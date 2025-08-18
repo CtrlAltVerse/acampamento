@@ -16,6 +16,10 @@ define('WRITERS_CAMP_FILE', __FILE__);
 add_action('plugins_loaded', 'writersCampP\plugins_loaded');
 function plugins_loaded(): void
 {
+   if (!function_exists('\cav_autoloader')) {
+      return;
+   }
+
    $AutoLoader = \cav_autoloader();
    $AutoLoader->add_namespace('writersCampP', implode(DIRECTORY_SEPARATOR, [__DIR__, 'classes']));
 
@@ -25,5 +29,4 @@ function plugins_loaded(): void
    new Media\Register_Endpoint();
    new Writer\Register();
    new Challenge\Register();
-   new Achievement\Register();
 }

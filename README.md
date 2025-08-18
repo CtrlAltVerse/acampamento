@@ -34,21 +34,3 @@
 | Login - Recuperar senha |        |       |         |
 | Search                  |        |       |         |
 | 404                     |        |       |         |
-
-## To-do list
-
-### Global
-
--  [ ] textos de ajuda/termos/privacidade
-
-### Home
-
--  [ ] Guilda stamps
-
-### Single
-
--  [ ] comment id duplicate
--  [ ] hr = 4 icons ⯅ ⬤ ⛊
-
--  𝐂𝐭𝐫𝐥𝗔𝗟𝗧𝓿𝓮𝓻𝓼𝓸
--  ⸙

@@ -11,10 +11,10 @@ $clubs = ClubUtils::get();
 <dialog id="menu"
         class="ml-auto w-full max-w-xs max-h-dvh h-full bg-neutral-100 dark:bg-neutral-700 backdrop:bg-neutral-900/60"
         x-on:click.self="closeMenu">
-   <?php if (is_user_logged_in()) { ?>
-   <?php $User = new User(get_current_user_id()); ?>
-   <?php $rank = Utils::get_rank($User->get('xp', default: 0)); ?>
    <div class="h-full">
+      <?php if (is_user_logged_in()) { ?>
+      <?php $User = new User(get_current_user_id()); ?>
+      <?php $rank = Utils::get_rank($User->get('xp', default: 0)); ?>
       <div class="<?php echo $rank->color; ?>">
          <div class="flex items-center bg-neutral-900/10 hover:bg-neutral-300/50">
             <a class="shrink-0 flex !pr-0"
@@ -47,6 +47,20 @@ $clubs = ClubUtils::get();
             <?php echo $rank->label; ?>
          </a>
       </div>
+      <?php } else {  ?>
+      <div class="bg-neutral-500 text-neutral-100">
+         <div class="flex items-center  min-h-17 bg-neutral-900/10 hover:bg-neutral-300/50">
+            <button class="grow text-left cursor-pointer py-2.5 px-3" type="button"
+                    x-on:click.prevent="$store.login.method='intro';login.showModal()">
+               Inscrições
+            </button>
+            <button class="shrink-0 flex justify-center items-center mr-3 rounded bg-neutral-300/10 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:bg-neutral-300 size-8 text-md cursor-pointer"
+                    type="button" x-on:click.prevent="closeMenu">
+               <i class="ri-close-fill"></i>
+            </button>
+         </div>
+      </div>
+      <?php } ?>
       <div class="dark:text-neutral-100">
          <ul>
             <li>
@@ -62,17 +76,13 @@ $clubs = ClubUtils::get();
             </li>
          </ul>
          <?php } ?>
+         <?php if (is_user_logged_in()) { ?>
          <?php wp_nav_menu([
             'theme_location' => 'profile',
             'container'      => '',
             'menu_id'        => '',
             'menu_class'     => '',
          ]); ?>
-         <?php } else { ?>
-         <a
-            href="<?php echo Utils::get_page_link('sign-up'); ?>">
-            Inscrições
-         </a>
          <?php } ?>
          <hr class="border-neutral-700/50 dark:border-neutral-100/50" />
          <?php wp_nav_menu([

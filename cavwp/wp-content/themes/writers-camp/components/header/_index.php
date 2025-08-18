@@ -35,7 +35,7 @@ do_action('get_header');
             'menu_class'     => 'hidden lg:flex justify-center items-center gap-4',
          ]); ?>
          <div class="menu-user">
-         <?php get_component(['header', 'sign-up']); ?>
+         <?php get_component(['header', 'cover']); ?>
          </div>
       </header>
    </div>

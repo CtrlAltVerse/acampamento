@@ -23,7 +23,7 @@ class Register_Gamification
             break;
 
          case 'post_updated':
-            if ('publish' === $entry['entity_details']['post_status'] && get_post_meta($entry['entity_ID'], 'redeemed', true) === '') {
+            if ('text' === $entry['entity_details']['post_type'] && 'publish' === $entry['entity_details']['post_status'] && get_post_meta($entry['entity_ID'], 'redeemed', true) === '') {
                update_post_meta($entry['entity_ID'], 'redeemed', 1);
 
                $recipient = (int) $entry['entity_details']['post_author'];

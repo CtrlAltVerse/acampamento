@@ -10,7 +10,26 @@ class Register
       add_action('wp_resource_hints', [$this, 'add_resources'], 10, 2);
       add_action('cav_head_scripts', [$this, 'theme_changer']);
 
+      add_filter('wp_nav_menu_items', [$this, 'add_menu_items'], 10, 2);
+
       new Register_Dashboard_New();
+   }
+
+   public function add_menu_items($items, $args)
+   {
+      if (!$args->theme_location) {
+         return $items;
+      }
+
+      $new_items = '';
+
+      if (!is_user_logged_in()) {
+         $new_items .= '<li class="menu-item menu-item-type-custom"><button class="cursor-pointer" type="button" x-on:click.prevent="$store.login.method=\'intro\';login.showModal()">Inscrições</button></li>';
+      }
+
+      $new_items .= '<li class="menu-item menu-item-type-custom"><a href="' . get_search_link() . '"><i class="ri-search-line"></i></a></li>';
+
+      return $items . $new_items;
    }
 
    public function add_resources($urls, $type)

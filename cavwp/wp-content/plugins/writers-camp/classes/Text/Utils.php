@@ -55,16 +55,16 @@ class Utils
 
       return [
          'post_title' => [
-            'title'    => 'Título',
-            'type'     => 'string',
-            'minimum'  => 3,
-            'required' => true,
+            'title'     => 'Título',
+            'type'      => 'string',
+            'minLength' => 3,
+            'required'  => true,
          ],
          'post_excerpt' => [
             'title'       => 'Sumário',
             'description' => 'Curta introdução ao texto',
             'type'        => 'string',
-            'minimum'     => 3,
+            'minLength'   => 3,
             'required'    => true,
          ],
          'post_content' => [
