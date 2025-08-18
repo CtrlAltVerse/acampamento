@@ -18,7 +18,6 @@ class Register
 
       new Register_Gamification();
       new Register_Shortcodes();
-      include_once 'Register_Fields.php';
    }
 
    public function block_dashboard()

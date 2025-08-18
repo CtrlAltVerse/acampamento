@@ -23,6 +23,8 @@ function plugins_loaded(): void
    $AutoLoader = \cav_autoloader();
    $AutoLoader->add_namespace('writersCampP', implode(DIRECTORY_SEPARATOR, [__DIR__, 'classes']));
 
+   include_once 'classes/Register_Fields.php';
+
    new Register();
    new Club\Register();
    new Text\Register();
