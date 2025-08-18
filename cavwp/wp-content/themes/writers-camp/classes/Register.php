@@ -17,7 +17,7 @@ class Register
 
    public function add_menu_items($items, $args)
    {
-      if (!$args->theme_location) {
+      if ('header' !== $args->theme_location) {
          return $items;
       }
 
