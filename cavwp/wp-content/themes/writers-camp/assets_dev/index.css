@@ -1,0 +1,165 @@
+@import 'tailwindcss' source(none);
+@import '@ctrlaltvers/tailwind/dist/remixicon';
+@import './croppie.css';
+@import './content.css';
+@import './defaults.css';
+@import './toast.css';
+@import './fonts.css';
+
+@source "../";
+@source "../../../plugins/writers-camp";
+@source inline("ri-fire-fill ri-tree-fill ri-aliens-fill ri-knife-blood-fill");
+@source inline("ri-google-fill ri-facebook-circle-fill ri-apple-fill ri-microsoft-fill ri-bluesky-fill ri-threads-fill ri-whatsapp-line ri-linkedin-box-fill ri-youtube-fill ri-twitter-x-line ri-tiktok-fill ri-flickr-fill ri-tumblr-fill ri-mastodon-fill ri-github-fill ri-twitch-fill ri-instagram-line ri-vimeo-fill ri-book-open-fill ri-book-2-fill ri-patreon-fill ri-pinterest-fill ri-reddit-fill ri-dribbble-line ri-telegram-fill ri-mail-fill ri-behance-fill ri-medium-fill ri-snapchat-line ri-gitlab-fill ri-eye-fill ri-eye-off-fill ri-infinity-line ri-heart-pulse-fill");
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+   --font-sans: 'Kumbh Sans', ui-sans-serif, system-ui, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+      'Noto Color Emoji';
+   --font-serif: 'EB Garamond', ui-serif, Georgia, Cambria, 'Times New Roman',
+      Times, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+      'Noto Color Emoji';
+   --font-unsplash: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Inter',
+      'Segoe UI', sans-serif;
+
+   --breakpoint-2xl: initial;
+   --list-style-type-square: square;
+
+   --text-*: initial;
+   --text-xxs: 0.75rem;
+   --text-xxs--line-height: calc(1 / 0.75);
+   --text-xs: 0.875rem;
+   --text-xs--line-height: calc(1.25 / 0.875);
+   --text-sm: 1rem;
+   --text-sm--line-height: calc(1.5 / 1);
+   --text-md: 1.125rem;
+   --text-md--line-height: calc(1.75 / 1.125);
+   --text-lg: 1.25rem;
+   --text-lg--line-height: calc(1.75 / 1.25);
+   --text-base: 1.375rem;
+   --text-base--line-height: calc(1.75 / 1.375);
+   --text-xl: 1.5rem;
+   --text-xl--line-height: calc(2 / 1.5);
+   --text-2xl: 1.875rem;
+   --text-2xl--line-height: calc(2.25 / 1.875);
+   --text-3xl: 2.25rem;
+   --text-3xl--line-height: calc(2.5 / 2.25);
+   --text-3.5xl: 2.5rem;
+   --text-3.5xl--line-height: 1;
+   --text-4xl: 3rem;
+   --text-4xl--line-height: 1;
+   --text-5xl: 3.75rem;
+   --text-5xl--line-height: 1;
+   --text-6xl: 4.5rem;
+   --text-6xl--line-height: 1;
+   --text-7xl: 6rem;
+   --text-7xl--line-height: 1;
+   --text-8xl: 8rem;
+   --text-8xl--line-height: 1;
+
+   --color-*: initial;
+
+   --color-guild: var(--color-guild);
+   --color-neutral-100: #f6f6f4;
+   --color-neutral-200: #dadad9;
+   --color-neutral-300: #9f9f9e;
+   --color-neutral-500: #646462;
+   --color-neutral-600: #444;
+   --color-neutral-700: #262625;
+   --color-neutral-900: #0b0b09;
+
+   --color-orange-300: #ff8749;
+   --color-orange-400: #fa7315;
+   --color-orange-500: #ff6700;
+   --color-orange-600: #ed5840;
+   --color-orange-650: #e7572a;
+   --color-orange-700: #913520;
+   --color-orange-800: #7d2e12;
+
+   --color-yellow-100: #dcdaca;
+   --color-yellow-300: #fcee28;
+   --color-yellow-400: #ffd60a;
+
+   --color-green-300: #47e000;
+   --color-green-400: #38b000;
+   --color-green-600: #2a573f;
+
+   --color-purple-300: #ac00e0;
+   --color-purple-500: #9c059e;
+
+   --color-teal-500: #25938f;
+
+   --color-blue-100: #bcecf6;
+   --color-blue-200: #6fc1f5;
+   --color-blue-300: #2196f3;
+   --color-blue-400: #1976d2;
+   --color-blue-800: #023e8a;
+
+   --color-red-400: #bf0603;
+
+   --color-brown-50: #ddd4b6;
+   --color-brown-100: #b6ad90;
+   --color-brown-200: #997b66;
+   --color-brown-300: #916750;
+   --color-brown-400: #754d37;
+   --color-brown-500: #54311c;
+   --color-brown-700: #3a200f;
+   --color-brown-900: #230f04;
+
+   --shadow-glow: 0 0 1rem 1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+
+   --aspect-card: 192 / 103;
+
+   --grid-template-columns-main: calc(var(--spacing) * 150) 1fr;
+}
+
+@utility container {
+   margin-inline: auto;
+   padding-inline: calc(var(--spacing) * 3);
+   min-width: 360px;
+}
+
+@utility thin-* {
+   font-variation-settings: 'YOPQ' --value(integer);
+}
+
+@utility small-caps {
+   font-variant: small-caps;
+}
+
+@utility v-gap-* {
+   --gap: --value(integer);
+   gap: calc(var(--gap) * var(--spacing));
+}
+
+@utility cols-* {
+   width: calc(
+      100% * 1 / --value(integer) - var(--spacing) * var(--gap) *
+         (--value(integer) - 1) / --value(integer)
+   );
+}
+
+@utility border-b-* {
+   border-bottom-style: --value(
+      'solid',
+      'dashed',
+      'dotted',
+      'double',
+      'hidden',
+      'none'
+   );
+}
+
+*,
+*::before,
+*::after {
+   font-optical-sizing: auto;
+}
+
+[x-cloak] {
+   @apply hidden;
+}
+
+/* data-summary
+data-author */

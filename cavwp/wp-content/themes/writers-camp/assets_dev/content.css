@@ -1,0 +1,96 @@
+.content {
+   @apply font-serif text-base xl:min-h-180 w-full max-w-200 leading-relaxed;
+
+   &.editor {
+      @apply py-3 px-4 outline-none select-text;
+   }
+
+   /* .selection,
+   ::selection {
+      @apply bg-blue-300;
+   } */
+
+   > p[style*='justify'],
+   blockquote > p[style*='justify'] {
+      @apply indent-9;
+   }
+
+   > :where(p, ul, ol, pre, blockquote) + :where(p, ul, ol, pre, blockquote) {
+      @apply mt-6;
+   }
+
+   li {
+      @apply my-1.5;
+   }
+
+   li p {
+      @apply inline-block;
+   }
+
+   > *.is-empty::before {
+      @apply font-normal float-left h-0 pointer-events-none text-neutral-500 dark:text-neutral-300;
+      content: attr(data-placeholder);
+   }
+
+   ul::before,
+   ol::before {
+      @apply ml-6;
+   }
+
+   h2 {
+      @apply mb-7 font-semibold text-xl;
+   }
+
+   :where(p, ul, ol, pre, blockquote) + h2 {
+      @apply mt-10;
+   }
+
+   h3 {
+      @apply mb-6 font-semibold text-neutral-500;
+   }
+
+   :where(p, ul, ol, pre, blockquote) + h3 {
+      @apply mt-8;
+   }
+
+   ol,
+   ul {
+      @apply list-inside;
+   }
+
+   ol {
+      @apply list-decimal;
+
+      ::marker {
+         @apply font-medium;
+      }
+   }
+
+   ul {
+      @apply list-square;
+   }
+
+   blockquote {
+      @apply border-l-3 border-neutral-900 dark:border-neutral-500 pl-4 py-2;
+   }
+
+   hr {
+      @apply border-0 flex justify-center h-auto my-6 text-neutral-500 tracking-wider;
+   }
+
+   hr::before {
+      content: '◆ ◆ ◆';
+   }
+
+   [draggable='true'] {
+      @apply cursor-ns-resize;
+   }
+
+   hr.has-focus {
+      @apply bg-neutral-100 rounded;
+   }
+}
+
+.content.editor {
+   @apply lg:min-h-180 bg-neutral-100/30 dark:bg-neutral-900/30;
+}

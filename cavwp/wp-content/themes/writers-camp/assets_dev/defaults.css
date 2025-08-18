@@ -1,0 +1,283 @@
+.main {
+   @apply container min-h-96 mt-9 mb-20;
+}
+
+.h1,
+.h2 {
+   @apply thin-120;
+}
+
+.h1 {
+   @apply font-bold text-2xl lg:text-3.5xl;
+}
+
+.h2 {
+   @apply font-semibold text-2xl;
+}
+
+.h3 {
+   @apply text-xl font-semibold;
+}
+
+.btn {
+   @apply inline-block rounded border border-brown-900 py-1.75 px-5 bg-neutral-100 text-brown-900 font-semibold font-sans disabled:cursor-not-allowed transition-colors duration-300;
+}
+
+.btn.active {
+   @apply bg-brown-500 text-neutral-100 font-bold;
+}
+
+button.btn,
+a.btn {
+   @apply cursor-pointer focus-visible:bg-brown-300 hover:bg-brown-300 focus-visible:text-neutral-100 hover:text-neutral-100;
+}
+
+.btn-editor {
+   @apply py-1 px-2 flex items-center justify-center cursor-pointer rounded transition-all;
+}
+.btn-editor.active {
+   @apply bg-[#fefefe] shadow-sm/30;
+}
+
+.small {
+   @apply text-xxs lg:text-xs uppercase font-medium px-4;
+}
+
+.section-border {
+   @apply rounded-xl p-4 border-6;
+}
+
+.input {
+   @apply rounded py-2.5 px-4 border border-neutral-500/50 outline-none focus:bg-neutral-100/30 dark:focus:bg-neutral-900/30;
+}
+
+.media-card {
+   @apply absolute bottom-30 left-1/3 z-1 flex flex-col gap-1 w-90;
+
+   .media-title {
+      @apply font-bold text-2xl line-clamp-3;
+   }
+
+   .media-summary {
+      @apply font-medium text-xl line-clamp-2;
+   }
+}
+
+.tag-random {
+   @apply rounded-md py-0.5 px-2 bg-neutral-100 text-neutral-700;
+}
+
+.tag {
+   @apply whitespace-nowrap;
+}
+
+.tag-slot {
+   @apply text-center rounded-l-md ml-1 py-0.5 px-2.5 bg-neutral-100 text-neutral-700 font-medium;
+}
+
+.tag-slot-desc {
+   @apply rounded-r-md py-0.5 pl-1 pr-2 bg-neutral-200 text-neutral-700;
+}
+
+.h-safe {
+   @apply h-screen md:h-[calc(100vh-3.75rem)] w-full;
+}
+
+.top-safe {
+   @apply top-[3.75rem];
+}
+
+.overflow-safe {
+   clip: rect(0, auto, auto, 0);
+}
+
+.title-effect {
+   @apply fixed top-30 w-full max-w-150 flex flex-col items-start gap-5;
+}
+
+/* .badge {
+   @apply bg-current w-6;
+}
+.stamp {
+   @apply bg-current w-6;
+}
+
+.sticker {
+   @apply bg-current w-6;
+}
+
+.circle {
+   @apply inline-block bg-orange-700 h-full text-neutral-900 rounded-full;
+} */
+
+#comments-list {
+   .children {
+      @apply mt-5 pt-4 pl-9;
+   }
+
+   .depth-1 > .children {
+      @apply border-l-2 border-neutral-300;
+   }
+
+   .bypostauthor > article .comment-author {
+      @apply bg-neutral-100 text-neutral-700 font-semibold pr-3;
+
+      &::after {
+         content: 'Autor';
+         @apply inline-block pl-2 font-normal;
+      }
+   }
+}
+
+#menu {
+   @apply whitespace-nowrap translate-x-full opacity-0 transition-all duration-333;
+
+   &::backdrop {
+      @apply opacity-0 transition-all duration-333;
+   }
+
+   ul {
+      @apply flex flex-col;
+   }
+
+   a {
+      @apply py-2.5 px-3;
+   }
+
+   a:not(.shrink-0, .grow) {
+      @apply hover:bg-neutral-300/50;
+   }
+
+   li a {
+      @apply inline-block w-full;
+   }
+}
+
+#menu[open]:not(.closing) {
+   @apply translate-x-0 opacity-100;
+}
+#menu[open]:not(.closing)::backdrop {
+   @apply opacity-100;
+}
+
+#menu.closing {
+   @apply block pointer-events-none inset-0;
+}
+
+.quest {
+   @apply inline-flex flex-col items-center justify-center gap-1 rounded-full p-1.5 size-12 bg-orange-700 font-extrabold text-yellow-300 text-3xl;
+
+   &::before {
+      content: '';
+      @apply grow w-5 bg-current rounded-full;
+
+      clip-path: polygon(
+         evenodd,
+         0 0,
+         100% 0,
+         100% 20%,
+         65% 100%,
+         35% 100%,
+         0 20%
+      );
+   }
+
+   &::after {
+      content: '';
+      @apply shrink-0 rounded-full size-2.5 bg-current;
+   }
+}
+
+.quest-complete {
+   @apply relative -top-1.5 z-0 flex items-center justify-center size-15 text-3xl text-orange-700;
+
+   span {
+      @apply bg-yellow-400 rounded-full size-9.5;
+   }
+
+   --b: var(--color-orange-500);
+   --c: var(--color-orange-700);
+   --t: var(--color-neutral-100);
+   --h: 70%;
+   --r: 18%;
+}
+.quest-complete::before {
+   content: '';
+   position: absolute;
+   z-index: -1;
+   inset: 60% 20% -40%;
+   background: var(--c);
+   clip-path: polygon(
+      15% 0,
+      85% 0,
+      100% var(--h),
+      50% calc(var(--h) - var(--r)),
+      0 var(--h)
+   );
+}
+.quest-complete::after {
+   @apply absolute -z-1 inset-0;
+   content: '';
+   background: var(--b);
+   clip-path: polygon(
+      100% 50%,
+      83.01% 58.14%,
+      94.27% 73.24%,
+      75.45% 72.55%,
+      78.4% 91.15%,
+      62.06% 81.79%,
+      56.03% 99.64%,
+      45.9% 83.75%,
+      32.27% 96.75%,
+      30.69% 77.98%,
+      12.57% 83.16%,
+      19.89% 65.8%,
+      1.45% 61.97%,
+      16% 50%,
+      1.45% 38.03%,
+      19.89% 34.2%,
+      12.57% 16.84%,
+      30.69% 22.02%,
+      32.27% 3.25%,
+      45.9% 16.25%,
+      56.03% 0.36%,
+      62.06% 18.21%,
+      78.4% 8.85%,
+      75.45% 27.45%,
+      94.27% 26.76%,
+      83.01% 41.86%
+   );
+}
+
+.quest-name {
+   @apply relative grow flex items-center pl-5.5 h-12 rounded-r-full bg-brown-500  font-bold text-xl text-neutral-100 overflow-hidden;
+
+   &::before {
+      content: '';
+      @apply absolute -left-13 size-16 rounded-full;
+   }
+}
+
+.footer-fullname {
+   @apply absolute -z-1 w-full text-brown-400 tracking-tighter font-black overflow-hidden whitespace-nowrap;
+   font-size: 7.5vw;
+   top: -8.3vw;
+}
+
+.ribbon {
+   --r: 2em;
+   @apply relative font-sans shrink-0 flex flex-col items-center gap-2 rounded-t-lg pt-3 px-3 w-34 h-60 border-2 border-neutral-500 border-b-0 shadow-lg shadow-neutral-900;
+   padding-bottom: var(--r);
+
+   clip-path: polygon(
+      -200% 0,
+      200% 0,
+      100% calc(100% - var(--r)),
+      50% 100%,
+      0 calc(100% - var(--r))
+   );
+
+   .title {
+      @apply uppercase font-semibold text-xs;
+   }
+}

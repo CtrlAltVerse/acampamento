@@ -1,0 +1,8 @@
+node_modules/
+vendor/
+**/cache/
+uploads/
+env-*
+**/themes/**/assets/*.js
+**/themes/**/assets/*.css
+**/themes/**/assets/*.txt

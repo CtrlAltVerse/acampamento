@@ -1,0 +1,51 @@
+{
+   "name": "escrita-assets",
+   "version": "1.0.0",
+   "main": "index.js",
+   "scripts": {
+      "build": "npm run css -- --minify && npm run js -- --mode=production",
+      "dev": "nodemon & npm run css -- --watch",
+      "css": "npx @tailwindcss/cli -i ./cavwp/wp-content/themes/writers-camp/assets_dev/index.css -o ./cavwp/wp-content/themes/writers-camp/assets/main.min.css",
+      "js": "webpack"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "description": "",
+   "devDependencies": {
+      "@alpinejs/mask": "^3.14.9",
+      "@alpinejs/persist": "^3.14.9",
+      "@ctrlaltvers/alpine": "^1.1.1",
+      "@ctrlaltvers/tailwind": "^1.1.0",
+      "@floating-ui/dom": "^1.7.2",
+      "@tailwindcss/cli": "^4.1.11",
+      "@tiptap/core": "^3.0.7",
+      "@tiptap/extension-bubble-menu": "^3.0.7",
+      "@tiptap/extension-document": "^3.0.7",
+      "@tiptap/extension-drag-handle": "^3.0.7",
+      "@tiptap/extension-floating-menu": "^3.0.7",
+      "@tiptap/extension-subscript": "^3.0.7",
+      "@tiptap/extension-superscript": "^3.0.7",
+      "@tiptap/extensions": "^3.0.7",
+      "@tiptap/starter-kit": "^3.0.7",
+      "@types/alpinejs": "^3.13.11",
+      "@types/alpinejs__mask": "^3.13.4",
+      "@types/alpinejs__persist": "^3.13.4",
+      "@types/croppie": "^2.6.4",
+      "@types/masonry-layout": "^4.2.8",
+      "alpinejs": "^3.14.9",
+      "croppie": "^2.6.5",
+      "masonry-layout": "^4.2.2",
+      "nodemon": "^3.1.10",
+      "tailwindcss": "^4.1.11",
+      "terser-webpack-plugin": "^5.3.14",
+      "ts-loader": "^9.5.2",
+      "typescript": "^5.8.3",
+      "webpack": "^5.100.2",
+      "webpack-cli": "^6.0.1"
+   },
+   "dependencies": {
+      "@tiptap/extension-text-align": "^3.0.7",
+      "@tiptap/extension-typography": "^3.0.7"
+   }
+}
