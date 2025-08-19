@@ -55,7 +55,9 @@ class Register
          return;
       }
 
-      $metatag['og:image'] = get_post_meta(get_the_ID(), 'image_mini', true);
+      $metatags['og:image'] = get_post_meta(get_the_ID(), 'image_mini', true);
+
+      return $metatags;
    }
 
    public function set_post_content()
