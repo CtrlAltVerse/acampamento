@@ -15,7 +15,8 @@
       @apply indent-9;
    }
 
-   > :where(p, ul, ol, pre, blockquote) + :where(p, ul, ol, pre, blockquote) {
+   > :where(p, ul, ol, pre, blockquote, figure)
+      + :where(p, ul, ol, pre, blockquote, figure) {
       @apply mt-6;
    }
 
