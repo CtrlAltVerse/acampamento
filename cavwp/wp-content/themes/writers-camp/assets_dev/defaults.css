@@ -67,10 +67,6 @@ a.btn {
    @apply rounded-md py-0.5 px-2 bg-neutral-100 text-neutral-700;
 }
 
-.tag {
-   @apply whitespace-nowrap;
-}
-
 .tag-slot {
    @apply text-center rounded-l-md ml-1 py-0.5 px-2.5 bg-neutral-100 text-neutral-700 font-medium;
 }

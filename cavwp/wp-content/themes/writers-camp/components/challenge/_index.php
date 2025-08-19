@@ -24,7 +24,7 @@ if ($complete) {
       </h3>
    </div>
    <div class="w-full flex flex-col gap-3.5">
-      <div class="text-lg">
+      <div class="text-lg whitespace-pre-line">
          <?php echo $challenge->get('summary', apply_filter: false); ?>
       </div>
       <div class="flex flex-wrap v-gap-3">

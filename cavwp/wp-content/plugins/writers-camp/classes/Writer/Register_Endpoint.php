@@ -349,7 +349,9 @@ class Register_Endpoint
 
       $actions = [];
 
+      ob_start();
       retrieve_password($body['user_email']);
+      ob_clean();
 
       $actions[] = [
          'action'  => 'toast',
