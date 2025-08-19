@@ -13,6 +13,7 @@ class Register
       add_action('template_redirect', [$this, 'set_text_draft']);
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
+      add_filter('cav_head_metatags', [$this, 'set_metatag_image']);
 
       new Register_Endpoint();
    }
@@ -46,6 +47,15 @@ class Register
             'club',
          ],
       ]);
+   }
+
+   public function set_metatag_image($metatags)
+   {
+      if (!is_singular('text')) {
+         return;
+      }
+
+      $metatag['og:image'] = get_post_meta(get_the_ID(), 'image_mini', true);
    }
 
    public function set_post_content()
