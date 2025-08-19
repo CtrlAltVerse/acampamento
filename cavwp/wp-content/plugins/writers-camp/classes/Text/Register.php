@@ -52,7 +52,7 @@ class Register
    public function set_metatag_image($metatags)
    {
       if (!is_singular('text')) {
-         return;
+         return $metatags;
       }
 
       $metatags['og:image'] = get_post_meta(get_the_ID(), 'image_mini', true);
