@@ -21,7 +21,13 @@ class Register
          return $value;
       }
 
-      $value = preg_replace('/(\d)\.([ ,\wÀ-ÿ]+)/', '<span class="tag"><span class="tag-slot">$1</span><span class="tag-slot-desc">$2</span></span>', $value);
+      $value = str_replace('1. ', '<ol class="tag-list">1. ', $value);
+
+      if (str_contains($value, '4. ')) {
+         $value .= '</ol>';
+      }
+
+      $value = preg_replace('/\d\. ([ \wÀ-ÿ;.]+)/', '<li class="tag-list-item">$1</li>', $value);
 
       return preg_replace('/%([-\w]+)%/', ' <span class="tag-random" x-countdown:9.start.repeat.invisible="$el.textContent = getRandom(\'$1\')">$1</span> ', $value);
    }

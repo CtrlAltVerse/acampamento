@@ -12,7 +12,7 @@
 }
 
 .h2 {
-   @apply font-semibold text-2xl;
+   @apply font-semibold text-xl sm:text-2xl;
 }
 
 .h3 {
@@ -20,7 +20,7 @@
 }
 
 .btn {
-   @apply inline-block rounded border border-brown-900 py-1.75 px-5 bg-neutral-100 text-brown-900 font-semibold font-sans disabled:cursor-not-allowed transition-colors duration-300;
+   @apply inline-block rounded border border-brown-900 py-1.75 px-5 bg-neutral-100 whitespace-nowrap text-brown-900 font-semibold font-sans disabled:cursor-not-allowed transition-colors duration-300;
 }
 
 .btn.active {
@@ -67,12 +67,16 @@ a.btn {
    @apply rounded-md py-0.5 px-2 bg-neutral-100 text-neutral-700;
 }
 
-.tag-slot {
-   @apply text-center rounded-l-md ml-1 py-0.5 px-2.5 bg-neutral-100 text-neutral-700 font-medium;
+.tag-list {
+   @apply flex flex-col sm:flex-row sm:flex-wrap gap-px my-1 items-start list-decimal list-inside text-neutral-700;
 }
 
-.tag-slot-desc {
-   @apply rounded-r-md py-0.5 pl-1 pr-2 bg-neutral-200 text-neutral-700;
+.tag-list ::marker {
+   @apply font-bold;
+}
+
+.tag-list-item {
+   @apply rounded-md py-0.5 px-2 bg-neutral-100;
 }
 
 .h-safe {
@@ -246,7 +250,7 @@ a.btn {
 }
 
 .quest-name {
-   @apply relative grow flex items-center pl-5.5 h-12 rounded-r-full bg-brown-500  font-bold text-xl text-neutral-100 overflow-hidden;
+   @apply relative grow flex items-center pl-5.5 pr-3 h-12 rounded-r-full bg-brown-500 leading-tight font-semibold lg:font-bold text-lg lg:text-xl text-neutral-100 overflow-hidden;
 
    &::before {
       content: '';

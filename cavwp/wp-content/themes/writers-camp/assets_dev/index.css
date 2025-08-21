@@ -23,6 +23,7 @@
    --font-unsplash: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Inter',
       'Segoe UI', sans-serif;
 
+   --breakpoint-sm: 36rem;
    --breakpoint-2xl: initial;
    --list-style-type-square: square;
 
@@ -110,6 +111,7 @@
    --shadow-glow: 0 0 1rem 1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
 
    --aspect-card: 192 / 103;
+   --aspect-banner: 5 / 2;
 
    --grid-template-columns-main: calc(var(--spacing) * 150) 1fr;
 }

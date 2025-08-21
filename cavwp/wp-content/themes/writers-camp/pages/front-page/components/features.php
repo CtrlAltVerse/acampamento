@@ -7,7 +7,7 @@ $texts = Utils::get(6);
 ?>
 <?php if (!empty($texts)) { ?>
    <section>
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex flex-col sm:flex-row gap-1 justify-between items-start sm:items-center mb-6">
          <hgroup class="flex flex-col gap-1">
             <h2 class="h2">Destaques</h2>
             <p>Mais populares das últimas semanas.</p>

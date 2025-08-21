@@ -31,7 +31,7 @@ if (!empty($text)) {
    // RESERVADO
    if ('publish' !== $status) {
       echo <<<HTML
-      <div class="aspect-square flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 pt-8.5 text-neutral-100 border-neutral-500 cursor-default bg-neutral-900/10 overflow-hidden">
+      <div class="aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 pt-8.5 text-neutral-100 border-neutral-500 cursor-default bg-neutral-900/10 overflow-hidden">
          {$middle}
          <span class="pt-2 pb-1.5 px-4 uppercase font-semibold text-xs text-neutral-100 bg-neutral-500">Reservado</span>
       </div>
@@ -79,7 +79,7 @@ if ($per_club) {
    ]);
 
    echo <<<HTML
-      <a href="{$new_url}" class="relative aspect-square flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed border-b-solid text-neutral-100" style="border-color: {$color}">
+      <a href="{$new_url}" class="relative aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed border-b-solid text-neutral-100" style="border-color: {$color}">
          {$middle}
          <span class="absolute bottom-0 -left-0.75 -right-0.75 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-sm" style="background-color: {$color}">{$club_name}</span>
       </a>
@@ -95,7 +95,7 @@ $new_url = Utils::get_page_link('edit', [
 
 // EMPTY
 echo <<<HTML
-   <a href="{$new_url}" class="relative flex aspect-square cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed">
+   <a href="{$new_url}" class="relative flex aspect-banner cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed">
       {$middle}
    </a>
 HTML;
