@@ -7,12 +7,33 @@ class Register
    public function __construct()
    {
       add_action('init', [$this, 'register']);
+      add_action('admin_head', [$this, 'set_excerpt_rows']);
 
       add_filter('pre_get_posts', [$this, 'filter_query']);
       add_filter('cavwp_post_get', [$this, 'filter_excerpt'], 10, 3);
 
       add_filter('acf/fields/relationship/query/name=texts', [$this, 'filter_texts']);
       add_filter('acf/update_value/name=texts', [$this, 'update_field'], 10, 2);
+   }
+
+
+   public function set_excerpt_rows()
+   {
+      $screen = get_current_screen();
+
+      if ($screen->base !== 'post' || $screen->id !== 'challenge') {
+         return;
+      }
+
+?>
+      <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("excerpt").rows = 10
+            document.getElementById("excerpt").style.height = 'auto'
+         })
+      </script>
+<?php
+
    }
 
    public function filter_excerpt($value, $key, $Post)
@@ -29,7 +50,7 @@ class Register
 
       $value = preg_replace('/\d\. ([ \wÀ-ÿ;.]+)/', '<li class="tag-list-item">$1</li>', $value);
 
-      return preg_replace('/%([-\w]+)%/', ' <span class="tag-random" x-countdown:9.start.repeat.invisible="$el.textContent = getRandom(\'$1\')">$1</span> ', $value);
+      return preg_replace('/%([-\w]+)%/', ' <span class="tag-random" x-countdown:5.start.repeat.invisible="$el.textContent = getRandom(\'$1\')">$1</span> ', $value);
    }
 
    public function filter_query($query)
