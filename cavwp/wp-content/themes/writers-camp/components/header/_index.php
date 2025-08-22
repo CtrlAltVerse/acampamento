@@ -20,11 +20,11 @@ do_action('get_header');
    </nav>
 
    <div class="relative z-10 bg-guild text-neutral-100 text-lg shadow-lg">
-      <header class="grid grid-cols-3 py-4 px-3" data-nosnippet>
-         <div class="flex items-center gap-3 col-span-2 lg:col-span-1">
+      <header class="flex md:grid grid-cols-3 py-4 px-3" data-nosnippet>
+         <div class="grow flex items-center gap-3 col-span-2 lg:col-span-1">
             <?php the_custom_logo(); ?>
             <a href="<?php echo home_url(); ?>"
-               class="font-semibold">
+               class="font-semibold text-sm sm:text-md">
                <?php bloginfo('name'); ?>
             </a>
          </div>

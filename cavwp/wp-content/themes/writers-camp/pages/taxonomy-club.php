@@ -10,7 +10,7 @@ $club = new Term();
 <div class="relative py-6"
      style="background-color: <?php echo $club->get('color'); ?>">
      <div class="absolute inset-0 z-0 bg-neutral-900/20"></div>
-   <div class="container relative flex flex-col justify-between min-h-55 text-neutral-100 text-shadow-lg">
+   <div class="container relative flex flex-col justify-between gap-3 min-h-55 text-neutral-100 text-shadow-lg">
       <?php echo $club->get('seal', image_size: 'medium', image_attrs: [
          'class' => 'absolute top-0 right-3 z-0 object-cover size-55',
       ]); ?>
@@ -22,7 +22,7 @@ $club = new Term();
          <?php echo $club->get('genres'); ?>
       </p>
       </hgroup>
-      <p class="relative z-1 font-medium text-lg md:text-xl max-w-180">
+      <p class="relative z-1 font-medium text-md sm:text-lg md:text-xl max-w-1/2 md:max-w-180">
          <?php echo $club->get('description'); ?>
       </p>
    </div>
