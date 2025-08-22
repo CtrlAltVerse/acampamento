@@ -25,26 +25,30 @@ class Register
       }
    }
 
-   public function get_avatar_url($avatar_url, $obj_or_email)
+   public function get_avatar_url($avatar_url, $_user)
    {
-      if (empty($obj_or_email) || is_a($obj_or_email, 'WP_Comment') || is_bool($obj_or_email)) {
+      if (empty($_user) || is_a($_user, 'WP_Comment') || is_bool($_user)) {
          return $avatar_url;
       }
 
-      if (is_a($obj_or_email, 'WP_User')) {
-         $User = $obj_or_email;
+      if (is_a($_user, 'WP_User')) {
+         $user_ID = $_user->ID;
+      } elseif (is_numeric($_user)) {
+         $user_ID = $_user;
       } else {
-         $User = get_user_by('email', $obj_or_email);
+         $User = get_user_by('email', $_user);
 
          if (is_bool($User)) {
             return $avatar_url;
          }
+
+         $user_ID = $User->ID;
       }
 
-      $avatar_source = get_user_meta($User->ID, 'avatar_source', true);
+      $avatar_source = get_user_meta($user_ID, 'avatar_source', true);
 
       if ('network' === $avatar_source) {
-         $network_avatar_url = get_user_meta($User->ID, 'avatar_url', true);
+         $network_avatar_url = get_user_meta($user_ID, 'avatar_url', true);
 
          if (!empty($network_avatar_url)) {
             return $network_avatar_url;
@@ -52,7 +56,7 @@ class Register
       }
 
       if ('upload' === $avatar_source) {
-         $uploaded_file = get_user_meta($User->ID, 'avatar_uploaded', true);
+         $uploaded_file = get_user_meta($user_ID, 'avatar_uploaded', true);
 
          if (!empty($uploaded_file)) {
             return wp_upload_dir()['baseurl'] . '/avatares/' . $uploaded_file;
