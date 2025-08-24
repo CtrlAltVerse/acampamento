@@ -74,119 +74,25 @@ Alpine.data('bonfire', function () {
          ])
       },
 
-      getRandom(category: 'animal' | 'cidade') {
-         const items = {
-            animal: [
-               'albatroz',
-               'avestruz',
-               'bisonte',
-               'mamute',
-               'mandril',
-               'orangotango',
-               'ornitorrinco',
-               'ouriço',
-               'panda',
-               'pavão',
-               'pelicano',
-               'pinguim',
-               'pônei',
-               'porco-espinho',
-               'porco',
-               'porquinho-da-índia',
-               'preá',
-               'rinoceronte',
-               'suricate',
-               'tigre',
-               'touro',
-               'unicórnio',
-               'urso',
-            ],
-            cidade: [
-               'Tóquio',
-               'Déli',
-               'Xangai',
-               'São Paulo',
-               'Cidade do México',
-               'Cairo',
-               'Mumbai',
-               'Pequim',
-               'Daca',
-               'Osaka',
-               'Nova Iorque',
-               'Carachi',
-               'Buenos Aires',
-               'Xunquim',
-               'Istambul',
-               'Calcutá',
-               'Manila',
-               'Lagos',
-               'Tianjin',
-               'Quinxassa',
-               'Cantão',
-               'Los Angeles',
-               'Moscou',
-               'Shenzhen',
-               'Lahore',
-               'Bangalor',
-               'Paris',
-               'Bogotá',
-               'Jacarta',
-               'Chenai',
-               'Lima',
-               'Banguecoque',
-               'Seul',
-               'Nagoia',
-               'Haiderabade',
-               'Londres',
-               'Teerã',
-               'Chicago',
-               'Chengdu',
-               'Nanquim',
-               'Wuhan',
-               'Luanda',
-               'Amedabade',
-               'Kuala Lumpur',
-               'Xian',
-               'Honguecongue',
-               'Dongguan',
-               'Hancheu',
-               'Foshan',
-               'Shenyang',
-               'Riade',
-               'Bagdá',
-               'Santiago',
-               'Surrate',
-               'Madrid',
-               'Sucheu',
-               'Pune',
-               'Harbin',
-               'Houston',
-               'Dallas',
-               'Toronto',
-               'Dar es Salaam',
-               'Miami',
-               'Belo Horizonte',
-               'Singapura',
-               'Filadélfia',
-               'Atlanta',
-               'Fukuoka',
-               'Cartum',
-               'Barcelona',
-               'Joanesburgo',
-               'São Petersburgo',
-               'Qingdao',
-               'Dalian',
-               'Washington, DC',
-               'Rangum',
-               'Alexandria',
-               'Jinan',
-               'Guadalajara',
-            ],
-         }
+      async getRandom(query: string) {
+         const { data } = await this.$rest.get(
+            'https://api.altvers.net/api/random/v1/' + query
+         )
+         const sorted = data[Math.floor(Math.random() * data.length)]
 
-         const list = items[category]
+         return sorted.name
+      },
 
-         return list[Math.floor(Math.random() * list.length)]
+      async getYoutube(videoID: string) {
+         const link = `https://www.youtube.com/watch?v=${videoID}`
+         const { data } = await this.$rest.get(
+            `https://youtube.com/oembed?url=${link}&format=json`
+         )
+
+         let { title } = data
+         title = title.replace(/\(.*\)|\[.*\]/i, '').trim()
+
+         return `<a href="${link}" target="_blank"><i class="ri-youtube-fill"></i> ${title}</a>`
       },
 
       checkTitle() {

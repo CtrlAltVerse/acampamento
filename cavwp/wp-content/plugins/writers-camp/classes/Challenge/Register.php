@@ -16,26 +16,6 @@ class Register
       add_filter('acf/update_value/name=texts', [$this, 'update_field'], 10, 2);
    }
 
-
-   public function set_excerpt_rows()
-   {
-      $screen = get_current_screen();
-
-      if ($screen->base !== 'post' || $screen->id !== 'challenge') {
-         return;
-      }
-
-?>
-      <script>
-         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById("excerpt").rows = 10
-            document.getElementById("excerpt").style.height = 'auto'
-         })
-      </script>
-<?php
-
-   }
-
    public function filter_excerpt($value, $key, $Post)
    {
       if ('post_excerpt' !== $key || 'challenge' !== $Post->post_type) {
@@ -48,9 +28,11 @@ class Register
          $value .= '</ol>';
       }
 
-      $value = preg_replace('/\d\. ([ \wÀ-ÿ;.]+)/', '<li class="tag-list-item">$1</li>', $value);
+      $value = preg_replace('/\d\. ([ :\w\dÀ-ÿ]+);?/', '<li class="tag-list-item">$1</li>', $value);
 
-      return preg_replace('/%([-\w]+)%/', ' <span class="tag-random" x-countdown:5.start.repeat.invisible="$el.textContent = getRandom(\'$1\')">$1</span> ', $value);
+      $value = preg_replace('/yt:([^"&?\/\s]{11})/', '<span class="tag-youtube" x-html="await getYoutube(\'$1\')" data-force="true">$1</span>', $value);
+
+      return preg_replace('/%([-\w=?]+)%/', ' <span class="tag-random" x-countdown:5.start.repeat.invisible="$el.textContent = await getRandom(\'$1\')" data-force="true">$1</span> ', $value);
    }
 
    public function filter_query($query)
@@ -103,6 +85,25 @@ class Register
       ]);
    }
 
+   public function set_excerpt_rows()
+   {
+      $screen = get_current_screen();
+
+      if ('post' !== $screen->base || 'challenge' !== $screen->id) {
+         return;
+      }
+
+      ?>
+<script>
+         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("excerpt").rows = 10
+            document.getElementById("excerpt").style.height = 'auto'
+         })
+      </script>
+<?php
+
+   }
+
    public function update_field($value, $post_ID)
    {
       $count   = 0;
@@ -119,3 +120,4 @@ class Register
       return $value;
    }
 }
+?>
