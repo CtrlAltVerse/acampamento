@@ -34,3 +34,11 @@
 | Login - Recuperar senha |        |       |         |
 | Search                  |        |       |         |
 | 404                     |        |       |         |
+
+## To-do
+
+-  [ ] Seguir autores
+-  [ ] Notificações
+-  [ ] Reações one-click
+-  [ ] Histórias em série
+-  [ ] Insignias

@@ -41,8 +41,7 @@ get_component('header');
                             x-for="[key, value, link] in <?php echo '[' . implode(',', array_map(fn($key, $social) => "['{$key}', m_{$key}, '{$social['has_profile']}']", array_keys($preview_socials), $preview_socials)) . ']'; ?>">
                      <li x-show="value.length" x-cloak>
                         <a target="_blank" rel="external" x-bind:href="link.replace('%user%',value)">
-                           <i
-                              x-bind:class="document.getElementById(key).dataset.icon"></i>
+                           <i x-bind:class="document.getElementById(key).dataset.icon"></i>
                         </a>
                      </li>
                   </template>

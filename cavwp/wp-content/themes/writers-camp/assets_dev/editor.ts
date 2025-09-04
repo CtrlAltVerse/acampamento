@@ -41,6 +41,12 @@ document.addEventListener('alpine:init', () => {
          },
 
          init() {
+            window.onbeforeunload = () => {
+               if (!this.current.saved) {
+                  return 'Tem certeza?'
+               }
+            }
+
             this.$watch('current.showChanger', (state) => {
                if (state) {
                   this.updateCurrent('close')
