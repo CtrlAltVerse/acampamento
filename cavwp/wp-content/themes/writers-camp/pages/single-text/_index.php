@@ -30,6 +30,7 @@ $from_author     = $Text->related(4, 'author', exclude: array_merge($from_club, 
 $terms           = $Text->get('terms', taxonomy: 'club');
 $reading_time    = $Text->get('time_to_read');
 $term            = $terms[0];
+$color = $Text->get('color', default: '#fff');
 $container_class = '';
 
 ?>
@@ -40,9 +41,9 @@ $container_class = '';
         src="<?php echo $full; ?>" loading="eager" alt="">
    <div class="container h-full">
       <div class="title-effect z-1 text-shadow-lg"
-           style="color: <?php echo $Text->get('color', default: '#fff'); ?>">
-         <span class="rounded py-1 px-2 uppercase font-extrabold text-neutral-700 text-sm text-shadow-none"
-               style="background-color: <?php echo $Text->get('color', default: '#fff'); ?>">
+           style="color: <?php echo $color; ?>">
+         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none <?php echo ($color === '#000000') ? 'text-neutral-100' : 'text-neutral-700'; ?>"
+               style="background-color: <?php echo $color; ?>">
             <?php echo $term->get('name'); ?>
          </span>
          <div class="h1">
