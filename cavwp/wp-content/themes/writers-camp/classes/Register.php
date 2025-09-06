@@ -27,7 +27,7 @@ class Register
          $new_items .= '<li class="menu-item menu-item-type-custom"><button class="cursor-pointer" type="button" x-on:click.prevent="$store.login.method=\'intro\';login.showModal()">Inscrições</button></li>';
       }
 
-      $new_items .= '<li class="menu-item menu-item-type-custom"><a href="' . get_search_link() . '"><i class="ri-search-line"></i></a></li>';
+      $new_items .= '<li class="menu-item menu-item-type-custom"><a href="' . home_url('?s=') . '"><i class="ri-search-line"></i></a></li>';
 
       return $items . $new_items;
    }
