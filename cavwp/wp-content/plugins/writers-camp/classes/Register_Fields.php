@@ -56,7 +56,7 @@ add_action( 'acf/include_fields', function() {
 			'label' => 'Textos',
 			'name' => 'texts',
 			'aria-label' => '',
-			'type' => 'text',
+			'type' => 'relationship',
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
