@@ -13,7 +13,7 @@ class Register
       add_action('template_redirect', [$this, 'set_text_draft']);
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
-      add_filter('cav_head_metatags', [$this, 'set_metatag_image']);
+      add_filter('cav_head_metatags', [$this, 'set_metatags']);
 
       new Register_Endpoint();
    }
@@ -37,7 +37,7 @@ class Register
          'show_in_rest'  => true,
          'menu_position' => 3,
          'menu_icon'     => 'dashicons-text',
-         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions','custom-fields'],
+         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions', 'custom-fields'],
          'rewrite'       => [
             'slug' => 'texto',
          ],
@@ -49,7 +49,7 @@ class Register
       ]);
    }
 
-   public function set_metatag_image($metatags)
+   public function set_metatags($metatags)
    {
       if (!is_singular('text')) {
          return $metatags;

@@ -32,7 +32,7 @@ class Register
 
       $value = preg_replace('/yt:([^"&?\/\s]{11})/', '<span class="tag-youtube" x-html="await getYoutube(\'$1\')" data-force="true">$1</span>', $value);
 
-      return preg_replace('/%([-\w=?]+)%/', ' <span class="tag-random" x-countdown:5.start.repeat.invisible="$el.textContent = await getRandom(\'$1\')" data-force="true">$1</span> ', $value);
+      return preg_replace('/%([-\w=?]+)%/', ' <span class="tag-random"><i class="ri-dice-line"></i> <span x-countdown:5.start.repeat.invisible="$el.textContent = await getRandom(\'$1\')" data-force="true">$1</span></span> ', $value);
    }
 
    public function filter_query($query)
@@ -77,7 +77,7 @@ class Register
          'has_archive'         => true,
          'menu_position'       => 3,
          'menu_icon'           => 'dashicons-yes-alt',
-         'supports'            => ['title', 'author', 'excerpt','custom-fields'],
+         'supports'            => ['title', 'author', 'excerpt', 'custom-fields'],
          'rewrite'             => [
             'slug'  => 'desafios',
             'pages' => true,

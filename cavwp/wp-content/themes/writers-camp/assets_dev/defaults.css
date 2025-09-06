@@ -64,7 +64,7 @@ a.btn {
 }
 
 .tag-random {
-   @apply rounded-md py-0.5 px-2 bg-neutral-100 text-neutral-700;
+   @apply inline-flex items-center gap-1 rounded-md py-0.5 px-2 bg-neutral-100 text-neutral-700;
 }
 
 .tag-list {

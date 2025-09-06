@@ -30,7 +30,7 @@ $from_author     = $Text->related(4, 'author', exclude: array_merge($from_club, 
 $terms           = $Text->get('terms', taxonomy: 'club');
 $reading_time    = $Text->get('time_to_read');
 $term            = $terms[0];
-$color = $Text->get('color', default: '#fff');
+$color           = $Text->get('color', default: '#fff');
 $container_class = '';
 
 ?>
@@ -42,7 +42,7 @@ $container_class = '';
    <div class="container h-full">
       <div class="title-effect z-1 text-shadow-lg"
            style="color: <?php echo $color; ?>">
-         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none <?php echo ($color === '#000000') ? 'text-neutral-100' : 'text-neutral-700'; ?>"
+         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none <?php echo ('#000000' === $color) ? 'text-neutral-100' : 'text-neutral-700'; ?>"
                style="background-color: <?php echo $color; ?>">
             <?php echo $term->get('name'); ?>
          </span>
@@ -58,11 +58,12 @@ $container_class = '';
             <?php echo $Text->get('summary'); ?>
          </div>
          <div class="pt-4">
-            <a class="flex items-center gap-2 mt-3 mx-2"
+            <a class="flex items-center"
                href="<?php echo $Text->get('image_author_url'); ?>"
                target="_blank" rel="external">
-               Foto de <?php echo $Text->get('image_author'); ?>
-                  no <span class="font-unsplash font-bold text-lg">Unsplash</span>
+               Foto de
+               <?php echo $Text->get('image_author'); ?>
+               no <span class="font-unsplash font-bold text-lg">Unsplash</span>
             </a>
          </div>
       </div>

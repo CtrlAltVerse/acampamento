@@ -39,7 +39,7 @@
    }
 
    h2 {
-      @apply mb-7 font-semibold text-xl;
+      @apply mb-7 font-semibold text-2xl;
    }
 
    :where(p, ul, ol, pre, blockquote) + h2 {
@@ -47,7 +47,7 @@
    }
 
    h3 {
-      @apply mb-6 font-semibold text-neutral-500;
+      @apply mb-6 font-semibold text-neutral-500 text-xl;
    }
 
    :where(p, ul, ol, pre, blockquote) + h3 {
@@ -89,6 +89,33 @@
 
    hr.has-focus {
       @apply bg-neutral-100 rounded;
+   }
+
+   table {
+      @apply w-full border-collapse;
+
+      thead,
+      th,
+      td {
+         @apply border-0;
+      }
+
+      thead {
+         @apply bg-neutral-300 dark:bg-neutral-900;
+      }
+
+      tbody {
+         @apply divide-y divide-neutral-300 dark:divide-neutral-900;
+      }
+
+      th,
+      td {
+         @apply py-1.25 px-2.5 text-left;
+      }
+
+      .has-fixed-layout {
+         @apply table-fixed;
+      }
    }
 }
 
