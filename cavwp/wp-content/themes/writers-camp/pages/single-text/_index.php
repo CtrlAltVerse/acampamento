@@ -60,7 +60,7 @@ $container_class = '';
             <a class="flex items-center gap-2 mt-3 mx-2"
                href="<?php echo $Text->get('image_author_url'); ?>"
                target="_blank" rel="external">
-               Foto de <?php $Text->get('image_author'); ?>
+               Foto de <?php echo $Text->get('image_author'); ?>
                   no <span class="font-unsplash font-bold text-lg">Unsplash</span>
             </a>
          </div>
