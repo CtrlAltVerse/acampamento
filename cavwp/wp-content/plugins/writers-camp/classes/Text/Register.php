@@ -37,7 +37,7 @@ class Register
          'show_in_rest'  => true,
          'menu_position' => 3,
          'menu_icon'     => 'dashicons-text',
-         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions'],
+         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions','custom-fields'],
          'rewrite'       => [
             'slug' => 'texto',
          ],

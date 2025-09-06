@@ -77,7 +77,7 @@ class Register
          'has_archive'         => true,
          'menu_position'       => 3,
          'menu_icon'           => 'dashicons-yes-alt',
-         'supports'            => ['title', 'author', 'excerpt'],
+         'supports'            => ['title', 'author', 'excerpt','custom-fields'],
          'rewrite'             => [
             'slug'  => 'desafios',
             'pages' => true,
