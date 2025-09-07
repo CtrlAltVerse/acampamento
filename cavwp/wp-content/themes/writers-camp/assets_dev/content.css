@@ -47,7 +47,7 @@
    }
 
    h3 {
-      @apply mb-6 font-semibold text-neutral-500 text-xl;
+      @apply mb-6 font-semibold text-neutral-600 dark:text-neutral-200 text-xl;
    }
 
    :where(p, ul, ol, pre, blockquote) + h3 {
