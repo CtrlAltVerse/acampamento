@@ -12,8 +12,14 @@ class Register
       add_filter('pre_get_posts', [$this, 'filter_query']);
       add_filter('cavwp_post_get', [$this, 'filter_excerpt'], 10, 3);
 
-      add_filter('acf/fields/relationship/query/name=texts', [$this, 'filter_texts']);
-      add_filter('acf/update_value/name=texts', [$this, 'update_field'], 10, 2);
+      add_filter('acf/fields/relationship/query/name=s0', [$this, 'filter_slots']);
+      add_filter('acf/fields/relationship/query/name=s1', [$this, 'filter_slots']);
+      add_filter('acf/fields/relationship/query/name=s2', [$this, 'filter_slots']);
+      add_filter('acf/fields/relationship/query/name=s3', [$this, 'filter_slots']);
+      add_filter('acf/update_value/name=s0', [$this, 'on_update_slot'], 10, 2);
+      add_filter('acf/update_value/name=s1', [$this, 'on_update_slot'], 10, 2);
+      add_filter('acf/update_value/name=s2', [$this, 'on_update_slot'], 10, 2);
+      add_filter('acf/update_value/name=s3', [$this, 'on_update_slot'], 10, 2);
    }
 
    public function filter_excerpt($value, $key, $Post)
@@ -51,7 +57,7 @@ class Register
       return $query;
    }
 
-   public function filter_texts($field_query)
+   public function filter_slots($field_query)
    {
       $field_query['order']      = 'DESC';
       $field_query['orderby']    = 'date';
@@ -61,6 +67,31 @@ class Register
       ]];
 
       return $field_query;
+   }
+
+   public function on_update_slot($value, $post_ID)
+   {
+      $count   = 0;
+      $publish = 0;
+
+      $slots = get_field('slots', $post_ID);
+
+      foreach ($slots as $text) {
+         if (empty($text)) {
+            continue;
+         }
+
+         $count++;
+
+         if ('publish' === get_post_status(reset($text))) {
+            $publish++;
+         }
+      }
+
+      update_post_meta($post_ID, 'text_count', $count);
+      update_post_meta($post_ID, 'publish_count', $publish);
+
+      return $value;
    }
 
    public function register(): void
@@ -102,22 +133,6 @@ class Register
       </script>
 <?php
 
-   }
-
-   public function update_field($value, $post_ID)
-   {
-      $count   = 0;
-      $publish = 0;
-
-      if (is_array($value)) {
-         $count   = count($value);
-         $publish = count(array_filter($value, fn($post_id) => 'publish' === get_post_status($post_id)));
-      }
-
-      update_post_meta($post_ID, 'text_count', $count);
-      update_post_meta($post_ID, 'publish_count', $publish);
-
-      return $value;
    }
 }
 ?>

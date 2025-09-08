@@ -88,23 +88,23 @@ get_component('header');
             ]); ?>
             <?php $Form->field('color', [
                'type'  => 'hidden',
-               'value' => $_GET['edit'] ? $Text->get('color') : '',
+               'value' => !empty($_GET['edit']) ? $Text->get('color') : '',
             ]); ?>
             <?php $Form->field('image_author', [
                'type'  => 'hidden',
-               'value' => $_GET['edit'] ? $Text->get('image_author') : '',
+               'value' => !empty($_GET['edit']) ? $Text->get('image_author') : '',
             ]); ?>
             <?php $Form->field('image_author_url', [
                'type'  => 'hidden',
-               'value' => $_GET['edit'] ? $Text->get('image_author_url') : '',
+               'value' => !empty($_GET['edit']) ? $Text->get('image_author_url') : '',
             ]); ?>
             <?php $Form->field('image_full', [
                'type'  => 'hidden',
-               'value' => $_GET['edit'] ? $Text->get('image_full') : '',
+               'value' => !empty($_GET['edit']) ? $Text->get('image_full') : '',
             ]); ?>
             <?php $Form->field('image_mini', [
                'type'         => 'hidden',
-               'value'        => $_GET['edit'] ? $Text->get('image_mini') : '',
+               'value'        => !empty($_GET['edit']) ? $Text->get('image_mini') : '',
                'x-model.fill' => 'entry.image_mini',
             ]); ?>
             <button class="flex justify-center items-center mx-2 border-2 border-middle rounded w-full max-w-120 aspect-card bg-neutral-200/80 dark:bg-neutral-900/80 cursor-pointer"

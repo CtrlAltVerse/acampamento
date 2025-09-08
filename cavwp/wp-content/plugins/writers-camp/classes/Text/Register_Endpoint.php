@@ -109,21 +109,21 @@ class Register_Endpoint
          return $post_ID;
       }
 
-      if (!empty($raw['challenge'])) {
+      if (!empty($raw['challenge']) && empty($raw['ID'])) {
          $challenge = (int) $raw['challenge'];
-         $texts     = get_post_meta($challenge, 'texts', true);
+         $slots     = get_field('slots', $challenge);
 
-         if (empty($texts)) {
-            $texts = [];
+         if (empty($slots)) {
+            $slots = [];
          }
 
          if (empty($raw['slot'])) {
-            $texts[] = $post_ID;
+            $slots['s0'] = [$post_ID];
          } else {
-            $texts[$raw['slot']] = $post_ID;
+            $slots['s' . $raw['slot']] = [$post_ID];
          }
 
-         update_post_meta($challenge, 'texts', $texts);
+         update_field('slots', $slots, $challenge);
       }
 
       $actions[] = [

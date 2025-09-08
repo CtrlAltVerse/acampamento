@@ -18,10 +18,10 @@ if (!empty($challenge)) {
       $challenge = 0;
    }
 
-   $_from_challenge = get_post_meta($challenge, 'texts', true);
+   $_from_challenge = get_field('slots', $challenge);
 
    if (is_array($_from_challenge)) {
-      $from_challenge = $_from_challenge;
+      $from_challenge = array_values($_from_challenge);
    }
 }
 
