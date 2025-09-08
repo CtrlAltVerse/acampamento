@@ -83,11 +83,18 @@ get_component('header');
                em contato</a>.</p>
       </div>
       <?php } ?>
-      <h1 class="h1">
-         <?php esc_html_e('Suas publicações', 'cavcamp'); ?>
-      </h1>
+      <div class="flex items-center justify-between gap-2">
+         <h1 class="h1">
+            <?php esc_html_e('Suas publicações', 'cavcamp'); ?>
+         </h1>
+         <a class="btn"
+            href="<?php echo WritersCampPUtils::get_page_link('edit'); ?>">
+            <i class="ri-add-circle-fill"></i> <span class="hidden sm:inline">Novo texto</span>
+         </a>
+      </div>
+
       <ul class="flex gap-3 my-5 whitespace-nowrap overflow-x-auto !text-sm lg:!text-md">
-         <?php foreach ($statuses as $status_k => $status_info) {       ?>
+         <?php foreach ($statuses as $status_k => $status_info) { ?>
          <li>
             <?php if ($status_k === $status) { ?>
             <span class="btn active">
@@ -116,7 +123,8 @@ get_component('header');
                <?php $mini = $text->get('image_mini'); ?>
                <?php if ($mini) { ?>
                <img class="aspect-card rounded h-26 border-2 border-neutral-500 object-cover overflow-hidden"
-                    src="<?php echo $mini; ?>" alt=""                    loading="lazy" />
+                    src="<?php echo $mini; ?>" alt=""
+                    loading="lazy" />
                <?php } else { ?>
                <div
                     class="flex items-center justify-center rounded aspect-card h-26 uppercase border-2 border-neutral-500 text-neutral-500 bg-neutral-200">

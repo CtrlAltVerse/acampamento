@@ -1,6 +1,8 @@
 <?php
 
 use cavWP\Models\Post;
+use cavWP\Utils;
+use writersCampP\Challenge\Utils as ChallengeUtils;
 
 get_component('header');
 
@@ -15,14 +17,10 @@ $from_challenge = [];
 
 if (!empty($challenge)) {
    if (is_array($challenge)) {
-      $challenge = 0;
+      $challenge = reset($challenge);
    }
 
-   $_from_challenge = get_field('slots', $challenge);
-
-   if (is_array($_from_challenge)) {
-      $from_challenge = array_values($_from_challenge);
-   }
+   $from_challenge = ChallengeUtils::get_texts($challenge);
 }
 
 $from_club       = $Text->related(4, 'term', 'club', exclude: $from_challenge);
@@ -31,6 +29,7 @@ $terms           = $Text->get('terms', taxonomy: 'club');
 $reading_time    = $Text->get('time_to_read');
 $term            = $terms[0];
 $color           = $Text->get('color', default: '#fff');
+$text_color      = Utils::calc_text_color($color);
 $container_class = '';
 
 ?>
@@ -42,7 +41,7 @@ $container_class = '';
    <div class="container h-full">
       <div class="title-effect z-1 text-shadow-lg"
            style="color: <?php echo $color; ?>">
-         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none <?php echo ('#000000' === $color) ? 'text-neutral-100' : 'text-neutral-700'; ?>"
+         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none <?php echo ('w' === $text_color) ? 'text-neutral-100' : 'text-neutral-700'; ?>"
                style="background-color: <?php echo $color; ?>">
             <?php echo $term->get('name'); ?>
          </span>
@@ -58,7 +57,7 @@ $container_class = '';
             <?php echo $Text->get('summary'); ?>
          </div>
          <div class="pt-4">
-            <a class="flex items-center"
+            <a class="flex items-center gap-1"
                href="<?php echo $Text->get('image_author_url'); ?>"
                target="_blank" rel="external">
                Foto de
@@ -193,7 +192,7 @@ $container_class = '';
       </article>
       <div id="related" class="flex flex-col gap-12 mt-15" x-init="checkTitle" x-on:scroll.window.passive="checkTitle"
            x-on:resize.window.passive="checkTitle">
-         <?php if ($challenge) { ?>
+         <?php if (!empty($challenge)) { ?>
          <section class="flex flex-col gap-4">
             <h2 class="h2">Parte do Desafio</h2>
             <?php get_component('challenge', ['challenge' => new Post($challenge)]); ?>

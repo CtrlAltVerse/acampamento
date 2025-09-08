@@ -61,10 +61,16 @@ class Register
    {
       $field_query['order']      = 'DESC';
       $field_query['orderby']    = 'date';
-      $field_query['meta_query'] = [[
-         'key'     => 'challenge',
-         'compare' => 'NOT EXISTS',
-      ]];
+      $field_query['meta_query'] = [
+         'relation' => 'OR',
+         [
+            'key'     => 'challenge',
+            'compare' => 'NOT EXISTS',
+         ], [
+            'key'     => 'challenge',
+            'compare' => '=',
+            'value'   => '',
+         ]];
 
       return $field_query;
    }

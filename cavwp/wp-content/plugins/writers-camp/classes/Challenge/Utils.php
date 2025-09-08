@@ -34,4 +34,24 @@ class Utils
 
       return array_map(fn($challenge) => new Post($challenge), $challenges);
    }
+
+   public static function get_texts($challenge_ID)
+   {
+      $texts = [];
+      $slots = get_field('slots', $challenge_ID);
+
+      if (empty($slots)) {
+         return $texts;
+      }
+
+      foreach ($slots as $slot) {
+         if (empty($slot)) {
+            continue;
+         }
+
+         $texts[] = reset($slot);
+      }
+
+      return $texts;
+   }
 }
