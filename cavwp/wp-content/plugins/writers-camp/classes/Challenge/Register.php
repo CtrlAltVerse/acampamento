@@ -12,10 +12,10 @@ class Register
       add_filter('pre_get_posts', [$this, 'filter_query']);
       add_filter('cavwp_post_get', [$this, 'filter_excerpt'], 10, 3);
 
-      add_filter('acf/fields/relationship/query/name=s0', [$this, 'filter_slots']);
-      add_filter('acf/fields/relationship/query/name=s1', [$this, 'filter_slots']);
-      add_filter('acf/fields/relationship/query/name=s2', [$this, 'filter_slots']);
-      add_filter('acf/fields/relationship/query/name=s3', [$this, 'filter_slots']);
+      add_filter('acf/fields/post_object/query/name=s0', [$this, 'filter_slots']);
+      add_filter('acf/fields/post_object/query/name=s1', [$this, 'filter_slots']);
+      add_filter('acf/fields/post_object/query/name=s2', [$this, 'filter_slots']);
+      add_filter('acf/fields/post_object/query/name=s3', [$this, 'filter_slots']);
       add_filter('acf/update_value/name=s0', [$this, 'on_update_slot'], 10, 2);
       add_filter('acf/update_value/name=s1', [$this, 'on_update_slot'], 10, 2);
       add_filter('acf/update_value/name=s2', [$this, 'on_update_slot'], 10, 2);
@@ -82,20 +82,46 @@ class Register
 
       $slots = get_field('slots', $post_ID);
 
-      foreach ($slots as $text) {
-         if (empty($text)) {
-            continue;
-         }
+      if (!empty($slots)) {
+         foreach ($slots as $text) {
+            if (empty($text)) {
+               continue;
+            }
 
-         $count++;
+            $count++;
 
-         if ('publish' === get_post_status(reset($text))) {
-            $publish++;
+            if ('publish' === get_post_status($text)) {
+               $publish++;
+            }
          }
       }
 
       update_post_meta($post_ID, 'text_count', $count);
       update_post_meta($post_ID, 'publish_count', $publish);
+
+      if ($count >= 4) {
+         $open_challengers = Utils::get(10);
+
+         if (10 < count($open_challengers)) {
+            $next_challenger = get_posts([
+               'post_type'      => 'challenge',
+               'post_status'    => 'draft',
+               'order'          => 'ASC',
+               'orderby'        => 'date',
+               'posts_per_page' => 1,
+               'fields'         => 'ids',
+            ]);
+
+            if (!empty($next_challenger)) {
+               $next_challenger_ID = $next_challenger[0];
+
+               wp_update_post([
+                  'ID'          => $next_challenger_ID,
+                  'post_status' => 'publish',
+               ]);
+            }
+         }
+      }
 
       return $value;
    }
@@ -130,15 +156,13 @@ class Register
          return;
       }
 
-      ?>
-<script>
+      echo <<<'HTML'
+      <script>
          document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("excerpt").rows = 10
             document.getElementById("excerpt").style.height = 'auto'
          })
       </script>
-<?php
-
+      HTML;
    }
 }
-?>

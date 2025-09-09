@@ -17,7 +17,7 @@ if ($per_club || !empty($text)) {
 $middle = '<span class="grow flex items-center justify-center text-xl font-extrabold text-neutral-500 dark:text-neutral-200">' . $key + 1 . '</span>';
 
 if (!empty($text)) {
-   $text   = new Post(reset($text));
+   $text   = new Post($text);
    $status = $text->get('status');
    $title  = $text->get('title');
    $author = $text->get('author:display_name');

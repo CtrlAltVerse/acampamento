@@ -49,7 +49,7 @@ class Utils
             continue;
          }
 
-         $texts[] = reset($slot);
+         $texts[] = $slot;
       }
 
       return $texts;

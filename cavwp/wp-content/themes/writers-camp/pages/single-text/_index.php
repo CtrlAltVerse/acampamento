@@ -16,10 +16,6 @@ $shares    = $Text->get('share', attrs: ['facebook', 'x-twitter', 'email', 'what
 $from_challenge = [];
 
 if (!empty($challenge)) {
-   if (is_array($challenge)) {
-      $challenge = reset($challenge);
-   }
-
    $from_challenge = ChallengeUtils::get_texts($challenge);
 }
 
