@@ -117,6 +117,14 @@
          @apply table-fixed;
       }
    }
+
+   .wp-block-image {
+      @apply overflow-hidden rounded-xl my-8;
+
+      .wp-element-caption {
+         @apply py-1.5 px-4 bg-guild text-neutral-100 font-medium text-sm;
+      }
+   }
 }
 
 .content.editor {
