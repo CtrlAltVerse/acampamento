@@ -2,6 +2,7 @@
 
 namespace writersCampP\Text;
 
+use cavWP\Utils as cavUtils;
 use WP_REST_Response;
 use WP_REST_Server;
 
@@ -97,7 +98,7 @@ class Register_Endpoint
 
       foreach (['challenge', 'color', 'image_author', 'image_author_url', 'image_full', 'image_mini'] as $meta) {
          if (!empty($raw[$meta])) {
-            $body['meta_input'][$meta] = $raw[$meta];
+            $body['meta_input'][$meta] = cavUtils::remove_emoji($raw[$meta]);
          }
       }
 

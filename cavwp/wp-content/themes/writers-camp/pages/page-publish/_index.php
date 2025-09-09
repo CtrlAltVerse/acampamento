@@ -122,7 +122,7 @@ get_component('header');
       </div>
    </form>
    <div class="hidden">
-      <div class="menu-mark flex gap-0.5 p-1 bg-neutral-100 text-neutral-700 rounded" x-show="!current.showChanger"
+      <div class="menu-mark flex gap-px p-1 bg-neutral-100 text-neutral-700 rounded" x-show="!current.showChanger"
            x-transition>
          <template x-for="{name,label,icon} in sky.marks">
             <button class="btn-editor" type="button" x-on:click.prevent="mark(name)"
@@ -149,7 +149,7 @@ get_component('header');
                     x-bind:class="{'!opacity-100': current.showChanger }">
                <i x-bind:class="current.icon"></i>
             </button>
-            <div class="menu-changer absolute top-1/2 -left-0 -translate-y-1/2 z-1 flex items-center gap-1 py-1 pr-2 bg-neutral-100 rounded pl-10"
+            <div class="menu-changer absolute top-1/2 -left-0 -translate-y-1/2 z-1 flex items-center gap-px py-1 pr-2 bg-neutral-100 rounded pl-10"
                  x-show="current.showChanger"
                  x-transition:enter="transition-all ease-out duration-300"
                  x-transition:enter-start="opacity-0 scale-90 -translate-x-full"
