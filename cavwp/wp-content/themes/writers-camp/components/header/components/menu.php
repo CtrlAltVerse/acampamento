@@ -52,7 +52,7 @@ $clubs = ClubUtils::get();
          <div class="flex items-center  min-h-17 bg-neutral-900/10 hover:bg-neutral-300/50">
             <button class="grow text-left cursor-pointer py-2.5 px-3" type="button"
                     x-on:click.prevent="$store.login.method='intro';login.showModal()">
-               <i class="ri-login-box-fill ri-fw"></i> Inscrições
+               <i class="ri-login-box-fill ri-fw"></i> Entrar
             </button>
             <button class="shrink-0 flex justify-center items-center mr-3 rounded bg-neutral-300/10 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:bg-neutral-300 size-8 text-md cursor-pointer"
                     type="button" x-on:click.prevent="closeMenu">

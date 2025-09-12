@@ -9,7 +9,8 @@ $Retrieve = new Form(Utils::get_retrieve_fields());
 $networks = CavWPUtils::get_login_networks();
 
 ?>
-<dialog id="login" class="m-auto w-full max-w-2xl rounded-lg backdrop:z-45 backdrop:bg-neutral-900/60 dark:text-neutral-100 dark:bg-neutral-600"
+<dialog id="login"
+        class="m-auto w-full max-w-2xl rounded-lg backdrop:z-45 backdrop:bg-neutral-900/60 dark:text-neutral-100 dark:bg-neutral-600"
         x-on:click.self="login.close()">
    <div class="flex flex-col sm:grid sm:grid-rows-1 sm:grid-cols-2 h-full min-h-126"
         x-data="{is_signup: true, method: ''}"
@@ -22,7 +23,8 @@ $networks = CavWPUtils::get_login_networks();
               alt />
          <div class="flex justify-start w-full">
             <h2 class="h2">
-               Entrar <span x-show="$store.login.method==='email'" x-transition:enter x-cloak>com email</span>
+               <span x-text="is_signup ? 'Cadastrar' : 'Entrar'"></span>
+               <span x-show="$store.login.method==='email'" x-transition:enter x-cloak>com email</span>
                <span x-show="$store.login.method==='google'" x-transition:enter x-cloak>com Google</span>
                <span x-show="$store.login.method==='facebook'" x-transition:enter x-cloak>com Facebook</span>
             </h2>
@@ -105,8 +107,8 @@ $networks = CavWPUtils::get_login_networks();
                <div class="flex flex-col gap-1">
                   <?php $Form->label('user_pass', ['class' => 'font-medium'], p_attrs: false); ?>
                   <?php $Form->field('user_pass', [
-                     'class'              => 'border border-neutral-500 rounded py-1 px-2',
-                     'x-bind:placeholder' => 'is_signup && "Use uma senha segura"',
+                     'class'               => 'border border-neutral-500 rounded py-1 px-2',
+                     'x-bind:placeholder'  => 'is_signup && "Use uma senha segura"',
                      'x-bind:autocomplete' => 'is_signup ? "new-password" : "current-password"',
                   ]); ?>
                </div>

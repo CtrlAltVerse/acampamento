@@ -26,7 +26,7 @@ use writersCampP\Utils;
          <a class="btn"
             href="<?php echo Utils::get_page_link('hints'); ?>">Dicas</a>
          <?php } else { ?>
-         <button class="btn" type="button" x-on:click.prevent="$store.login.method='intro';login.showModal()">Inscrições</button>
+         <button class="btn" type="button" x-on:click.prevent="$store.login.method='intro';login.showModal()">Entrar</button>
          <?php } ?>
       </div>
    </div>

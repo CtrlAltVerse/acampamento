@@ -94,7 +94,7 @@ $container_class = '';
                         <?php printf(_n('%d minuto de leitura', '%d minutos de leitura', $reading_time, 'cav'), $reading_time); ?>
                      </span>
                   </div>
-                  <ul class="flex items-center gap-3" x-data="{show: false}">
+                  <ul class="flex flex-wrap items-center gap-3" x-data="{show: false}">
                      <li x-show="!show"><button class="cursor-pointer" type="button"
                                 x-on:click.prevent="show=true">Compartilhar</button></li>
                      <li x-show="show" x-cloak>

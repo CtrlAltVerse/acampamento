@@ -16,7 +16,7 @@
       "@alpinejs/mask": "^3.14.9",
       "@alpinejs/persist": "^3.14.9",
       "@ctrlaltvers/alpine": "^1.1.2",
-      "@ctrlaltvers/tailwind": "^1.1.0",
+      "@ctrlaltvers/tailwind": "^1.1.2",
       "@floating-ui/dom": "^1.7.2",
       "@tailwindcss/cli": "^4.1.11",
       "@tiptap/core": "^3.0.7",
