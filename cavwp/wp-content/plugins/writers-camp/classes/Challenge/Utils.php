@@ -38,7 +38,7 @@ class Utils
    public static function get_texts($challenge_ID)
    {
       $texts = [];
-      $slots = get_field('slots', $challenge_ID);
+      $slots = get_field('slots', is_array($challenge_ID) ? $challenge_ID[0] : $challenge_ID);
 
       if (empty($slots)) {
          return $texts;
