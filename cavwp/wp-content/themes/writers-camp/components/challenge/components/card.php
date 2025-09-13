@@ -97,6 +97,6 @@ $new_url = Utils::get_page_link('edit', [
 echo <<<HTML
    <a href="{$new_url}" class="relative flex aspect-banner flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed border-b-solid">
       {$middle}
-      <span class="absolute bottom-0 -left-0.75 -right-0.75 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-xs bg-neutral-100 text-neutral-600"><i class="ri-add-circle-line"></i> Enviar</span>
+      <span class="absolute bottom-0 -left-0.75 -right-0.75 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-xs bg-neutral-700 dark:bg-neutral-100 text-neutral-100 dark:text-neutral-700"><i class="ri-add-circle-line"></i> Enviar</span>
    </a>
 HTML;
