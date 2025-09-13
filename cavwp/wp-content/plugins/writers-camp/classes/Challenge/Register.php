@@ -48,7 +48,7 @@ class Register
       }
 
       $query->set('meta_query', [[
-         'key'     => 'text_count',
+         'key'     => 'publish_count',
          'compare' => '=',
          'value'   => 4,
          'type'    => 'NUMERIC',

@@ -14,7 +14,7 @@ if ($per_club || !empty($text)) {
    $all_clubs = UtilsClub::get();
 }
 
-$middle = '<span class="grow flex items-center justify-center text-xl font-extrabold text-neutral-500 dark:text-neutral-200">' . $key + 1 . '</span>';
+$middle = '<span class="grow flex items-center justify-center pb-9.5 text-xl font-extrabold text-neutral-500 dark:text-neutral-200">' . $key + 1 . '</span>';
 
 if (!empty($text)) {
    $text   = new Post($text);
@@ -33,7 +33,7 @@ if (!empty($text)) {
       echo <<<HTML
       <div class="aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 pt-8.5 text-neutral-100 border-neutral-500 cursor-default bg-neutral-900/10 overflow-hidden">
          {$middle}
-         <span class="pt-2 pb-1.5 px-4 uppercase font-semibold text-xs text-neutral-100 bg-neutral-500">Reservado</span>
+         <span class="pt-2 pb-1.5 px-4 uppercase font-semibold text-xs text-neutral-100 bg-neutral-500"><i class="ri-progress-2-line"></i> Reservado</span>
       </div>
       HTML;
 
@@ -81,7 +81,7 @@ if ($per_club) {
    echo <<<HTML
       <a href="{$new_url}" class="relative aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed border-b-solid text-neutral-100" style="border-color: {$color}">
          {$middle}
-         <span class="absolute bottom-0 -left-0.75 -right-0.75 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-sm" style="background-color: {$color}">{$club_name}</span>
+         <span class="absolute bottom-0 -left-0.75 -right-0.75 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-xs" style="background-color: {$color}">{$club_name}</span>
       </a>
    HTML;
 
@@ -95,7 +95,8 @@ $new_url = Utils::get_page_link('edit', [
 
 // EMPTY
 echo <<<HTML
-   <a href="{$new_url}" class="relative flex aspect-banner cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed">
+   <a href="{$new_url}" class="relative flex aspect-banner flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 border-dashed border-b-solid">
       {$middle}
+      <span class="absolute bottom-0 -left-0.75 -right-0.75 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-xs bg-neutral-100 text-neutral-600"><i class="ri-add-circle-line"></i> Enviar</span>
    </a>
 HTML;

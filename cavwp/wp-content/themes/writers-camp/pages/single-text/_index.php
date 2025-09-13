@@ -191,7 +191,7 @@ $container_class = '';
          <?php if (!empty($challenge)) { ?>
          <section class="flex flex-col gap-4">
             <h2 class="h2">Parte do Desafio</h2>
-            <?php get_component('challenge', ['challenge' => new Post($challenge)]); ?>
+            <?php get_component('challenge', ['challenge' => new Post($challenge[0])]); ?>
          </section>
          <?php } ?>
 
