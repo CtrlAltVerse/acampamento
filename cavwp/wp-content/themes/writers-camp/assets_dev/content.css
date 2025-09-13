@@ -121,7 +121,7 @@
       }
 
       thead {
-         @apply bg-guild;
+         @apply bg-guild text-neutral-100;
       }
 
       tbody {

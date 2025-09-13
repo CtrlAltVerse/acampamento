@@ -1,7 +1,6 @@
 <?php
 
 use cavWP\Models\User;
-use cavWP\Utils as CavUtils;
 use writersCampP\Club\Utils as ClubUtils;
 use writersCampP\Utils;
 
@@ -105,11 +104,11 @@ $clubs = ClubUtils::get();
          </ul>
          <?php if (is_user_logged_in()) { ?>
          <hr class="border-neutral-700/50 dark:border-neutral-100/50" />
-         <a class="flex gap-2"
-            href="<?php echo wp_logout_url(CavUtils::get_current_url()); ?>">
+         <button class="a flex gap-2 cursor-pointer"
+            x-on:click="$rest.get(moon.apiUrl+'/logout?_wpnonce='+moon.nonce)" type="button">
             <i class="ri-logout-circle-r-line ri-fw"></i>
             Sair
-         </a>
+         </button>
          <?php } ?>
       </div>
    </div>

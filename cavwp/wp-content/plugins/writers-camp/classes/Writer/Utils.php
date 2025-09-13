@@ -69,23 +69,6 @@ class Utils
             'format'      => 'email',
             'required'    => true,
          ],
-         'old_password' => [
-            'title'             => 'Senha antiga',
-            'type'              => 'string',
-            'format'            => 'password',
-            'minLength'         => 6,
-            'maxLength'         => 33,
-            'validate_callback' => [$Validade, 'check'],
-         ],
-         'user_password' => [
-            'title'             => 'Senha nova',
-            'type'              => 'string',
-            'format'            => 'password',
-            'minLength'         => 6,
-            'maxLength'         => 33,
-            'has'               => ['lowercase', 'uppercase', 'special', 'number'],
-            'validate_callback' => [$Validade, 'check'],
-         ],
          'description' => [
             'title'     => 'Apresentação',
             'type'      => 'string',

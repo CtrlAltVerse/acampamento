@@ -168,6 +168,6 @@ $networks = CavWPUtils::get_login_networks();
          </div>
          <button class="cursor-pointer" type="button" x-on:click.prevent="login.close()">Cancelar</button>
       </form>
-      <input name="token" type="hidden" />
+      <input id="token" type="hidden" />
    </div>
 </dialog>

@@ -21,6 +21,10 @@ Alpine.data('bonfire', function () {
          const url = new URL(location.href)
 
          if (url.searchParams.get('action')) {
+            if (document.body.classList.contains('logged-in')) {
+               return
+            }
+
             const action = url.searchParams.get('action')
             if ('rp' === action) {
                //@ts-expect-error
@@ -118,17 +122,7 @@ Alpine.data('bonfire', function () {
       },
 
       doLogin() {
-         this.$rest.post(moon.apiUrl + '/enter').then((res) =>
-            res.data.forEach((action) => {
-               if (action.action !== 'ignore') {
-                  return
-               }
-
-               if (action.target === 'update_nonce') {
-                  moon.nonce = action.content
-               }
-            })
-         )
+         this.$rest.post(moon.apiUrl + '/enter')
       },
 
       openMenu() {
@@ -149,11 +143,13 @@ Alpine.data('bonfire', function () {
 
       checkUser() {
          //@ts-expect-error
-         const token = document.getElementsByName('token').value
+         const token = document.getElementById('token').value
 
-         return this.$rest.post(moon.apiUrl + '/check', {
+         return this.$rest.post(moon.apiUrl + '/check?_wpnonce=' + moon.nonce, {
             //@ts-expect-error
             sign_method: this.$store.login.method,
+            //@ts-expect-error
+            join: document.getElementById('join') ? true : false,
             token,
          })
       },
@@ -168,7 +164,7 @@ window.handleGoogleToken = (response) => {
    //@ts-expect-error
    Alpine.store('login').method = 'google'
    //@ts-expect-error
-   document.getElementsByName('token').value = response.credential
+   document.getElementById('token').value = response.credential
 }
 
 window.handleFbToken = (response) => {
@@ -179,7 +175,7 @@ window.handleFbToken = (response) => {
    //@ts-expect-error
    Alpine.store('login').method = 'facebook'
    //@ts-expect-error
-   document.getElementsByName('token').value = response.authResponse.accessToken
+   document.getElementById('token').value = response.authResponse.accessToken
 }
 
 // document.addEventListener('AppleIDSignInOnSuccess', (event) => {})

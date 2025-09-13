@@ -140,7 +140,8 @@ a.btn {
       @apply flex flex-col;
    }
 
-   a {
+   a,
+   .a {
       @apply py-2.5 px-3;
    }
 

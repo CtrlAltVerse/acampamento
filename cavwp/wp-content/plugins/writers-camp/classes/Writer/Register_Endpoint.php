@@ -31,6 +31,13 @@ class Register_Endpoint
          'args'                => Utils::get_retrieve_fields(),
       ]);
 
+      register_rest_route('wrs-camp/v1', '/logout', [
+         'methods'             => WP_REST_Server::READABLE,
+         'callback'            => [$this, 'logout'],
+         'permission_callback' => '__return_true',
+         'parse_errors'        => true,
+      ]);
+
       register_rest_route('wrs-camp/v1', '/retrieve', [
          'methods'             => WP_REST_Server::EDITABLE,
          'callback'            => [$this, 'retrieve'],
@@ -60,6 +67,23 @@ class Register_Endpoint
             ],
             'token' => [
                'type'     => 'string',
+               'required' => true,
+            ],
+            'join' => [
+               'type' => 'boolean',
+            ],
+         ],
+      ]);
+
+      register_rest_route('wrs-camp/v1', '/unjoin', [
+         'methods'             => WP_REST_Server::EDITABLE,
+         'callback'            => [$this, 'unjoin'],
+         'permission_callback' => ['writersCampP\Utils', 'checks_login'],
+         'parse_errors'        => true,
+         'args'                => [
+            'sign_method' => [
+               'type'     => 'string',
+               'enum'     => ['google', 'facebook'],
                'required' => true,
             ],
          ],
@@ -155,9 +179,31 @@ class Register_Endpoint
          $user['avatar_url']     = $user_google['picture'];
       }
 
-      $User = get_user_by('email', $user['user_email']);
+      if (!empty($body['join'])) {
+         update_user_meta(get_current_user_id(), "network_user_id_{$body['sign_method']}", $user['social_user_id']);
+         update_user_meta(get_current_user_id(), "network_user_email_{$body['sign_method']}", $user['user_email']);
 
-      if (!empty($User)) {
+         $actions[] = [
+            'action'  => 'toast',
+            'content' => 'Método adicionado com sucesso.',
+         ];
+
+         return new WP_REST_Response($actions);
+      }
+
+      $users = get_users([
+         'fields'     => 'ids',
+         'meta_query' => [
+            [
+               'key'   => "network_user_email_{$body['sign_method']}",
+               'value' => $user['user_email'],
+            ],
+         ],
+      ]);
+
+      if (!empty($users)) {
+         $User = get_user_by('id', $users[0]);
+
          if (!empty($user['social_user_id']) && !empty($body['sign_method'])) {
             $network_user_id = get_user_meta($User->ID, "network_user_id_{$body['sign_method']}", true);
 
@@ -254,7 +300,8 @@ class Register_Endpoint
                   $user['meta_input']['avatar_source'] = 'network';
                }
 
-               $user['meta_input']["network_user_id_{$body['sign_method']}"] = $user['social_user_id'];
+               $user['meta_input']["network_user_id_{$body['sign_method']}"]    = $user['social_user_id'];
+               $user['meta_input']["network_user_email_{$body['sign_method']}"] = $user['user_email'];
             }
 
             if (!isset($social_user['email_verified'])) {
@@ -317,6 +364,30 @@ class Register_Endpoint
       return new WP_REST_Response($actions);
    }
 
+   public function logout($request)
+   {
+      $referrer = $request->get_header('referer');
+
+      $user = wp_get_current_user();
+
+      wp_logout();
+
+      $redirect_to = apply_filters('logout_redirect', $referrer, '', $user);
+
+      $actions[] = [
+         'action'  => 'toast',
+         'content' => 'Saiu com sucesso.',
+         'extra'   => 2,
+      ];
+      $actions[] = [
+         'action' => 'go',
+         'target' => $redirect_to,
+         'extra'  => 2,
+      ];
+
+      return new WP_REST_Response($actions);
+   }
+
    public function new_pass($request)
    {
       $body = $request->get_params();
@@ -355,7 +426,24 @@ class Register_Endpoint
 
       $actions[] = [
          'action'  => 'toast',
-         'content' => 'Se há uma conta com este e-mail, siga os passos enviados a ele.',
+         'content' => 'Siga os passos enviados ao e-mail cadastrado.',
+      ];
+
+      return new WP_REST_Response($actions);
+   }
+
+   public function unjoin($request)
+   {
+      $body = $request->get_params();
+
+      $actions = [];
+
+      delete_user_meta(get_current_user_id(), "network_user_id_{$body['sign_method']}");
+      delete_user_meta(get_current_user_id(), "network_user_email_{$body['sign_method']}");
+
+      $actions[] = [
+         'action'  => 'toast',
+         'content' => 'Método removido com sucesso.',
       ];
 
       return new WP_REST_Response($actions);
@@ -385,28 +473,6 @@ class Register_Endpoint
       if (!empty($body['avatar'])) {
          $userdata['meta_input']['avatar_uploaded'] = $body['avatar'];
          $userdata['meta_input']['avatar_source']   = 'upload';
-      }
-
-      // CHANGING PASS
-      if (!empty($body['old_password']) && !empty($body['user_password']) && $body['old_password'] !== $body['user_password']) {
-         $check = wp_authenticate($User->user_login, $body['old_password']);
-
-         if (is_wp_error($check)) {
-            $actions[] = [
-               'action'  => 'toast',
-               'content' => 'Senha não alterada. Senha antiga não confere.',
-            ];
-         } else {
-            $userdata['user_pass'] = $body['user_password'];
-         }
-      }
-
-      // NOT CHANGING PASS
-      if ((empty($body['old_password']) && !empty($body['user_password'])) || (!empty($body['old_password']) && empty($body['user_password']))) {
-         $actions[] = [
-            'action'  => 'toast',
-            'content' => 'Senha não alterada. Preencha os dois campos.',
-         ];
       }
 
       $all_socials = array_keys(NetworksUtils::get_services('profile'));
