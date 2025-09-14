@@ -18,8 +18,8 @@
 | Página                  | Mobile | <...> | Desktop |
 | ----------------------- | :----: | :---: | :-----: |
 | Home                    |        |       |         |
-| CPT/Challenges          |        |       |         |
-| CPT/Texts               |        |       |         |
+| Archive/Challenges      |        |       |         |
+| Archive/Texts           |        |       |         |
 | Author                  |        |       |         |
 | Tax/Club                |        |       |         |
 | Single/Text             |        |       |         |

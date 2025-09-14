@@ -5,7 +5,6 @@ use cavWP\Models\Post;
 use cavWP\Models\User;
 use writersCampP\Text\Utils as TextUtils;
 
-
 $Text  = new Post();
 $User  = new User(get_current_user_id());
 $Form  = new Form(TextUtils::get_comment_fields());
@@ -25,9 +24,9 @@ if ($args['in_body'] ?? false) {
       <?php echo $title; ?>
    </h3>
    <form class="flex flex-col gap-3"
-         x-on:submit.prevent="$rest.post(moon.apiUrl+'/comment?_wpnonce='+moon.nonce).then(() => {$do('value','[name=comment]','');parent=0})">
+         x-on:submit.prevent="$rest.post(moon.apiUrl+'/comment?_wpnonce='+moon.nonce).then(() => {comment='';parent=0})">
       <div class="comment-user flex items-center gap-3">
-         <?php get_page_component(__FILE__,'comment-user'); ?>
+         <?php get_page_component(__FILE__, 'comment-user'); ?>
       </div>
       <div>
          <?php $Form->field('comment', [
@@ -35,7 +34,7 @@ if ($args['in_body'] ?? false) {
             'rows'        => '2',
             'aria-label'  => 'Comentário',
             'placeholder' => 'Adicionar comentário',
-            'x-model'       => 'comment',
+            'x-model'     => 'comment',
             'x-autosize'  => true,
          ], 'textarea'); ?>
       </div>

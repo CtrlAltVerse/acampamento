@@ -54,6 +54,11 @@ class Register_Endpoint
             'target'  => '#comments-list',
             'content' => $html,
          ];
+
+         $actions[] = [
+            'action' => 'scroll',
+            'target' => '#comments-list',
+         ];
       } else {
          $comment_children = get_comments([
             'count'  => true,
@@ -73,6 +78,11 @@ class Register_Endpoint
                'content' => $html,
             ];
          }
+
+         $actions[] = [
+            'action' => 'scroll',
+            'target' => "#comment-{$body['comment_parent']}",
+         ];
       }
 
       return new WP_REST_Response($actions);
