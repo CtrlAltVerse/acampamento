@@ -102,7 +102,7 @@ $container_class = '';
                            <li class="text-xl">
                               <button class="cursor-pointer" x-on:click.prevent="navigator.share({
                                     title: '<?php echo $Text->get('title'); ?>',
-                                    text: '<?php echo $Text->get('summary'); ?>',
+                                    text: '<?php echo $Text->get('summary', apply_filter: false); ?>',
                                     url: '<?php echo $Text->get('url'); ?>',
                                  })" type="button" title="Compartilhar">
                                  <i class="ri-share-fill"></i>
