@@ -21,6 +21,7 @@ class Utils
          'orderby'        => $orderby,
       ]);
    }
+
    public static function get_comment_fields()
    {
       $Validade = new Validate();
@@ -72,7 +73,7 @@ class Utils
             'type'      => 'string',
             'required'  => true,
             'minLength' => 444,
-            'maxLength' => 5555,
+            'maxLength' => 333333,
          ],
          'mode' => [
             'type'     => 'string',

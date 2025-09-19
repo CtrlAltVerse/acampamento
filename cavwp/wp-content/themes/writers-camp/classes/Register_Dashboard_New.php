@@ -94,14 +94,14 @@ class Register_Dashboard_New
                'icon'        => 'ri-list-ordered-2',
                'placeholder' => 'Escreva uma lista numerada',
             ], [
-               'name'  => 'horizontalRule',
-               'label' => 'Linha horizontal',
-               'icon'  => 'ri-more-fill',
-            ], [
                'name'        => 'codeBlock',
                'label'       => 'Bloco de código',
                'icon'        => 'ri-code-block',
                'placeholder' => 'Escreva código',
+            ], [
+               'name'  => 'horizontalRule',
+               'label' => 'Linha horizontal',
+               'icon'  => 'ri-more-fill',
             ],
          ],
       ]);
