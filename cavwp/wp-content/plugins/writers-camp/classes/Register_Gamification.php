@@ -13,7 +13,7 @@ class Register_Gamification
    {
       switch ($type) {
          case 'comment_approved':
-            if (get_comment_meta($entry['entity_ID'], 'redeemed', true) === '') {
+            if (empty(get_comment_meta($entry['entity_ID'], 'redeemed', true))) {
                update_comment_meta($entry['entity_ID'], 'redeemed', 1);
 
                $comment   = get_comment($entry['entity_ID']);
@@ -23,11 +23,26 @@ class Register_Gamification
             break;
 
          case 'post_updated':
-            if ('text' === $entry['entity_details']['post_type'] && 'publish' === $entry['entity_details']['post_status'] && get_post_meta($entry['entity_ID'], 'redeemed', true) === '') {
+            if ('text' !== $entry['entity_details']['post_type']) {
+               return;
+            }
+
+            $recipient = (int) $entry['entity_details']['post_author'];
+
+            if (
+               in_array($entry['entity_details']['post_status'], ['publish', 'future']) && empty(get_post_meta($entry['entity_ID'], 'reviewer', true)) && (int) $entry['current_user_ID'] !== $recipient && !wp_doing_cron()
+            ) {
+               $current_xp = (int) get_user_meta($entry['current_user_ID'], 'xp', true);
+               update_user_meta($entry['current_user_ID'], 'xp', $current_xp + 5);
+               update_post_meta($entry['entity_ID'], 'reviewer', $entry['current_user_ID']);
+            }
+
+            if (
+               'publish' === $entry['entity_details']['post_status'] && empty(get_post_meta($entry['entity_ID'], 'redeemed', true))
+            ) {
                update_post_meta($entry['entity_ID'], 'redeemed', 1);
 
-               $recipient = (int) $entry['entity_details']['post_author'];
-               $points    = 10;
+               $points = 10;
 
                if (!empty(get_post_meta($entry['entity_ID'], 'challenge', true))) {
                   $points += 15;
@@ -39,7 +54,7 @@ class Register_Gamification
             break;
       }
 
-      if (empty($recipient)) {
+      if (empty($recipient) || empty($points)) {
          return;
       }
 

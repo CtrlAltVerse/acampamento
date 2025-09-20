@@ -22,9 +22,8 @@ do_action('get_header');
    <div class="relative z-10 bg-guild text-neutral-100 text-lg shadow-lg">
       <header class="flex md:grid grid-cols-3 py-4 px-3" data-nosnippet>
          <div class="grow flex items-center gap-3 col-span-2 lg:col-span-1">
-            <?php the_custom_logo(); ?>
-            <a href="<?php echo home_url(); ?>"
-               class="font-semibold text-sm sm:text-md">
+            <a class="font-semibold text-sm sm:text-md" href="<?php echo home_url(); ?>">
+               <?php the_custom_logo(); ?>
                <?php bloginfo('name'); ?>
             </a>
          </div>
@@ -32,7 +31,7 @@ do_action('get_header');
             'theme_location' => 'header',
             'container'      => '',
             'menu_id'        => '',
-            'menu_class'     => 'hidden lg:flex justify-center items-center gap-4',
+            'menu_class'     => 'hidden lg:flex justify-center items-center gap-4 whitespace-nowrap',
          ]); ?>
          <div class="menu-user">
          <?php get_component(['header', 'cover']); ?>

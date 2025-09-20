@@ -8,17 +8,20 @@ $clubs = Utils::get();
 ?>
 <div class="relative bg-linear-to-b from-brown-400 from-22% to-brown-700 to-44% mt-55 pt-20">
    <div class="footer-fullname flex items-center gap-2">
-      <?php CavUtils::render_svg(get_template_directory() . '/assets/vectors/fire.svg', 'size-[11vw]'); ?>
+      <?php CavUtils::render_svg(get_template_directory() . '/assets/vectors/fire.svg', 'size-[7vw]'); ?>
       <?php bloginfo('name'); ?>
    </div>
    <footer class="container text-neutral-100">
       <div class="flex flex-col xl:flex-row justify-between gap-9">
          <div class="flex flex-col gap-4 justify-between">
             <div class="flex items-center gap-3">
+               <a href="<?php echo home_url(); ?>">
                <?php the_custom_logo(); ?>
+               </a>
                <h2 class="font-semibold text-lg">
-                  <a
-                     href="<?php echo home_url(); ?>"><?php bloginfo('name'); ?></a>
+                  <a href="<?php echo home_url(); ?>">
+                     <?php bloginfo('name'); ?>
+                  </a>
                </h2>
             </div>
             <?php wp_nav_menu([

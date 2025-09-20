@@ -8,6 +8,7 @@ class Register
 {
    public function __construct()
    {
+      add_action('init', [$this, 'changes_author_base_rewrite']);
       add_action('after_setup_theme', [$this, 'register_menus']);
       add_action('pre_get_posts', [$this, 'set_search_query']);
       add_action('template_redirect', [$this, 'block_dashboard']);
@@ -44,6 +45,12 @@ class Register
    public function change_api_prefix()
    {
       return 'api';
+   }
+
+   public function changes_author_base_rewrite()
+   {
+      global $wp_rewrite;
+      $wp_rewrite->author_base = 'autor';
    }
 
    public function clean_search($text)
