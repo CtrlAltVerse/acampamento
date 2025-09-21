@@ -21,12 +21,10 @@ do_action('get_header');
 
    <div class="relative z-10 bg-guild text-neutral-100 text-lg shadow-lg">
       <header class="flex md:grid grid-cols-3 py-4 px-3" data-nosnippet>
-         <div class="grow flex items-center gap-3 col-span-2 lg:col-span-1">
-            <a class="font-semibold text-sm sm:text-md" href="<?php echo home_url(); ?>">
-               <?php the_custom_logo(); ?>
-               <?php bloginfo('name'); ?>
-            </a>
-         </div>
+         <a class="grow flex items-center gap-3 col-span-2 lg:col-span-1 font-semibold text-sm sm:text-md" href="<?php echo home_url(); ?>">
+            <?php the_custom_logo(); ?>
+            <?php bloginfo('name'); ?>
+         </a>
          <?php wp_nav_menu([
             'theme_location' => 'header',
             'container'      => '',

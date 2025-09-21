@@ -23,12 +23,20 @@ class Register_Endpoint
          'args'                => Utils::get_comment_fields(),
       ]);
 
-      register_rest_route('wrs-camp/v1', '/text', [
+      register_rest_route('wrs-camp/v1', '/draft', [
          'methods'             => WP_REST_Server::CREATABLE,
          'callback'            => [$this, 'create_text'],
          'permission_callback' => ['writersCampP\Utils', 'checks_login'],
          'parse_errors'        => true,
-         'args'                => Utils::get_text_fields(),
+         'args'                => Utils::get_draft_fields(),
+      ]);
+
+      register_rest_route('wrs-camp/v1', '/pending', [
+         'methods'             => WP_REST_Server::CREATABLE,
+         'callback'            => [$this, 'create_text'],
+         'permission_callback' => ['writersCampP\Utils', 'checks_login'],
+         'parse_errors'        => true,
+         'args'                => Utils::get_pending_fields(),
       ]);
    }
 
@@ -100,9 +108,9 @@ class Register_Endpoint
       $body['post_author']  = get_current_user_id();
       $body['post_title']   = $raw['post_title'];
       $body['post_content'] = $raw['post_content'];
-      $body['post_excerpt'] = $raw['post_excerpt'];
+      $body['post_excerpt'] = $raw['post_excerpt'] ?? '';
 
-      if ('save' === $raw['mode']) {
+      if ('/wrs-camp/v1/pending' === $request->get_route()) {
          $body['post_status'] = 'pending';
       }
 
@@ -112,7 +120,9 @@ class Register_Endpoint
          }
       }
 
-      $body['tax_input']['club'] = [$raw['club']];
+      if (!empty($raw['club'])) {
+         $body['tax_input']['club'] = [$raw['club']];
+      }
 
       $post_ID = wp_insert_post($body, true);
 
@@ -143,7 +153,7 @@ class Register_Endpoint
          'content' => $post_ID,
       ];
 
-      if ('save' === $raw['mode']) {
+      if ('/wrs-camp/v1/pending' === $request->get_route()) {
          $actions[] = [
             'action'  => 'toast',
             'content' => 'Texto enviado para revisão!',

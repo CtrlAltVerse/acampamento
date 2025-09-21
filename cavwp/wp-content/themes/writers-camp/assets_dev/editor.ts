@@ -55,14 +55,14 @@ document.addEventListener('alpine:init', () => {
                }
             })
 
-            this.$watch('entry.title', this.checkLength.bind(this))
-            this.$watch('entry.summary', this.checkLength.bind(this))
-            this.$watch('entry.content', this.checkLength.bind(this))
-            this.$watch('entry.image_mini', this.checkLength.bind(this))
+            this.$watch('entry.title', this.setDirt.bind(this))
+            this.$watch('entry.summary', this.setDirt.bind(this))
+            this.$watch('entry.content', this.setDirt.bind(this))
+            this.$watch('entry.image_mini', this.setDirt.bind(this))
 
             setInterval(() => {
                if (!this.current.saved) {
-                  this.save('auto-save')
+                  this.save('draft')
                }
             }, 33 * 999)
 
@@ -70,25 +70,22 @@ document.addEventListener('alpine:init', () => {
             this.countWords()
          },
 
-         checkLength(newS: string, oldS: string) {
-            if (oldS.length === 0 || newS.length === oldS.length) {
+         setDirt(newS: string, oldS: string) {
+            if (oldS === newS) {
                return
             }
             this.current.saved = false
          },
 
-         save(status = 'save') {
+         save(status = 'pending') {
+            if (!['pending', 'draft'].includes(status)) {
+               return
+            }
+
             if (
-               status === 'auto-save' &&
+               status === 'draft' &&
                // @ts-expect-error
-               (document.getElementById('post_title').value.length < 3 ||
-                  // @ts-expect-error
-                  document.getElementById('post_excerpt').value.length < 3 ||
-                  //@ts-expect-error
-                  document.getElementById('image_mini').value.length === 0 ||
-                  //@ts-expect-error
-                  document.getElementById('club').value.length === 0 ||
-                  this.entry.content.length < 444)
+               document.getElementById('post_title').value.length < 3
             ) {
                return
             }
@@ -97,7 +94,6 @@ document.addEventListener('alpine:init', () => {
             const formData = new FormData(el)
 
             formData.append('post_content', this.entry.content)
-            formData.append('mode', status)
 
             let body = {}
             formData.forEach((value, key) => {
@@ -109,7 +105,7 @@ document.addEventListener('alpine:init', () => {
             })
 
             this.$rest
-               .post(moon.apiUrl + '/text?_wpnonce=' + moon.nonce, body)
+               .post(`${moon.apiUrl}/${status}?_wpnonce=${moon.nonce}`, body)
                .then(({ data }) => {
                   this.current.saved = true
 
@@ -352,6 +348,7 @@ document.addEventListener('alpine:init', () => {
                   this.entry.content = editor.getHTML()
                   this.countWords()
                   this.updateCurrent(editor)
+                  this.current.saved = false
                },
                onSelectionUpdate: ({ editor }) => {
                   this.updateCurrent(editor)

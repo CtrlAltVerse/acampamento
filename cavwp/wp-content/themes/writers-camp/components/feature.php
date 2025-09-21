@@ -15,7 +15,7 @@ $full = !($args['small'] ?? false);
 
 ?>
 <a href="<?php echo $text->get('link'); ?>"
-   class="flex flex-col gap-1">
+   class="flex flex-col gap-1.5">
    <div class="relative flex items-center justify-center aspect-card rounded-md border-4"
         style="border-color: <?php echo $color; ?>;background-color: <?php echo $color; ?>">
       <?php if ($text->get('image_mini', default: false)) { ?>

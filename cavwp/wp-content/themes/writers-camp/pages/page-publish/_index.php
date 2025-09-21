@@ -5,7 +5,7 @@ use cavWP\Models\Post;
 use writersCampP\Text\Utils as TextUtils;
 use writersCampP\Utils;
 
-$Form = new Form(TextUtils::get_text_fields());
+$Form = new Form(TextUtils::get_draft_fields());
 
 $text = $_GET['edit'] ?? null;
 
@@ -32,9 +32,18 @@ get_component('header');
       <div class="flex items-center justify-between mb-4">
          <h1 class="text-3xl font-semibold">Editando</h1>
          <div>
-            <a href="<?php echo Utils::get_page_link('dashboard'); ?>"
-               class="btn">Voltar</a>
-            <button class="btn" type="submit">Enviar</button>
+            <a class="btn" href="<?php echo Utils::get_page_link('dashboard'); ?>">
+               <i class="ri-arrow-left-line"></i>
+               <span class="hidden sm:inline">Voltar</span>
+            </a>
+            <button class="btn" type="button" x-on:click.prevent="save('draft')">
+               <i class="ri-save-3-fill"></i>
+               <span class="hidden sm:inline">Salvar</span>
+            </button>
+            <button class="btn" type="submit">
+               <i class="ri-file-check-fill"></i>
+               <span class="hidden sm:inline">Enviar</span>
+            </button>
          </div>
       </div>
       <div class="flex flex-col lg:flex-row items-start gap-8">
