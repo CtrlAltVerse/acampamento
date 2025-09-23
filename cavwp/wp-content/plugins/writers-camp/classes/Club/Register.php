@@ -34,7 +34,7 @@ class Register
             'singular_name' => 'Guilda',
             'edit_item'     => 'Editar guilda',
          ],
-         'hierarchical'      => true,
+         'hierarchical'      => false,
          'public'            => true,
          'show_in_nav_menus' => false,
          'show_tagcloud'     => false,

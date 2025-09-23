@@ -37,13 +37,13 @@ class Register
          'show_in_rest'  => true,
          'menu_position' => 3,
          'menu_icon'     => 'dashicons-text',
-         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions', 'custom-fields'],
+         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions', 'custom-fields', 'page-attributes'],
          'rewrite'       => [
             'slug' => 'texto',
          ],
          'can_export' => false,
          'taxonomies' => [
-            'post_tag',
+            'series',
             'club',
          ],
       ]);

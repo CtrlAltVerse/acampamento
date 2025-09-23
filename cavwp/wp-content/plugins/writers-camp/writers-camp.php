@@ -29,6 +29,7 @@ function plugins_loaded(): void
    new Club\Register();
    new Text\Register();
    new Media\Register_Endpoint();
+   new Series\Register();
    new Writer\Register();
    new Challenge\Register();
 }
