@@ -8,7 +8,7 @@
 }
 
 .h1 {
-   @apply font-bold text-2xl lg:text-3.5xl;
+   @apply font-bold text-2xl lg:text-3.5xl hyphens-auto text-pretty;
 }
 
 .h2 {
@@ -20,7 +20,7 @@
 }
 
 .btn {
-   @apply inline-block rounded border border-brown-900 py-1.75 px-5 bg-neutral-100 whitespace-nowrap text-brown-900 font-semibold font-sans disabled:cursor-not-allowed transition-colors duration-300;
+   @apply inline-block rounded border border-brown-900 py-1.75 px-5 bg-neutral-100 whitespace-nowrap text-brown-900 font-semibold font-sans disabled:cursor-not-allowed disabled:bg-neutral-200 transition-colors duration-300;
 }
 
 .btn.active {
@@ -40,7 +40,7 @@ a.btn {
 }
 
 .small {
-   @apply text-xxs lg:text-xs uppercase font-medium px-4;
+   @apply text-xxs uppercase font-medium px-3.5;
 }
 
 .section-border {

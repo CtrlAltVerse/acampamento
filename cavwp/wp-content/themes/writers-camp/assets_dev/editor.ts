@@ -31,7 +31,7 @@ document.addEventListener('alpine:init', () => {
             alignable: true,
             focus: Alpine.$persist([]),
             words: 0,
-            saved: true,
+            saved: 1, // -1 = not, 0 = saving , 1 = saved
          },
          entry: {
             title: '',
@@ -41,8 +41,9 @@ document.addEventListener('alpine:init', () => {
          },
 
          init() {
-            window.onbeforeunload = () => {
-               if (!this.current.saved) {
+            window.onbeforeunload = (e: any) => {
+               if (this.current.saved === -1) {
+                  e.preventDefault()
                   return 'Tem certeza?'
                }
             }
@@ -61,10 +62,10 @@ document.addEventListener('alpine:init', () => {
             this.$watch('entry.image_mini', this.setDirt.bind(this))
 
             setInterval(() => {
-               if (!this.current.saved) {
+               if (this.current.saved === -1) {
                   this.save('draft')
                }
-            }, 33 * 999)
+            }, Number.parseInt(sky.autosave) * 999)
 
             this.editor = this.initEditor()
             this.countWords()
@@ -74,21 +75,27 @@ document.addEventListener('alpine:init', () => {
             if (oldS === newS) {
                return
             }
-            this.current.saved = false
+            this.current.saved = -1
          },
 
          save(status = 'pending') {
-            if (!['pending', 'draft'].includes(status)) {
+            if (
+               !['pending', 'draft'].includes(status) ||
+               this.current.saved === 0
+            ) {
                return
             }
 
             if (
                status === 'draft' &&
                // @ts-expect-error
-               document.getElementById('post_title').value.length < 3
+               document.getElementById('post_title').value.length < 3 &&
+               this.entry.content.length < 3
             ) {
                return
             }
+
+            this.current.saved = 0
 
             const el = document.getElementById('editorForm') as HTMLFormElement
             const formData = new FormData(el)
@@ -107,7 +114,7 @@ document.addEventListener('alpine:init', () => {
             this.$rest
                .post(`${moon.apiUrl}/${status}?_wpnonce=${moon.nonce}`, body)
                .then(({ data }) => {
-                  this.current.saved = true
+                  this.current.saved = 1
 
                   if (data.length === 0) {
                      return
@@ -315,6 +322,7 @@ document.addEventListener('alpine:init', () => {
                   BubbleMenu.configure({
                      element: BubbleMenuEl,
                      options: {
+                        placement: 'bottom',
                         strategy: 'absolute',
                         offset: 8,
                         flip: false,
@@ -348,7 +356,7 @@ document.addEventListener('alpine:init', () => {
                   this.entry.content = editor.getHTML()
                   this.countWords()
                   this.updateCurrent(editor)
-                  this.current.saved = false
+                  this.current.saved = -1
                },
                onSelectionUpdate: ({ editor }) => {
                   this.updateCurrent(editor)

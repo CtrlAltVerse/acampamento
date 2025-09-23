@@ -22,8 +22,8 @@ if (!empty($challenge)) {
 $from_club       = $Text->related(4, 'term', 'club', exclude: $from_challenge);
 $from_author     = $Text->related(4, 'author', exclude: array_merge($from_club, $from_challenge));
 $terms           = $Text->get('terms', taxonomy: 'club');
-$reading_time    = $Text->get('time_to_read');
 $term            = $terms[0];
+$reading_time    = $Text->get('time_to_read');
 $color           = $Text->get('color', default: '#fff');
 $text_color      = Utils::calc_text_color($color);
 $container_class = '';

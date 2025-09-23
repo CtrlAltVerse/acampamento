@@ -109,19 +109,20 @@ get_component('header');
          </li>
          <?php } ?>
       </ul>
-      <div class="flex flex-col gap-6 lg:gap-3 divide-blue-100">
+      <div class="grid lg:grid-cols-2 gap-y-6 gap-x-3 divide-blue-100">
          <?php if (!empty($texts)) {
             foreach ($texts as $text) {
-               $text        = new Post($text);
-               $status      = $text->get('status');
-               $count       = $text->get('comments_count');
+               $Text        = new Post($text);
+               $status      = $Text->get('status');
+               $count       = $Text->get('comments_count');
+               $terms       = $Text->get('terms', taxonomy: 'club');
+               $term        = $terms[0] ?? false;
                $status_info = $statuses[$status];
 
                ?>
-         <div class="flex items-center gap-2.5">
-            <div class="shrink-0">
-               <?php $mini = $text->get('image_mini'); ?>
-               <?php if ($mini) { ?>
+         <div class="flex gap-2">
+            <div class="shrink-0 flex flex-col gap-1.5">
+               <?php if ($mini = $Text->get('image_mini')) { ?>
                <img class="aspect-card rounded h-26 border-2 border-neutral-500 object-cover overflow-hidden"
                     src="<?php echo $mini; ?>" alt=""
                     loading="lazy" />
@@ -131,11 +132,11 @@ get_component('header');
                   Sem imagem
                </div>
                <?php } ?>
-               <ul class="flex justify-between lg:hidden mt-2">
+               <ul class="flex gap-1.5">
                   <?php if ('publish' === $status) { ?>
                   <li>
                      <a class="btn small"
-                        href="<?php echo $text->get('permalink'); ?>#comments"
+                        href="<?php echo $Text->get('permalink'); ?>#comments"
                         title="<?php printf(
                            'Visualizar %s',
                            _n('comentário', 'comentários', $count, 'cavcamp'),
@@ -148,7 +149,7 @@ get_component('header');
                      <button class="btn small"
                              type="button"
                              data-href="<?php echo WritersCampPUtils::get_page_link('edit', [
-                                'draft' => $text->ID,
+                                'draft' => $Text->ID,
                              ]); ?>"
                              title="Tornar rascunho"
                              x-on:click.prevent="if(confirm('Para editar novamente este texto é preciso despublicá-lo e torná-lo um rascunho. Tem certeza?')){location.href=$event.target.dataset.href}">
@@ -160,7 +161,7 @@ get_component('header');
                   <li>
                      <a class="btn small"
                         href="<?php echo WritersCampPUtils::get_page_link('edit', [
-                           'edit' => $text->ID,
+                           'edit' => $Text->ID,
                         ]); ?>">
                         <i class="ri-edit-2-fill"></i>
                         Editar
@@ -170,49 +171,19 @@ get_component('header');
                </ul>
             </div>
             <div class="grow flex flex-col gap-1 items-start">
-               <strong
-                       class="font-semibold text-lg line-clamp-2"><?php echo $text->get('title'); ?></strong>
+               <?php if (!empty($term)) { ?>
+               <span class="rounded py-1 px-2 uppercase font-semibold text-xxs text-neutral-100"
+                     style="background-color: <?php echo $term->get('color'); ?>">
+                  <?php echo $term->get('name'); ?>
+               </span>
+               <?php } ?>
+               <strong class="font-semibold text-lg line-clamp-2">
+                  <?php echo $Text->get('title'); ?>
+               </strong>
                <p class="line-clamp-3">
-                  <?php echo $text->get('summary', apply_filter: false); ?>
+                  <?php echo $Text->get('summary', apply_filter: false); ?>
                </p>
             </div>
-            <ul class="shrink-0 lg:flex flex-col gap-2.5 hidden">
-               <?php if ('publish' === $status) { ?>
-               <li>
-                  <a class="btn small"
-                     href="<?php echo $text->get('permalink'); ?>#comments"
-                     title="<?php printf(
-                        'Visualizar %s',
-                        _n('comentário', 'comentários', $count, 'cavcamp'),
-                     ); ?>">
-                     <i class="ri-external-link-fill"></i>
-                     Ver (<?php echo $count; ?>)
-                  </a>
-               </li>
-               <li>
-                  <button class="btn small"
-                          type="button"
-                          data-href="<?php echo WritersCampPUtils::get_page_link('edit', [
-                             'draft' => $text->ID,
-                          ]); ?>"
-                          title="Tornar rascunho"
-                          x-on:click.prevent="if(confirm('Para editar novamente este texto é preciso despublicá-lo e torná-lo um rascunho. Tem certeza?')){location.href=$event.target.dataset.href}">
-                     <i class="ri-draft-line"></i>
-                     Editar
-                  </button>
-               </li>
-               <?php } else { ?>
-               <li>
-                  <a class="btn small"
-                     href="<?php echo WritersCampPUtils::get_page_link('edit', [
-                        'edit' => $text->ID,
-                     ]); ?>">
-                     <i class="ri-edit-2-fill"></i>
-                     Editar
-                  </a>
-               </li>
-               <?php } ?>
-            </ul>
          </div>
          <?php } ?>
          <?php } else { ?>

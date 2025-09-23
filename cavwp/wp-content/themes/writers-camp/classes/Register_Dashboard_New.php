@@ -20,6 +20,7 @@ class Register_Dashboard_New
       ]);
 
       wp_localize_script('dashboard', 'sky', [
+         'autosave'    => AUTOSAVE_INTERVAL,
          'unsplashUrl' => rest_url('unsplash/v1'),
          'colors'      => \get_field('colors', 'option'),
          'marks'       => [

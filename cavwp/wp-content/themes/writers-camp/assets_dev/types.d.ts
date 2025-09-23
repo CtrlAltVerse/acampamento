@@ -35,6 +35,7 @@ interface iSky {
    blocks: any[]
    align: any[]
    marks: any[]
+   autosave: string
 }
 
 interface iMoon {
