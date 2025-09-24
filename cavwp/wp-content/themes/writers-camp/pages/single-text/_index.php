@@ -25,22 +25,25 @@ if (!empty($series)) {
    $series_itens = $serie->get_posts([
       'posts_per_page' => -1,
       'orderby'        => ['menu_order' => 'ASC', 'date' => 'desc'],
+      'post_status'    => is_preview() ? ['publish', 'pending', 'draft', 'future'] : ['publish'],
    ]);
 
-   $current = $Text->get('menu_order');
+   if (!empty($series_itens)) {
+      $current = $Text->get('menu_order');
 
-   $min_position = 1;
-   $max_position = $current + 2;
+      $min_position = 1;
+      $max_position = $current + 2;
 
-   if ($current <= 2) {
-      $max_position = 4;
-   } else {
-      $min_position = $current - 1;
-   }
+      if ($current <= 2) {
+         $max_position = 4;
+      } else {
+         $min_position = $current - 1;
+      }
 
-   if ($current > count($series_itens) - 3) {
-      $min_position = count($series_itens) - 3;
-      $max_position = count($series_itens);
+      if ($current > count($series_itens) - 3) {
+         $min_position = count($series_itens) - 3;
+         $max_position = count($series_itens);
+      }
    }
 }
 
@@ -215,7 +218,7 @@ $container_class = '';
       </article>
       <div id="related" class="flex flex-col gap-12 mt-15" x-init="checkTitle" x-on:scroll.window.passive="checkTitle"
            x-on:resize.window.passive="checkTitle">
-         <?php if (!empty($serie)) { ?>
+         <?php if (!empty($series_itens)) { ?>
          <section class="flex flex-col gap-4">
             <h2 class="h2">
                <a
