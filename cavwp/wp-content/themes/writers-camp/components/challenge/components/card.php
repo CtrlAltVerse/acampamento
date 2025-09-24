@@ -31,9 +31,9 @@ if (!empty($text)) {
    // RESERVADO
    if ('publish' !== $status) {
       echo <<<HTML
-      <div class="aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 pt-8.5 text-neutral-100 border-neutral-500 cursor-default bg-neutral-900/10 overflow-hidden">
+      <div class="relative aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 pt-8.5 text-neutral-100 border-neutral-500 cursor-default bg-neutral-900/10 overflow-hidden">
          {$middle}
-         <span class="pt-2 pb-1.5 px-4 uppercase font-semibold text-xs text-neutral-100 bg-neutral-500"><i class="ri-progress-2-line"></i> Reservado</span>
+         <span class="absolute bottom-0 -left-0.75 -right-0.75 z-5 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-xs text-neutral-100 bg-neutral-500"><i class="ri-progress-2-line"></i> Reservado</span>
       </div>
       HTML;
 

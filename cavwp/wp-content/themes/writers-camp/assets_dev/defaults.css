@@ -29,7 +29,7 @@
 
 button.btn,
 a.btn {
-   @apply cursor-pointer focus-visible:bg-brown-300 hover:bg-brown-300 focus-visible:text-neutral-100 hover:text-neutral-100;
+   @apply cursor-pointer focus-visible:bg-guild hover:bg-guild focus-visible:text-neutral-100 hover:text-neutral-100;
 }
 
 .btn-editor {
@@ -274,9 +274,9 @@ a.btn {
 }
 
 .footer-fullname {
-   @apply absolute -z-1 w-full text-brown-400 tracking-tighter font-black overflow-hidden whitespace-nowrap;
+   @apply absolute -z-1 w-full tracking-tighter font-black overflow-hidden whitespace-nowrap;
    font-size: 7.5vw;
-   top: -8.3vw;
+   top: -8.5vw;
 }
 
 .ribbon {

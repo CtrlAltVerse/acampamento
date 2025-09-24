@@ -6,8 +6,8 @@ use writersCampP\Club\Utils;
 $clubs = Utils::get();
 
 ?>
-<div class="relative bg-linear-to-b from-brown-400 from-22% to-brown-700 to-44% mt-55 pt-20">
-   <div class="footer-fullname flex items-center gap-2">
+<div class="relative bg-linear-to-b from-guild from-22% to-neutral-900 to-44% mt-55 pt-20">
+   <div class="footer-fullname flex items-center gap-2 text-guild">
       <?php CavUtils::render_svg(get_template_directory() . '/assets/vectors/fire.svg', 'size-[7vw]'); ?>
       <?php bloginfo('name'); ?>
    </div>
