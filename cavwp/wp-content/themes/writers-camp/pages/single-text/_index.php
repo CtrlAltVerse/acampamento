@@ -8,21 +8,49 @@ get_component('header');
 
 the_post();
 
+$from_challenge = [];
+$series_itens   = [];
+
 $Text      = new Post();
 $full      = $Text->get('image_full');
 $challenge = $Text->get('challenge');
 $shares    = $Text->get('share', attrs: ['facebook', 'x-twitter', 'email', 'whatsapp']);
+$terms     = $Text->get('terms', taxonomy: 'club');
+$term      = $terms[0];
+$series    = $Text->get('terms', taxonomy: 'series');
 
-$from_challenge = [];
+if (!empty($series)) {
+   $serie = $series[0];
+
+   $series_itens = $serie->get_posts([
+      'posts_per_page' => -1,
+      'orderby'        => ['menu_order' => 'ASC', 'date' => 'desc'],
+   ]);
+
+   $current = $Text->get('menu_order');
+
+   $min_position = 1;
+   $max_position = $current + 2;
+
+   if ($current <= 2) {
+      $max_position = 4;
+   } else {
+      $min_position = $current - 1;
+   }
+
+   if ($current > count($series_itens) - 3) {
+      $min_position = count($series_itens) - 3;
+      $max_position = count($series_itens);
+   }
+}
 
 if (!empty($challenge)) {
    $from_challenge = ChallengeUtils::get_texts($challenge);
 }
 
-$from_club       = $Text->related(4, 'term', 'club', exclude: $from_challenge);
-$from_author     = $Text->related(4, 'author', exclude: array_merge($from_club, $from_challenge));
-$terms           = $Text->get('terms', taxonomy: 'club');
-$term            = $terms[0];
+$from_club   = $Text->related(4, 'term', 'club', exclude: array_merge($from_challenge, $series_itens));
+$from_author = $Text->related(4, 'author', exclude: array_merge($from_club, $from_challenge, $series_itens));
+
 $reading_time    = $Text->get('time_to_read');
 $color           = $Text->get('color', default: '#fff');
 $text_color      = Utils::calc_text_color($color);
@@ -145,7 +173,6 @@ $container_class = '';
             <div class="mt-22 xl:hidden block">
                <?php get_page_component(__FILE__, 'comment-form', ['in_body' => true, 'title' => sprintf('O que achou de %s?', $Text->get('title', apply_filter: false))]); ?>
             </div>
-
             <footer class="flex flex-col items-start gap-3 pt-20 w-full max-w-xl">
                <a
                   href="<?php echo $Text->get('author:link'); ?>"><?php echo $Text->get('author:avatar', attrs: [
@@ -188,6 +215,30 @@ $container_class = '';
       </article>
       <div id="related" class="flex flex-col gap-12 mt-15" x-init="checkTitle" x-on:scroll.window.passive="checkTitle"
            x-on:resize.window.passive="checkTitle">
+         <?php if (!empty($serie)) { ?>
+         <section class="flex flex-col gap-4">
+            <h2 class="h2">
+               <a
+                  href="<?php echo $serie->get('link'); ?>">
+                  <?php echo $serie->get('title'); ?>
+                  <em class="text-md">(<?php echo count($series_itens); ?>
+                     partes)</em>
+               </a>
+            </h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+               <?php foreach ($series_itens as $serie_item) { ?>
+               <?php $position = $serie_item->menu_order; ?>
+               <?php if ($min_position <= $position && $position <= $max_position) {
+                  ?>
+               <li>
+                  <?php get_component('feature', ['text' => $serie_item, 'small' => true]); ?>
+               </li>
+               <?php } ?>
+               <?php } ?>
+            </ul>
+         </section>
+         <?php } ?>
+
          <?php if (!empty($challenge)) { ?>
          <section class="flex flex-col gap-4">
             <h2 class="h2">Parte do Desafio</h2>
