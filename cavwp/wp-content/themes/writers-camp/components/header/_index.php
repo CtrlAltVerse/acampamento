@@ -32,7 +32,7 @@ do_action('get_header');
             'menu_class'     => 'hidden lg:flex justify-center items-center gap-4 whitespace-nowrap',
          ]); ?>
          <div class="menu-user">
-         <?php get_component(['header', 'cover']); ?>
+         <?php get_component(['header', 'corner']); ?>
          </div>
       </header>
    </div>

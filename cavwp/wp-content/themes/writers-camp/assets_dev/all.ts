@@ -9,23 +9,28 @@ window.Alpine = Alpine
 
 Alpine.data('bonfire', function () {
    return {
+      currentUrl: '',
+      bookmark: Alpine.$persist(null),
       midPoint: 160,
 
       init() {
+         const Url = new URL(location.href)
+         this.currentUrl = Url.origin + Url.pathname
+
+         this.enableBookmark()
+
          this.$watch('$store.login.method', (method) => {
             if (['google', 'facebook'].includes(method)) {
                this.checkUser()
             }
          })
 
-         const url = new URL(location.href)
-
-         if (url.searchParams.get('action')) {
+         if (Url.searchParams.get('action')) {
             if (document.body.classList.contains('logged-in')) {
                return
             }
 
-            const action = url.searchParams.get('action')
+            const action = Url.searchParams.get('action')
             if ('rp' === action) {
                //@ts-expect-error
                this.$store.login.method = 'retrieve'
@@ -34,13 +39,13 @@ Alpine.data('bonfire', function () {
 
                //@ts-expect-error
                document.getElementById('rp_key').value =
-                  url.searchParams.get('key')
+                  Url.searchParams.get('key')
 
                //@ts-expect-error
                document.getElementById('rp_login').value =
-                  url.searchParams.get('login')
+                  Url.searchParams.get('login')
 
-               history.replaceState(null, '', url.origin + url.pathname)
+               history.replaceState(null, '', Url.origin + Url.pathname)
             }
             if ('login' === action) {
                //@ts-expect-error
@@ -55,6 +60,73 @@ Alpine.data('bonfire', function () {
                document.getElementById('login').showModal()
             }
          }
+      },
+
+      enableBookmark() {
+         if (!document.body.classList.contains('single-text')) {
+            return
+         }
+
+         document.querySelectorAll('#content > *').forEach((el, item) => {
+            const block = `block-${item}`
+            el.id = block
+
+            if (
+               this.bookmark !== null &&
+               this.currentUrl === this.bookmark.url &&
+               block === this.bookmark.block
+            ) {
+               el.classList.add('actual-bookmark')
+            }
+
+            el.addEventListener('click', (elEvent) => {
+               if (
+                  this.bookmark !== null &&
+                  this.currentUrl === this.bookmark.url &&
+                  this.bookmark.block === block
+               ) {
+                  this.cleanBookmark()
+                  return
+               }
+
+               this.cleanBookmark()
+
+               this.bookmark = { url: this.currentUrl, block }
+
+               //@ts-expect-error
+               elEvent.target.classList.add('actual-bookmark')
+            })
+         })
+
+         if (location.hash === '#bookmark') {
+            this.openBookmark()
+         }
+      },
+
+      cleanBookmark() {
+         document
+            .querySelectorAll('#content > *')
+            .forEach((singleBlock) =>
+               singleBlock.classList.remove('actual-bookmark')
+            )
+
+         this.bookmark = { url: '', block: '' }
+
+         history.pushState(null, '', this.currentUrl)
+      },
+
+      openBookmark() {
+         if (0 === this.bookmark.url.length) {
+            return
+         }
+
+         if (this.bookmark.url !== this.currentUrl) {
+            location.href = this.bookmark.url + '#bookmark'
+         }
+
+         setTimeout(() => {
+            this.$do('scroll', '#' + this.bookmark.block)
+         }, 111)
       },
 
       toggleTheme() {

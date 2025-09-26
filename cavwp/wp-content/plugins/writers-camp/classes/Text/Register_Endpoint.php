@@ -102,6 +102,7 @@ class Register_Endpoint
 
       if (!empty($raw['ID'])) {
          $body['ID'] = $raw['ID'];
+         $body['post_status'] = get_post_status($raw['ID']);
       }
 
       $body['post_type']    = 'text';

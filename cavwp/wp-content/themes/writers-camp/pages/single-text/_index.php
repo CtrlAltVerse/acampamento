@@ -163,6 +163,10 @@ $container_class = '';
                      <?php edit_post_link(); ?>
                      <?php } ?>
                   </ul>
+                  <p class="mt-5 font-xs" x-show="bookmark === null" x-cloak>
+                     <i class="ri-bookmark-3-fill"></i>
+                     Clique num paragrafo para adicionar uma marcação
+                  </p>
                </div>
             </div>
             <div class="mb-6 hidden xl:block">
@@ -170,20 +174,26 @@ $container_class = '';
             </div>
          </div>
          <div class="pt-13">
-            <div id="content" class="content">
+            <div id="content" class="content mb-22">
                <?php echo $Text->get('content'); ?>
             </div>
-            <div class="mt-22 xl:hidden block">
+            <div x-show="bookmark !== null && bookmark.url.length && bookmark.url === currentUrl" x-cloak>
+               <button class="border rounded py-2 px-3 text-md cursor-pointer" x-on:click.prevent="cleanBookmark()"  type="button">
+                  <i class="ri-bookmark-2-line"></i>
+                   Remover marca-página
+               </button>
+            </div>
+            <div class="xl:hidden block mt-6">
                <?php get_page_component(__FILE__, 'comment-form', ['in_body' => true, 'title' => sprintf('O que achou de %s?', $Text->get('title', apply_filter: false))]); ?>
             </div>
             <footer class="flex flex-col items-start gap-3 pt-20 w-full max-w-xl">
-               <a
-                  href="<?php echo $Text->get('author:link'); ?>"><?php echo $Text->get('author:avatar', attrs: [
+               <a href="<?php echo $Text->get('author:link'); ?>">
+                  <?php echo $Text->get('author:avatar', attrs: [
                      'class' => 'rounded-full',
-                  ]); ?></a>
+                  ]); ?>
+               </a>
                <h2 class="font-semibold text-xl">
-                  <a
-                     href="<?php echo $Text->get('author:link'); ?>">
+                  <a href="<?php echo $Text->get('author:link'); ?>">
                      Sobre
                      <?php echo $Text->get('author:name'); ?>
                   </a>
@@ -209,7 +219,6 @@ $container_class = '';
                            class="<?php echo $social['icon']; ?>"></i>
                      </a>
                   </li>
-                  <?php ?>
                   <?php } ?>
                   <?php } ?>
                </ul>

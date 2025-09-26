@@ -152,7 +152,7 @@ get_component('header');
                                 'draft' => $Text->ID,
                              ]); ?>"
                              title="Tornar rascunho"
-                             x-on:click.prevent="if(confirm('Para editar novamente este texto é preciso despublicá-lo e torná-lo um rascunho. Tem certeza?')){location.href=$event.target.dataset.href}">
+                             x-on:click.prevent="if(confirm('Para editar este texto é preciso torná-lo um rascunho. Tem certeza?')){location.href=$event.target.dataset.href}">
                         <i class="ri-draft-line"></i>
                         Editar
                      </button>
