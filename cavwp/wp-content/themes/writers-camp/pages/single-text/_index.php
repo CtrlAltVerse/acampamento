@@ -66,10 +66,8 @@ $container_class = '';
    <img class="absolute inset-0 z-0 size-full object-cover"
         src="<?php echo $full; ?>" loading="eager" alt="">
    <div class="container h-full">
-      <div class="title-effect z-1 text-shadow-lg"
-           style="color: <?php echo $color; ?>">
-         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none <?php echo ('w' === $text_color) ? 'text-neutral-100' : 'text-neutral-700'; ?>"
-               style="background-color: <?php echo $color; ?>">
+      <div class="title-effect z-1">
+         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-700 text-shadow-none bg-neutral-100">
             <?php echo $term->get('name'); ?>
          </span>
          <div class="h1">
@@ -83,13 +81,12 @@ $container_class = '';
          <div class="text-xl font-medium w-full pt-4">
             <?php echo $Text->get('summary'); ?>
          </div>
-         <div class="pt-4">
-            <a class="flex items-center gap-1"
-               href="<?php echo $Text->get('image_author_url'); ?>"
-               target="_blank" rel="external">
+         <div class="flex items-center gap-1 pt-4">
                Foto de
-               <?php echo $Text->get('image_author'); ?>
-               no <span class="font-unsplash font-bold text-lg">Unsplash</span>
+               <a href="<?php echo $Text->get('image_author_url'); ?>"
+               target="_blank" rel="external"><?php echo $Text->get('image_author'); ?></a>
+               no <a class="font-unsplash font-bold text-lg" href="https://unsplash.com/?utm_source=CtrlAltVersœ&utm_medium=referral"
+               target="_blank" rel="external">Unsplash</a>
             </a>
          </div>
       </div>

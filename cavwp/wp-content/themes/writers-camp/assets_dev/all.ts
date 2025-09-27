@@ -18,6 +18,7 @@ Alpine.data('bonfire', function () {
          this.currentUrl = Url.origin + Url.pathname
 
          this.enableBookmark()
+         this.checkInitialLetter()
 
          this.$watch('$store.login.method', (method) => {
             if (['google', 'facebook'].includes(method)) {
@@ -60,6 +61,52 @@ Alpine.data('bonfire', function () {
                document.getElementById('login').showModal()
             }
          }
+      },
+
+      checkInitialLetter() {
+         if (!document.body.classList.contains('single-text')) {
+            return
+         }
+
+         const allBlocks = document.querySelectorAll('#content > *')
+
+         if ('P' !== allBlocks[0].tagName) {
+            return
+         }
+
+         if (allBlocks[0].clientHeight < 90) {
+            return
+         }
+
+         const firstParagraph = allBlocks[0].textContent
+         let spaceBreak = 0
+         if (firstParagraph.slice(0, 1) === '—') {
+            spaceBreak = 2
+         }
+
+         let rawInitialLetters = firstParagraph.slice(
+            0,
+            firstParagraph.indexOf(' ', spaceBreak)
+         )
+
+         // if (rawInitialLetters.length > 2 + spaceBreak) {
+         //    rawInitialLetters = rawInitialLetters.slice(0, 1 + spaceBreak)
+         // }
+
+         const initialLetter =
+            '<span class="initial-letter">' + rawInitialLetters + '</span>'
+
+         console.log(allBlocks[0].innerHTML)
+
+         allBlocks[0].innerHTML = allBlocks[0].innerHTML.replace(
+            rawInitialLetters,
+            initialLetter
+         )
+
+         allBlocks[0].outerHTML = allBlocks[0].outerHTML.replace(
+            '<p',
+            '<p class="p-with-initial-letter"'
+         )
       },
 
       enableBookmark() {
