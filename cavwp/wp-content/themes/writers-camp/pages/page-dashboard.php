@@ -160,6 +160,14 @@ get_component('header');
                   <?php } else { ?>
                   <li>
                      <a class="btn small"
+                        href="<?php echo get_preview_post_link($Text->ID); ?>"
+                        title="Prévia">
+                        <i class="ri-external-link-fill"></i>
+                        Prévia
+                     </a>
+                  </li>
+                  <li>
+                     <a class="btn small"
                         href="<?php echo WritersCampPUtils::get_page_link('edit', [
                            'edit' => $Text->ID,
                         ]); ?>">

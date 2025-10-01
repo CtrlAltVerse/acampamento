@@ -1,7 +1,6 @@
 <?php
 
 use cavWP\Models\Post;
-use cavWP\Utils;
 use writersCampP\Challenge\Utils as ChallengeUtils;
 
 get_component('header');
@@ -16,8 +15,11 @@ $full      = $Text->get('image_full');
 $challenge = $Text->get('challenge');
 $shares    = $Text->get('share', attrs: ['facebook', 'x-twitter', 'email', 'whatsapp']);
 $terms     = $Text->get('terms', taxonomy: 'club');
-$term      = $terms[0];
-$series    = $Text->get('terms', taxonomy: 'series');
+
+if (!empty($terms)) {
+   $term = $terms[0];
+}
+$series = $Text->get('terms', taxonomy: 'series');
 
 if (!empty($series)) {
    $serie = $series[0];
@@ -25,7 +27,7 @@ if (!empty($series)) {
    $series_itens = $serie->get_posts([
       'posts_per_page' => -1,
       'orderby'        => ['menu_order' => 'ASC', 'date' => 'desc'],
-      'post_status'    => is_preview() ? ['publish', 'pending', 'draft', 'future'] : ['publish'],
+      'post_status'    => is_preview() ? ['publish', 'pending', 'draft', 'future'] : ['publish', 'future'],
    ]);
 
    if (!empty($series_itens)) {
@@ -54,9 +56,9 @@ if (!empty($challenge)) {
 $from_club   = $Text->related(4, 'term', 'club', exclude: array_merge($from_challenge, $series_itens));
 $from_author = $Text->related(4, 'author', exclude: array_merge($from_club, $from_challenge, $series_itens));
 
-$reading_time    = $Text->get('time_to_read');
-$color           = $Text->get('color', default: '#fff');
-$text_color      = Utils::calc_text_color($color);
+$reading_time = $Text->get('time_to_read');
+$color        = $Text->get('color', default: false);
+
 $container_class = '';
 
 ?>
@@ -66,10 +68,15 @@ $container_class = '';
    <img class="absolute inset-0 z-0 size-full object-cover"
         src="<?php echo $full; ?>" loading="eager" alt="">
    <div class="container h-full">
-      <div class="title-effect z-1">
-         <span class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-700 text-shadow-none bg-neutral-100">
+      <div
+           class="title-effect z-1 <?php echo $color ? 'text-neutral-900 text-shadow-neutral-100' : 'text-neutral-100 text-shadow-neutral-900'; ?>">
+         <?php if (!empty($term)) { ?>
+         <span
+               class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none
+         <?php echo $color ? 'text-neutral-900 bg-neutral-100' : 'text-neutral-100 bg-neutral-900'; ?>">
             <?php echo $term->get('name'); ?>
          </span>
+         <?php } ?>
          <div class="h1">
             <?php echo $Text->get('title'); ?>
          </div>
@@ -82,10 +89,13 @@ $container_class = '';
             <?php echo $Text->get('summary'); ?>
          </div>
          <div class="flex items-center gap-1 pt-4">
-               Foto de
-               <a href="<?php echo $Text->get('image_author_url'); ?>"
-               target="_blank" rel="external"><?php echo $Text->get('image_author'); ?></a>
-               no <a class="font-unsplash font-bold text-lg" href="https://unsplash.com/?utm_source=CtrlAltVersœ&utm_medium=referral"
+            Foto de
+            <a class="font-semibold"
+               href="<?php echo $Text->get('image_author_url'); ?>"
+               target="_blank"
+               rel="external"><?php echo $Text->get('image_author'); ?></a>
+            no <a class="font-semibold"
+               href="https://unsplash.com/?utm_source=CtrlAltVersœ&utm_medium=referral"
                target="_blank" rel="external">Unsplash</a>
             </a>
          </div>
@@ -99,11 +109,13 @@ $container_class = '';
          <div class="flex flex-col justify-between gap-3">
             <div>
                <div class="title-effect" x-ref="singleTitle" x-cloak>
+                  <?php if (!empty($term)) { ?>
                   <a href="<?php echo $term->get('link'); ?>"
                      class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-100"
                      style="background-color: <?php echo $term->get('color'); ?>">
                      <?php echo $term->get('name'); ?>
                   </a>
+                  <?php } ?>
                   <h1 class="h1">
                      <?php echo $Text->get('title'); ?>
                   </h1>
@@ -175,22 +187,25 @@ $container_class = '';
                <?php echo $Text->get('content'); ?>
             </div>
             <div x-show="bookmark !== null && bookmark.url.length && bookmark.url === currentUrl" x-cloak>
-               <button class="border rounded py-2 px-3 text-md cursor-pointer" x-on:click.prevent="cleanBookmark()"  type="button">
+               <button class="border rounded py-2 px-3 text-md cursor-pointer" x-on:click.prevent="cleanBookmark()"
+                       type="button">
                   <i class="ri-bookmark-2-line"></i>
-                   Remover marca-página
+                  Remover marca-página
                </button>
             </div>
             <div class="xl:hidden block mt-6">
                <?php get_page_component(__FILE__, 'comment-form', ['in_body' => true, 'title' => sprintf('O que achou de %s?', $Text->get('title', apply_filter: false))]); ?>
             </div>
             <footer class="flex flex-col items-start gap-3 pt-20 w-full max-w-xl">
-               <a href="<?php echo $Text->get('author:link'); ?>">
+               <a
+                  href="<?php echo $Text->get('author:link'); ?>">
                   <?php echo $Text->get('author:avatar', attrs: [
                      'class' => 'rounded-full',
                   ]); ?>
                </a>
                <h2 class="font-semibold text-xl">
-                  <a href="<?php echo $Text->get('author:link'); ?>">
+                  <a
+                     href="<?php echo $Text->get('author:link'); ?>">
                      Sobre
                      <?php echo $Text->get('author:name'); ?>
                   </a>

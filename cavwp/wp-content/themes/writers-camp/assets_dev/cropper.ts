@@ -23,7 +23,7 @@ document.addEventListener('alpine:init', () => {
             picked: false as unsplashItem,
          },
          selected: {
-            color: '#ffffff',
+            color: 0,
             image_author: '',
             image_author_url: '',
             image_full: '',
@@ -204,6 +204,7 @@ document.addEventListener('alpine:init', () => {
                   `input[name="${key}"]`
                ) as HTMLInputElement
 
+               //@ts-expect-error
                el.value = value
 
                if (key === 'image_mini') {

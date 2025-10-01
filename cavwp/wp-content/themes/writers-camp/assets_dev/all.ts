@@ -74,7 +74,7 @@ Alpine.data('bonfire', function () {
             return
          }
 
-         if (allBlocks[0].clientHeight < 90) {
+         if (allBlocks[0].clientHeight < 70) {
             return
          }
 

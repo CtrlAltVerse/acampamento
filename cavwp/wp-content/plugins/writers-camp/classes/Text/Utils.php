@@ -101,9 +101,8 @@ class Utils
             'enum'   => ClubUtils::get(true),
          ],
          'color' => [
-            'type'    => 'string',
-            'format'  => 'hex-color',
-            'default' => '#fff',
+            'type'    => 'boolean',
+            'default' => '0',
          ],
          'image_author' => [
             'type'      => 'string',

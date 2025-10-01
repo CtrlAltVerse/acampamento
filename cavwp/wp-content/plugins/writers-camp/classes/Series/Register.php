@@ -18,6 +18,7 @@ final class Register
 
       $query->set('posts_per_page', -1);
       $query->set('orderby', ['menu_order' => 'ASC', 'date' => 'desc']);
+      $query->set('post_status', ['publish', 'future']);
    }
 
    public function register()

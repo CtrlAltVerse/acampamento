@@ -147,7 +147,6 @@
 }
 
 .fullscreen-image .title-effect {
-   @apply text-neutral-100 text-shadow-neutral-900;
    text-shadow: 0px 0px 2px var(--tw-text-shadow-color);
 }
 

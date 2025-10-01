@@ -17,14 +17,19 @@ if ($args['in_body'] ?? false) {
 }
 
 ?>
-<div id="respond"
+<div id="<?php echo wp_unique_id('respond-'); ?>"
      class="flex flex-col gap-3 <?php echo $container_class; ?>">
    <h3 class="h3"
        x-text="parent === 0 ? '<?php echo $title; ?>' : reply_to">
       <?php echo $title; ?>
    </h3>
    <form class="flex flex-col gap-3"
-         x-on:submit.prevent="$rest.post(moon.apiUrl+'/comment?_wpnonce='+moon.nonce).then(() => {comment='';parent=0})">
+         <?php if (is_preview()) { ?>
+      x-on:submit.prevent="alert('Não é possível comentar numa prévia.')"
+      <?php } else { ?>
+      x-on:submit.prevent="$rest.post(moon.apiUrl+'/comment?_wpnonce='+moon.nonce).then(() => {comment='';parent=0})
+      <?php } ?>
+      ">
       <div class="comment-user flex items-center gap-3">
          <?php get_page_component(__FILE__, 'comment-user'); ?>
       </div>

@@ -1,13 +1,14 @@
 <?php
 
 use cavWP\Models\Term;
+use cavWP\Utils;
 
 get_component('header');
 
 $series = new Term();
 
-$first = 0;
-$clubs = [];
+$first   = 0;
+$clubs   = [];
 $authors = [];
 
 if (have_posts()) {
@@ -23,7 +24,7 @@ if (have_posts()) {
       }
 
       $terms = get_the_terms($series_post, 'club');
-      $term = $terms[0];
+      $term  = $terms[0];
 
       if (!in_array($term->term_id, array_keys($clubs))) {
          $clubs[$term->term_id] = new Term($term);
@@ -35,50 +36,70 @@ if (have_posts()) {
 <div class="relative py-6">
    <div class="absolute inset-0 z-1 bg-neutral-900/20"></div>
    <?php if (!empty($first)) { ?>
-      <img class="absolute inset-0 z-0 size-full object-cover"
-         src="<?php echo $first; ?>" loading="lazy" alt="">
+   <img class="absolute inset-0 z-0 size-full object-cover"
+        src="<?php echo $first; ?>" loading="lazy" alt="">
    <?php } ?>
    <div class="container flex flex-col justify-between gap-3 min-h-55 text-neutral-100 text-shadow-lg">
       <div class="flex flex-col gap-3">
-      <?php if (!empty($clubs)) { ?>
-      <div class="relative flex gap-2">
-         <?php foreach ($clubs as $club) { ?>
+         <?php if (!empty($clubs)) { ?>
+         <div class="relative flex gap-2">
+            <?php foreach ($clubs as $club) { ?>
             <a href="<?php echo $club->get('link'); ?>"
                class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-100"
                style="background-color: <?php echo $club->get('color'); ?>">
                <?php echo $club->get('name'); ?>
             </a>
-         <?php } ?>
+            <?php } ?>
          </div>
-      <?php } ?>
-      <hgroup class="flex flex-col gap-1.5 relative z-1">
-         <h3 class="font-extrabold uppercase text-xl md:text-3xl">
-            <?php echo $series->get('name'); ?>
-         </h3>
-         <?php if (!empty($authors)) { ?>
+         <?php } ?>
+         <hgroup class="flex flex-col gap-1.5 relative z-1">
+            <h3 class="font-extrabold uppercase text-xl md:text-3xl">
+               <?php echo $series->get('name'); ?>
+            </h3>
+            <?php if (!empty($authors)) { ?>
             <p class="font-medium text-md">
                Por
-               <?php echo implode(', ', $authors); ?>
+               <?php echo Utils::parse_titles($authors); ?>
             </p>
-         <?php } ?>
-      </hgroup>
+            <?php } ?>
+         </hgroup>
       </div>
-      <p class="relative z-1 font-medium text-md sm:text-lg md:text-xl max-w-1/2 md:max-w-180">
-         <?php echo $series->get('description'); ?>
-      </p>
+      <div class="flex flex-col items-start gap-3">
+         <p class="relative z-1 font-medium text-md sm:text-lg md:text-xl max-w-1/2 md:max-w-180">
+            <?php echo nl2br($series->get('description')); ?>
+         </p>
+         <?php if (have_rows('links', $series())) { ?>
+         <ul class="relative z-1 flex rounded border border-neutral-100 divide-x">
+            <?php while (have_rows('links', $series())) {
+               the_row(); ?>
+            <li>
+               <a class="py-2 px-4"
+                  href="<?php echo get_sub_field('url'); ?>"
+                  target="_blank" rel="external nofollow">
+                  <?php if (!empty(get_sub_field('icon'))) { ?>
+                  <i
+                     class="<?php echo get_sub_field('icon'); ?>"></i>
+                  <?php } ?>
+                  <?php echo get_sub_field('label'); ?>
+               </a>
+            </li>
+            <?php } ?>
+         </ul>
+         <?php } ?>
+      </div>
    </div>
 </div>
 <?php if (have_posts()) { ?>
-   <main class="main">
-      <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 gap-y-7">
-         <?php while (have_posts()) { ?>
-            <?php the_post(); ?>
-            <li>
-               <?php get_component('feature'); ?>
-            </li>
-         <?php } ?>
-      </ul>
-      <?php get_component('pagination'); ?>
-   </main>
+<main class="main">
+   <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 gap-y-7">
+      <?php while (have_posts()) { ?>
+      <?php the_post(); ?>
+      <li>
+         <?php get_component('feature'); ?>
+      </li>
+      <?php } ?>
+   </ul>
+   <?php get_component('pagination'); ?>
+</main>
 <?php } ?>
 <?php get_component('footer'); ?>

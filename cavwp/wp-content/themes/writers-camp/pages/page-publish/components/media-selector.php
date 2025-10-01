@@ -2,14 +2,14 @@
 
 ?>
 <dialog id="unsplash" x-data="cropper"
-        class="m-auto overflow-y-auto backdrop:bg-neutral-900/60 border-2 border-neutral-900 dark:text-neutral-100 dark:bg-neutral-600"
-        x-on:click.self="unsplash.close()">
+   class="m-auto overflow-y-auto backdrop:bg-neutral-900/60 border-2 border-neutral-900 dark:text-neutral-100 dark:bg-neutral-600"
+   x-on:click.self="unsplash.close()">
    <search class="flex flex-col gap-3 w-full sm:w-160 md:w-3xl lg:w-5xl xl:w-7xl text-lg" x-show="!cropper.picked">
       <h2 class="sr-only">Escolha uma imagem para ilustrar o texto</h2>
       <form x-on:submit.prevent="doSearch" class="flex border-b-2 border-dark">
          <div class="flex items-center w-full my-1 mx-2 gap-2">
             <input class="grow py-2 px-3.5 font-semibold outline-none" type="search" name="q" x-model="search.q"
-                   placeholder="Busque por uma imagem" />
+               placeholder="Busque por uma imagem" />
             <button class="py-2 px-3.5 bg-neutral-700 text-neutral-100 cursor-pointer" type="submit" title="Buscar">
                <i class="ri-search-line"></i>
             </button>
@@ -24,10 +24,10 @@
                <i class="ri-arrow-left-line"></i>
             </button>
             <button class="py-2 px-3.5 bg-neutral-700 text-neutral-100 cursor-pointer" type="button" x-on:click="setPage(1)" title="Próxima página" x-show="search.maxPages > 0" x-bind:disabled="search.page===search.maxPages">
-                    <i class="ri-arrow-right-line"></i>
+               <i class="ri-arrow-right-line"></i>
             </button>
             <button class="py-2 px-3.5 bg-neutral-700 text-neutral-100 cursor-pointer" type="button" x-on:click="unsplash.close()"
-                    title="Próxima página" x-bind:disabled="search.page===search.maxPages">
+               title="Próxima página" x-bind:disabled="search.page===search.maxPages">
                <i class="ri-close-fill"></i>
             </button>
          </div>
@@ -48,17 +48,17 @@
          <div class="flex items-center w-full my-1 mx-2 gap-2">
             <h2 class="grow py-2 px-3.5 font-semibold">Posicione a imagem</h2>
             <button class="py-2 px-3.5 bg-neutral-700 text-neutral-100 cursor-pointer" type="button"
-                    x-on:click="cropper.picked=false" title="Voltar">
+               x-on:click="cropper.picked=false" title="Voltar">
                <i class="ri-arrow-left-s-line"></i>
             </button>
             <button class="py-2 px-3.5 bg-neutral-700 text-neutral-100 cursor-pointer" type="button"
-                    x-on:click="confirm();unsplash.close()" title="Confirmar">
+               x-on:click="confirm();unsplash.close()" title="Confirmar">
                <i class="ri-checkbox-circle-fill"></i>
             </button>
          </div>
       </div>
-      <div class="flex flex-col mx-2">
-         <div id="media" class="relative" x-bind:style="`color: ${selected.color}`"></div>
+      <form class="flex flex-col mx-2">
+         <div id="media" class="relative" x-bind:style="`color: ${selected.color==1?'#000':'#fff'}`"></div>
          <div class="flex gap-3">
             <div class="flex flex-col gap-1">
                <label class="font-semibold" for="cropper-zoom">
@@ -69,29 +69,33 @@
             <div class="flex flex-col gap-1">
                <strong>Girar</strong>
                <div class="flex gap-3">
-               <button class="btn small whitespace-nowrap" type="button" x-on:click="rotate(90)">
-                  <i class="ri-anticlockwise-line"></i>
-                  -90º
-               </button>
-               <button class="btn small whitespace-nowrap" type="button" x-on:click="rotate(-90)">
-                  <i class="ri-clockwise-line"></i>
-                  90º
-               </button>
+                  <button class="btn small whitespace-nowrap" type="button" x-on:click="rotate(90)">
+                     <i class="ri-anticlockwise-line"></i>
+                     -90º
+                  </button>
+                  <button class="btn small whitespace-nowrap" type="button" x-on:click="rotate(-90)">
+                     <i class="ri-clockwise-line"></i>
+                     90º
+                  </button>
                </div>
             </div>
             <div class="flex flex-col gap-1">
                <strong>Cor do Texto</strong>
                <div class="flex flex-wrap gap-3">
-               <template x-for="color in sky.colors">
-                  <button class="btn small flex items-center gap-2" type="button" x-on:click="selected.color=color.hex">
-                     <span class="rounded size-5" x-bind:style="`background: ${color.hex}`"></span>
-                     <span x-text="color.name"></span>
-                  </button>
-               </template>
+                  <label for="color-white" class="btn small !flex items-center gap-2 cursor-pointer">
+                     <input id="color-white" class="hidden" name="color" x-model="selected.color" value="0" type="radio" />
+                     <span class="inline-block rounded size-4.25" style="background: #fff"></span>
+                     Branco
+                  </label>
+                  <label for="color-black" class="btn small !flex items-center gap-2 cursor-pointer">
+                     <input id="color-black" class="hidden" name="color" x-model="selected.color" value="1" type="radio" />
+                     <span class="inline-block rounded size-4.25" style="background: #000"></span>
+                     Preto
+                  </label>
                </div>
             </div>
          </div>
-      </div>
+      </form>
    </section>
    <a class="flex items-center gap-2 mt-3 mx-2" x-bind:href="!cropper.picked ? mainUrl : cropper.picked.image_author_url"
       target="_blank" rel="external">
