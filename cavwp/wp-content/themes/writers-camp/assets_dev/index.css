@@ -9,7 +9,7 @@
 @source "../";
 @source "../../../plugins/writers-camp";
 @source inline("ri-fire-fill ri-tree-fill ri-aliens-fill ri-knife-blood-fill");
-@source inline("ri-google-fill ri-facebook-circle-fill ri-apple-fill ri-microsoft-fill ri-bluesky-fill ri-threads-fill ri-whatsapp-line ri-linkedin-box-fill ri-youtube-fill ri-twitter-x-line ri-tiktok-fill ri-flickr-fill ri-tumblr-fill ri-mastodon-fill ri-github-fill ri-twitch-fill ri-instagram-line ri-vimeo-fill ri-book-open-fill ri-book-2-fill ri-patreon-fill ri-pinterest-fill ri-reddit-fill ri-dribbble-line ri-telegram-fill ri-mail-fill ri-behance-fill ri-medium-fill ri-snapchat-line ri-gitlab-fill ri-eye-fill ri-eye-off-fill ri-infinity-line ri-heart-pulse-fill");
+@source inline("ri-google-fill ri-facebook-circle-fill ri-apple-fill ri-microsoft-fill ri-bluesky-fill ri-threads-fill ri-whatsapp-line ri-linkedin-box-fill ri-youtube-fill ri-twitter-x-line ri-tiktok-fill ri-flickr-fill ri-tumblr-fill ri-mastodon-fill ri-github-fill ri-twitch-fill ri-instagram-line ri-vimeo-fill ri-book-open-fill ri-book-2-fill ri-patreon-fill ri-pinterest-fill ri-reddit-fill ri-dribbble-line ri-telegram-fill ri-mail-fill ri-behance-fill ri-medium-fill ri-snapchat-line ri-gitlab-fill ri-eye-fill ri-eye-off-fill ri-infinity-line ri-heart-pulse-fill ri-spotify-fill ri-book-marked-fill");
 
 @custom-variant dark (&:where(.dark, .dark *));
 

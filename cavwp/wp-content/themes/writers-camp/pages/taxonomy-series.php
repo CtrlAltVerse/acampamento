@@ -65,7 +65,7 @@ if (have_posts()) {
          </hgroup>
       </div>
       <div class="flex flex-col items-start gap-3">
-         <p class="relative z-1 font-medium text-md sm:text-lg md:text-xl max-w-1/2 md:max-w-180">
+         <p class="relative z-1 font-medium text-md sm:text-lg max-w-1/2 md:max-w-180">
             <?php echo nl2br($series->get('description')); ?>
          </p>
          <?php if (have_rows('links', $series())) { ?>
