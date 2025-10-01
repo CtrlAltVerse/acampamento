@@ -39,7 +39,7 @@ if (have_posts()) {
    <img class="absolute inset-0 z-0 size-full object-cover"
         src="<?php echo $first; ?>" loading="lazy" alt="">
    <?php } ?>
-   <div class="container flex flex-col justify-between gap-3 min-h-55 text-neutral-100 text-shadow-lg">
+   <div class="container relative z-1 flex flex-col justify-between gap-3 min-h-55 text-neutral-100 text-shadow-lg">
       <div class="flex flex-col gap-3">
          <?php if (!empty($clubs)) { ?>
          <div class="relative flex gap-2">
@@ -65,11 +65,11 @@ if (have_posts()) {
          </hgroup>
       </div>
       <div class="flex flex-col items-start gap-3">
-         <p class="relative z-1 font-medium text-md sm:text-lg max-w-1/2 md:max-w-180">
+         <p class="font-medium text-md sm:text-lg max-w-1/2 md:max-w-180">
             <?php echo nl2br($series->get('description')); ?>
          </p>
          <?php if (have_rows('links', $series())) { ?>
-         <ul class="relative z-1 flex rounded border border-neutral-100 divide-x">
+         <ul class="flex rounded border border-neutral-100 divide-x">
             <?php while (have_rows('links', $series())) {
                the_row(); ?>
             <li>
