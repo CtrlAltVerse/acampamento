@@ -12,23 +12,16 @@ $networks = CavWPUtils::get_login_networks();
 <dialog id="login"
         class="m-auto w-full max-w-2xl rounded-lg backdrop:z-45 backdrop:bg-neutral-900/60 dark:text-neutral-100 dark:bg-neutral-600"
         x-on:click.self="login.close()">
-   <div class="flex flex-col sm:grid sm:grid-rows-1 sm:grid-cols-2 h-full min-h-126"
+   <div class="flex flex-col sm:grid sm:grid-rows-1 sm:grid-cols-7 h-full min-h-136"
         x-data="{is_signup: true, method: ''}"
         x-effect="method = $store.login.method;if('login'===method){is_signup = false;$store.login.method='email'};if(['google','facebook'].includes(method)){is_signup = true}">
       <div
-           class="relative flex flex-col items-center justify-between h-full min-h-40 text-neutral-100 py-3 px-4 text-shadow-xs">
+           class="relative sm:col-span-3 flex flex-col items-center justify-between h-full min-h-34 text-neutral-100 py-3 px-4 text-shadow-xs">
          <img class="absolute inset-0 -z-1 size-full object-cover"
               src="<?php echo get_theme_file_uri('assets/images/camping.jpg'); ?>"
               loading="lazy"
               alt />
-         <div class="flex justify-start w-full">
-            <h2 class="h2">
-               <span x-text="is_signup ? 'Cadastrar' : 'Entrar'"></span>
-               <span x-show="$store.login.method==='email'" x-transition:enter x-cloak>com email</span>
-               <span x-show="$store.login.method==='google'" x-transition:enter x-cloak>com Google</span>
-               <span x-show="$store.login.method==='facebook'" x-transition:enter x-cloak>com Facebook</span>
-            </h2>
-         </div>
+         <div></div>
          <div class="hidden sm:flex flex-col gap-5 text-neutral-900 text-center text-sm">
             <div class="rounded-xl py-3 px-5 bg-neutral-100/80">
                Interaja com escritores e leitores
@@ -39,13 +32,21 @@ $networks = CavWPUtils::get_login_networks();
          </div>
          <div>Um projeto <span class="font-medium">CtrlAltVersœ</span></div>
       </div>
-      <form class="grow-1 flex flex-col justify-between gap-3 py-3 px-4"
+      <form class="sm:col-span-4 flex flex-col justify-between gap-3 py-3 px-4"
             x-on:submit.prevent="doLogin"
             x-show="$store.login.method!=='retrieve'">
-         <button class="self-end flex justify-center items-center rounded bg-neutral-300/10 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:bg-neutral-300 size-8 text-lg cursor-pointer"
+         <button class="absolute top-3 right-3 flex justify-center items-center rounded bg-neutral-300/10 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:bg-neutral-300 size-8 text-lg cursor-pointer"
                  type="button" x-on:click.prevent="login.close()">
             <i class="ri-close-fill"></i>
          </button>
+         <div class="flex justify-start w-full">
+            <h2 class="h2">
+               <span x-text="is_signup ? 'Cadastrar' : 'Entrar'"></span>
+               <span x-show="$store.login.method==='email'" x-transition:enter x-cloak>com email</span>
+               <span x-show="$store.login.method==='google'" x-transition:enter x-cloak>com Google</span>
+               <span x-show="$store.login.method==='facebook'" x-transition:enter x-cloak>com Facebook</span>
+            </h2>
+         </div>
          <ul class="flex flex-col items-center gap-3" x-show="$store.login.method==='intro'" x-transition:enter
              x-cloak>
             <?php foreach ($networks as $key => $network) { ?>
@@ -113,18 +114,21 @@ $networks = CavWPUtils::get_login_networks();
                   ]); ?>
                </div>
             </template>
-            <div class="flex justify-between" x-show="$store.login.method==='email'" x-cloak>
-               <label class="cursor-pointer font-medium" for="is_signup"
-                      x-text="is_signup ? 'Fazer login' : 'Cadastrar-se'"></label>
-               <button class="cursor-pointer" type="button" x-show="!is_signup"
+               <button class="cursor-pointer" type="button" x-show="$store.login.method==='email'&&!is_signup"
                        x-on:click.prevent="user_email.value.length<3 ? $do('toast','','Preencha o e-mail.') : $rest.post(moon.apiUrl+'/retrieve', {user_email: user_email.value})"
                        x-transition:enter x-cloak>Recuperar senha</button>
+            <div class="grid grid-cols-2 items-center gap-3 mt-3" x-show="$store.login.method==='email'" x-cloak>
+               <span>
+                  <i class="ri-arrow-left-right-line"></i>
+                  <label class="cursor-pointer font-medium" for="is_signup"
+                      x-text="is_signup ? 'Fazer login' : 'Cadastrar-se'"></label>
+               </span>
+               <button class="btn" type="submit" x-text="is_signup ? 'Cadastrar' : 'Entrar'"></button>
             </div>
-            <button class="btn" type="submit">Entrar</button>
          </div>
-         <div class="flex justify-center gap-3">
-            <button class="cursor-pointer" type="button" x-show="$store.login.method!=='intro'" x-cloak
-                    x-on:click.prevent="$store.login.method='intro'">Voltar</button>
+         <div class="flex justify-center gap-7">
+               <button class="cursor-pointer" type="button" x-show="$store.login.method!=='intro'" x-cloak
+                       x-on:click.prevent="$store.login.method='intro'">Voltar</button>
             <a href="<?php echo get_privacy_policy_url(); ?>"
                target="_black">Termos</a>
          </div>
