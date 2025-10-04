@@ -5,7 +5,7 @@ use cavWP\Models\Post;
 use writersCampP\Text\Utils as TextUtils;
 use writersCampP\Utils;
 
-$Form = new Form(TextUtils::get_draft_fields());
+$Form = new Form(TextUtils::get_text_fields());
 
 $text = $_GET['edit'] ?? null;
 
@@ -70,7 +70,7 @@ get_component('header');
                   ]); ?>
                   <?php $Form->field('club', [
                      'class' => 'dark:bg-neutral-700 dark:text-neutral-100',
-                     'value' => $_GET['guilda'] ?? ($text ? $club : ''),
+                     'value' => $_GET['guilda'] ?? (!empty($text) && !empty($club) ? $club : ''),
                   ], 'select'); ?>
                </div>
                <?php if ($challenge) { ?>

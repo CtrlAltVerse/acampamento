@@ -5,8 +5,6 @@ namespace writersCampP\Text;
 use cavWP\Validate;
 use writersCampP\Club\Utils as ClubUtils;
 
-const MAX_LENGTH = 333333;
-
 class Utils
 {
    public static function get($count = 6, $type = 'popular')
@@ -52,11 +50,11 @@ class Utils
       ];
    }
 
-   public static function get_draft_fields()
+   public static function get_text_fields($format = 'draft')
    {
       $Validade = new Validate();
 
-      return [
+      $fields = [
          'post_title' => [
             'title'     => 'Título',
             'type'      => 'string',
@@ -74,7 +72,7 @@ class Utils
             'type'      => 'string',
             'required'  => true,
             'minLength' => 3,
-            'maxLength' => MAX_LENGTH,
+            'maxLength' => 333333,
          ],
          'ID' => [
             'type'              => 'integer',
@@ -124,87 +122,18 @@ class Utils
             'validate_callback' => [$Validade, 'check'],
          ],
       ];
-   }
 
-   public static function get_pending_fields()
-   {
-      $Validade = new Validate();
+      if ('pending' === $format) {
+         $fields['post_excerpt']['required']     = true;
+         $fields['post_content']['minLength']    = 444;
+         $fields['club']['required']             = true;
+         $fields['color']['required']            = true;
+         $fields['image_author']['required']     = true;
+         $fields['image_author_url']['required'] = true;
+         $fields['image_full']['required']       = true;
+         $fields['image_mini']['required']       = true;
+      }
 
-      return [
-         'post_title' => [
-            'title'     => 'Título',
-            'type'      => 'string',
-            'minLength' => 3,
-            'required'  => true,
-         ],
-         'post_excerpt' => [
-            'title'       => 'Sumário',
-            'description' => 'Curta introdução ao texto',
-            'type'        => 'string',
-            'minLength'   => 3,
-            'required'    => true,
-         ],
-         'post_content' => [
-            'title'     => 'Texto',
-            'type'      => 'string',
-            'required'  => true,
-            'minLength' => 444,
-            'maxLength' => MAX_LENGTH,
-         ],
-         'ID' => [
-            'type'              => 'integer',
-            'format'            => 'post:text',
-            'minimum'           => 0,
-            'validate_callback' => [$Validade, 'check'],
-         ],
-         'challenge' => [
-            'title'             => 'Desafio',
-            'type'              => 'integer',
-            'format'            => 'post:challenge',
-            'minimum'           => 0,
-            'validate_callback' => [$Validade, 'check'],
-         ],
-         'slot' => [
-            'type'    => 'integer',
-            'minimum' => 0,
-            'maximum' => 3,
-         ],
-         'club' => [
-            'title'    => 'Guilda',
-            'type'     => 'integer',
-            'format'   => 'term:club',
-            'enum'     => ClubUtils::get(true),
-            'required' => true,
-         ],
-         'color' => [
-            'type'     => 'string',
-            'format'   => 'hex-color',
-            'required' => true,
-            'default'  => '#fff',
-         ],
-         'image_author' => [
-            'type'      => 'string',
-            'required'  => true,
-            'minLength' => 1,
-         ],
-         'image_author_url' => [
-            'type'              => 'string',
-            'format'            => 'url',
-            'required'          => true,
-            'validate_callback' => [$Validade, 'check'],
-         ],
-         'image_full' => [
-            'type'              => 'string',
-            'format'            => 'url',
-            'required'          => true,
-            'validate_callback' => [$Validade, 'check'],
-         ],
-         'image_mini' => [
-            'type'              => 'string',
-            'format'            => 'url',
-            'required'          => true,
-            'validate_callback' => [$Validade, 'check'],
-         ],
-      ];
+      return $fields;
    }
 }

@@ -28,7 +28,7 @@ class Register_Endpoint
          'callback'            => [$this, 'create_text'],
          'permission_callback' => ['writersCampP\Utils', 'checks_login'],
          'parse_errors'        => true,
-         'args'                => Utils::get_draft_fields(),
+         'args'                => Utils::get_text_fields(),
       ]);
 
       register_rest_route('wrs-camp/v1', '/pending', [
@@ -36,7 +36,7 @@ class Register_Endpoint
          'callback'            => [$this, 'create_text'],
          'permission_callback' => ['writersCampP\Utils', 'checks_login'],
          'parse_errors'        => true,
-         'args'                => Utils::get_pending_fields(),
+         'args'                => Utils::get_text_fields('pending'),
       ]);
    }
 
@@ -101,7 +101,7 @@ class Register_Endpoint
       $raw = $request->get_params();
 
       if (!empty($raw['ID'])) {
-         $body['ID'] = $raw['ID'];
+         $body['ID']          = $raw['ID'];
          $body['post_status'] = get_post_status($raw['ID']);
       }
 
