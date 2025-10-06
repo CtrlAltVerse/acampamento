@@ -125,6 +125,8 @@ class Register_Endpoint
          $body['tax_input']['club'] = [$raw['club']];
       }
 
+      $body['comment_status'] = 'open';
+
       $post_ID = wp_insert_post($body, true);
 
       if (is_wp_error($post_ID)) {

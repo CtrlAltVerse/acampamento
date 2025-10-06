@@ -42,7 +42,7 @@ usort($all_texts, function($a, $b) use ($statuses_keys) {
    return $key_a <=> $key_b;
 });
 
-$per_page = 25;
+$per_page = 24;
 $page     = Utils::get_page();
 
 foreach ($all_texts as $i => $raw_text) {
@@ -161,7 +161,7 @@ get_component('header');
                   <li>
                      <a class="btn small"
                         href="<?php echo get_preview_post_link($Text->ID); ?>"
-                        title="Prévia">
+                        title="Prévia" target="_blank">
                         <i class="ri-external-link-fill"></i>
                         Prévia
                      </a>
