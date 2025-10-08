@@ -3,7 +3,6 @@
 use cavWP\Form;
 use cavWP\Models\Post;
 use writersCampP\Text\Utils as TextUtils;
-use writersCampP\Utils;
 
 $Form = new Form(TextUtils::get_text_fields());
 
@@ -31,21 +30,11 @@ get_component('header');
    <form id="editorForm" x-on:submit.prevent="save()">
       <div class="flex items-center justify-between mb-4">
          <h1 class="text-3xl font-semibold">Editando</h1>
-         <div>
-            <a class="btn" href="<?php echo Utils::get_page_link('dashboard'); ?>">
-               <i class="ri-arrow-left-line"></i>
-               <span class="hidden sm:inline">Voltar</span>
-            </a>
-            <button class="btn" type="button" title="Salvar (Ctrl+S)" x-on:click.prevent="save('draft')"
-            x-on:keydown.ctrl.s.window.prevent="save('draft')" x-bind:disabled="current.saved===0">
-               <i class="ri-save-3-fill"></i>
-               <span class="hidden sm:inline">Salvar</span>
-            </button>
-            <button class="btn" type="submit" x-bind:disabled="current.saved===0">
-               <i class="ri-file-check-fill"></i>
-               <span class="hidden sm:inline">Enviar</span>
-            </button>
-         </div>
+         <?php get_page_component(__FILE__, 'actions'); ?>
+      </div>
+      <div class="fixed top-0 z-9 container w-full flex lg:hidden justify-between items-center rounded-sm py-1 px-2 bg-yellow-100 dark:bg-neutral-700">
+         <?php get_page_component(__FILE__, 'status'); ?>
+         <?php get_page_component(__FILE__, 'actions'); ?>
       </div>
       <div class="flex flex-col lg:flex-row items-start gap-8">
          <div class="grow lg:sticky top-6 w-full flex flex-col items-start gap-3">
@@ -126,7 +115,9 @@ get_component('header');
                   <img class="size-full object-cover" x-bind:src="entry.image_mini" alt="" loading="lazy" />
                </template>
             </button>
+            <div class="hidden  lg:block">
             <?php get_page_component(__FILE__, 'status'); ?>
+            </div>
          </div>
          <div id="editor" class="relative max-w-2xl w-full mx-auto ml-3.5 md:ml-0 "></div>
       </div>
@@ -134,16 +125,16 @@ get_component('header');
    <div class="hidden">
       <div class="menu-mark flex gap-px p-1 bg-neutral-100 text-neutral-700 rounded" x-show="!current.showChanger"
            x-transition>
-         <template x-for="{name,label,icon} in sky.marks">
+         <template x-for="{name,label,icon,shortcut} in sky.marks">
             <button class="btn-editor" type="button" x-on:click.prevent="mark(name)"
-                    x-bind:class="{active: current.has.includes(name)}" x-bind:title="label">
+                    x-bind:class="{active: current.has.includes(name)}" x-bind:title="`${label} (${shortcut})`">
                <i class="ri-fw" x-bind:class="icon"></i>
             </button>
          </template>
       </div>
       <div class="menu-block z-5 !-left-7 text-neutral-700 transition-all group"
            x-on:click.outside="current.showChanger=false">
-         <button class="btn-editor opacity-0 group-hover:opacity-100 transition-opacity disabled:!opacity-0 -translate-x-px"
+         <button class="btn-editor opacity-0 group-hover:opacity-100 transition-opacity disabled:!opacity-0 -translate-x-px dark:text-neutral-300"
                  type="button"
                  title="Mover para cima (Ctrl+Alt+↑)"
                  x-on:click.prevent="move"
@@ -167,22 +158,22 @@ get_component('header');
                  x-transition:leave="transition-all ease-in duration-99"
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0">
-               <template x-for="{name, label, icon, attr} in sky.align">
+               <template x-for="{name, label, icon, attr, shortcut} in sky.align">
                   <button class="btn-editor" type="button" x-on:click.prevent="align(attr)"
-                          x-show="!current.has.includes(attr) && current.alignable" x-bind:title="label">
+                          x-show="!current.has.includes(attr) && current.alignable" x-bind:title="`${label} (${shortcut})`">
                      <i class="ri-fw" x-bind:class="icon"></i>
                   </button>
                </template>
                <span class="text-neutral-300" x-show="current.alignable">|</span>
-               <template x-for="{name, label, icon, attr} in sky.blocks">
+               <template x-for="{name, label, icon, attr, shortcut} in sky.blocks">
                   <button class="btn-editor" type="button" x-on:click.prevent="node(name, attr)"
-                          x-show="current.type !== name" x-bind:title="label">
+                          x-show="current.type !== name" x-bind:title="`${label} (${shortcut})`">
                      <i class="ri-fw" x-bind:class="icon"></i>
                   </button>
                </template>
             </div>
          </div>
-         <button class="btn-editor opacity-0 group-hover:opacity-100 transition-opacity disabled:!opacity-0 -translate-x-px"
+         <button class="btn-editor opacity-0 group-hover:opacity-100 transition-opacity disabled:!opacity-0 -translate-x-px dark:text-neutral-300"
                  type="button"
                  title="Mover para baixo (Ctrl+Alt+↓)"
                  x-on:click.prevent="move(false)"
@@ -192,6 +183,7 @@ get_component('header');
       </div>
 
    </div>
+   <?php get_page_component(__FILE__, 'shortcuts'); ?>
    <?php get_page_component(__FILE__, 'media-selector'); ?>
 </main>
 <?php
