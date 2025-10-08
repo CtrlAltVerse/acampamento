@@ -32,7 +32,7 @@ get_component('header');
          <h1 class="text-3xl font-semibold">Editando</h1>
          <?php get_page_component(__FILE__, 'actions'); ?>
       </div>
-      <div class="fixed top-0 z-9 container w-full flex lg:hidden justify-between items-center rounded-sm py-1 px-2 bg-yellow-100 dark:bg-neutral-700">
+      <div class="fixed top-0 inset-x-0 z-9 w-ful flex lg:hidden justify-between items-center rounded-sm py-1 px-4 bg-yellow-100 dark:bg-neutral-700">
          <?php get_page_component(__FILE__, 'status'); ?>
          <?php get_page_component(__FILE__, 'actions'); ?>
       </div>

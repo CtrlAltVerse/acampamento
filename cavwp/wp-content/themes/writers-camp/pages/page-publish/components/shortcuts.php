@@ -10,9 +10,6 @@
          <li>
             Salvar rascunho <span class="flex gap-0.5"><kbd>Ctrl</kbd>+<kbd>S</kbd></span>
          </li>
-         <li>
-            <hr class="border-neutral-600 dark:border-neutral-200 py-0.25" />
-         </li>
          <template x-for="{label, shortcut} in sky.align">
             <li>
                <span x-text="label"></span> <span class="flex gap-0.5" x-html="parseKeys(shortcut)"></span>
@@ -25,9 +22,6 @@
                </li>
             </template>
          </template>
-         <li>
-            <hr class="border-neutral-600 dark:border-neutral-200 py-0.25" />
-         </li>
          <template x-for="{label, shortcut} in sky.marks">
             <template x-if="!!shortcut">
                <li>
