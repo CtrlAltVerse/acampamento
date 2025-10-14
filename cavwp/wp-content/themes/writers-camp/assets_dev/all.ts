@@ -199,7 +199,7 @@ Alpine.data('bonfire', function () {
 
       async getRandom(query: string) {
          const { data } = await this.$rest.get(
-            'https://api.altvers.net/api/random/v1/' + query
+            'https://ctrl.altvers.net/api/random/v1/' + query
          )
          const sorted = data[Math.floor(Math.random() * data.length)]
 

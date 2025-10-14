@@ -296,7 +296,7 @@ document.addEventListener('alpine:init', () => {
                   Placeholder.configure({
                      placeholder: ({ editor, node }) => {
                         if (editor.isEmpty) {
-                           return 'Comece por aqui...'
+                           return 'Comece aqui...'
                         }
 
                         const item = sky.blocks.find((el) => {

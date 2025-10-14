@@ -51,7 +51,7 @@ if (!empty($text)) {
          <img class="object-cover object-center absolute z-0 inset-0 size-full" src="{$mini}" alt="" loading="lazy" />
          <div class="relative flex flex-col justify-end mb-10 py-1.5 px-3.5 h-full z-2 text-shadow-lg">
             <span class="font-medium text-md line-clamp-3">{$title}</span>
-            <span>por {$author}</span>
+            <span>{$author}</span>
          </div>
          <span class="absolute bottom-0 -left-0.75 -right-0.75 z-5 rounded-b-lg pt-2 pb-1.5 px-4 uppercase font-semibold text-xs" style="background-color: {$color}">{$club_name}</span>
       </a>
