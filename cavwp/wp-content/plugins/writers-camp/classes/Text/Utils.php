@@ -136,4 +136,43 @@ class Utils
 
       return $fields;
    }
+
+   public static function split_string($string, $max_char_length = 32, $max_lines = 4)
+   {
+      $string = trim($string);
+      $total  = mb_strlen($string);
+
+      if ($total <= $max_char_length) {
+         return [$string];
+      }
+
+      $current_line = 0;
+      $current_word = 0;
+      $done         = 0;
+      $words        = explode(' ', $string);
+
+      while ($done < $total && $current_line < $max_lines) {
+         $output = '';
+
+         while (isset($words[$current_word]) && mb_strlen($output) + mb_strlen($words[$current_word]) + 1 < $max_char_length) {
+            if (!empty($output)) {
+               $output .= ' ';
+            }
+
+            $output .= $words[$current_word];
+            $current_word++;
+         }
+
+         $done += mb_strlen($output) + 1;
+         $return[$current_line] = $output;
+
+         if ($done < $total && $current_line + 1 === $max_lines) {
+            $return[$current_line] .= '...';
+         }
+
+         $current_line++;
+      }
+
+      return $return;
+   }
 }

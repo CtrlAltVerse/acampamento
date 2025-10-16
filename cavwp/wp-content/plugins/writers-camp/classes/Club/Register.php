@@ -58,7 +58,7 @@ class Register
          $clubs = $Post->get('terms', taxonomy : 'club');
 
          if (!empty($clubs)) {
-            $color = get_term_meta($clubs[0]->ID, 'color', true);
+            $color = get_term_meta($clubs[0]->term_id, 'color', true);
          }
       }
 
