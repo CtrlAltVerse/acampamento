@@ -2,6 +2,7 @@
 
 namespace writersCampP\Text;
 
+use cavEx\Shortlink\Utils as ShortlinkUtils;
 use cavWP\ImageUtils;
 use cavWP\Utils;
 use writersCampP\Text\Utils as TextUtils;
@@ -15,7 +16,9 @@ class Register
       add_action('wp_enqueue_scripts', [$this, 'set_post_content']);
       add_action('template_redirect', [$this, 'set_text_draft']);
       // add_action('post_updated', [$this, 'status_changed'], 10, 2);
-      add_action('post_updated', [$this, 'create_share_img'], 10, 2);
+      add_action('post_updated', [$this, 'create_shortlink'], 10, 2);
+      add_action('post_updated', [$this, 'create_share_img'], 11, 2);
+      add_action('delete_attachment', [$this, 'on_delete_attachment'], 10, 2);
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
       add_filter('cav_head_metatags', [$this, 'set_metatags']);
@@ -29,15 +32,19 @@ class Register
          return;
       }
 
-      $share = get_post_meta($post_ID, 'share_image', true);
-      $bg    = get_post_meta($post_ID, 'image_full', true);
+      // $share = get_post_meta($post_ID, 'share_image', true);
+      $bg = get_post_meta($post_ID, 'image_full', true);
+      // $delay = get_post_meta($post_ID, 'delay_upload', true);
 
-      if (!empty($share) || empty($bg)) {
+      if (!empty($delay) || !empty($share) || empty($bg)) {
          return;
       }
 
-      $author = get_the_author_meta('display_name', $post->post_author);
-      $clubs  = get_the_terms($post_ID, 'club');
+      update_post_meta($post_ID, 'delay_upload', 1);
+
+      $link_ID = get_post_meta($post_ID, 'shortlink', true);
+      $author  = get_the_author_meta('display_name', $post->post_author);
+      $clubs   = get_the_terms($post_ID, 'club');
 
       if (empty($clubs)) {
          return;
@@ -66,19 +73,13 @@ class Register
       imagecopyresized($img, $bg_img, 0, 0, $start_x, $start_y, 1080, 1920, $width, $height);
       imagedestroy($bg_img);
 
-      if (get_post_meta($post_ID, 'color', true)) {
+      if (get_post_meta($post_ID, 'color', true) || 1) {
          $text_color = imagecolorallocate($img, 23, 23, 23);
-         $shadow     = imagecolorallocate($img, 250, 250, 250);
          $logo       = 'black.png';
       } else {
          $text_color = imagecolorallocate($img, 250, 250, 250);
-         $shadow     = imagecolorallocate($img, 23, 23, 23);
          $logo       = 'white.png';
       }
-
-      $logo   = imagecreatefrompng($uploads . $logo);
-      $logo_x = imagesx($logo);
-      $logo_y = imagesy($logo);
 
       // CLUB PREP
       list($club_color_r, $club_color_g, $club_color_b) = Utils::hex_to_rgb($club_color);
@@ -93,83 +94,149 @@ class Register
       };
 
       // EXCERPT CALC
-      $excerpts = TextUtils::split_string($post->post_excerpt);
-
+      $excerpts  = TextUtils::split_string($post->post_excerpt);
       $excerpt_y = match (count($excerpts)) {
          1 => 1394,
          2 => 1317,
          3 => 1241,
          4 => 1168,
       };
-
       $club_y = $excerpt_y - $title_y - 170;
 
       // CLUB PRINT
       ImageUtils::rect($img, 55, $club_y, $club_size, $club_y + 80, $club_color, 20);
-
-      imagettftext($img, 30, 0, 70, $club_y + 53, $text_color, $icon, $club_icon);
-      imagettftext($img, 30, 0, 120, $club_y + 54, $text_color, $font_bold, $club);
+      $white = imagecolorallocate($img, 250, 250, 250);
+      imagettftext($img, 30, 0, 70, $club_y + 53, $white, $icon, $club_icon);
+      imagettftext($img, 30, 0, 120, $club_y + 54, $white, $font_bold, $club);
 
       // TITLE PRINT
       foreach ($titles as $index => $title) {
-         imagettftext($img, 60, 0, 57, ($excerpt_y - $title_y + 2) + 95 * $index, $shadow, $font_bold, $title);
          imagettftext($img, 60, 0, 55, ($excerpt_y - $title_y) + 95 * $index, $text_color, $font_bold, $title);
       }
 
       // EXCERPT PRINT
       foreach ($excerpts as $index => $excerpt) {
-         imagettftext($img, 46, 0, 56, ($excerpt_y + 1) + 75 * $index, $shadow, $font_normal, $excerpt);
          imagettftext($img, 46, 0, 55, $excerpt_y + 75 * $index, $text_color, $font_normal, $excerpt);
       }
 
       // AUTHOR
-      imagettftext($img, 35, 0, 163, 1502, $shadow, $font_normal, $author);
       imagettftext($img, 35, 0, 162, 1501, $text_color, $font_normal, $author);
       $avatar = get_avatar_url($post->post_author, [
-         'size' => 55,
+         'size' => 96,
       ]);
 
-      ImageUtils::circle_crop($img, $avatar, 55, 1439);
+      ImageUtils::circle_crop($img, $avatar, 96, 55, 1439);
+
+      // LOGO
+      $logo   = imagecreatefrompng($uploads . $logo);
+      $logo_x = imagesx($logo);
+      $logo_y = imagesy($logo);
+      imagealphablending($img, true);
       imagecopy($img, $logo, 950, 1439, 0, 0, $logo_x, $logo_y);
 
-      // SAVE
-      $file = "share-{$post_ID}.png";
-      imagepng($img, $uploads . $file);
+      // PREP
+      $files[] = [
+         'name' => "share-{$post_ID}.png",
+         'gd'   => $img,
+         'key'  => 'share_image',
+      ];
 
+      // LINK COPY
+      if (!empty($link_ID) && false) {
+         $shorter = ShortlinkUtils::get_link($link_ID);
+
+         $img_link = imagecreatetruecolor(1080, 1920);
+         imagecopy($img_link, $img, 0, 0, 0, 0, 1080, 1920);
+
+         $shortlink = str_replace(['://', 'https', 'http'], '', $shorter['link']);
+         $qr_code   = imagecreatefrompng($shorter['qr_code']);
+         $qr_code_x = imagesx($qr_code);
+         $qr_code_y = imagesy($qr_code);
+         imagecopy($img_link, $qr_code, 55, 1710, 0, 0, $qr_code_x, $qr_code_y);
+         imagettftext($img_link, 30, 0, 230, 1850, $text_color, $font_normal, $shortlink);
+
+         $files[] = [
+            'name' => "share_link-{$post_ID}.png",
+            'gd'   => $img_link,
+            'key'  => 'share_link_image',
+         ];
+      }
+
+      // SAVE
       if (!function_exists('wp_handle_upload')) {
          require_once ABSPATH . 'wp-admin/includes/file.php';
       }
 
-      $to_upload = [
-         'name'     => $file,
-         'type'     => 'image/png',
-         'tmp_name' => $uploads . $file,
-         'size'     => filesize($uploads . $file),
-         'error'    => 0,
-      ];
-      $overrides = [
-         'test_form' => false,
-      ];
-
-      function remove_image_sizes($sizes, $metadata)
-      {
-         return [];
+      if (!function_exists('wp_crop_image')) {
+         include ABSPATH . 'wp-admin/includes/image.php';
       }
 
-      add_filter('intermediate_image_sizes_advanced', '__return_empty_array', 9);
+      \add_filter('intermediate_image_sizes_advanced', '__return_empty_array', 11);
 
-      $uploaded = \wp_handle_sideload($to_upload, $overrides);
+      foreach ($files as $file) {
+         $path = $uploads . $file['name'];
+         imagepng($file['gd'], $path);
 
-      remove_filter('intermediate_image_sizes_advanced', '__return_empty_array', 9);
+         $to_upload = [
+            'name'     => $file['name'],
+            'type'     => 'image/png',
+            'tmp_name' => $path,
+            'size'     => filesize($path),
+            'error'    => 0,
+         ];
+         $overrides = [
+            'test_form' => false,
+         ];
 
-      unlink($uploads . $file);
+         $uploaded = \wp_handle_sideload($to_upload, $overrides);
 
-      update_post_meta($post_ID, 'share_image', $uploaded['url']);
+         if (file_exists($path)) {
+            unlink($path);
+         }
+
+         $attachment_ID = \wp_insert_attachment([
+            'guid'           => \wp_upload_dir()['url'] . '/' . $file['name'],
+            'post_mime_type' => 'image/png',
+            'post_title'     => 'Share ' . $post_ID,
+            'post_status'    => 'inherit',
+         ], $uploaded['file'], $post_ID);
+
+         $attachment_data = \wp_generate_attachment_metadata($attachment_ID, $uploaded['file']);
+         \wp_update_attachment_metadata($attachment_ID, $attachment_data);
+
+         \update_post_meta($post_ID, $file['key'], \wp_get_attachment_url($attachment_ID));
+      }
+
+      \remove_filter('intermediate_image_sizes_advanced', '__return_empty_array', 11);
+
+      delete_post_meta($post_ID, 'delay_upload');
+   }
+
+   public function create_shortlink($post_ID, $post)
+   {
+      if ('publish' !== $post->post_status) {
+         return;
+      }
+
+      $link_ID = get_post_meta($post_ID, 'shortlink', true);
+
+      if (empty($link_ID)) {
+         $link_ID = ShortlinkUtils::create_shortlink($post->post_title, get_permalink($post_ID));
+         update_post_meta($post_ID, 'shortlink', $link_ID);
+      } else {
+         ShortlinkUtils::update_shortlink($link_ID, get_permalink($post_ID));
+      }
    }
 
    public function filter_comment_reply_link($link)
    {
       return str_replace('class="comment-reply-link"', 'class="comment-reply-link" x-on:click.prevent="parent=$el.dataset.commentid;reply_to=$el.dataset.replyto"', $link);
+   }
+
+   public function on_delete_attachment($_post_ID, $post_obj)
+   {
+      delete_post_meta($post_obj->post_parent, 'share_link_image');
+      delete_post_meta($post_obj->post_parent, 'share_image');
    }
 
    public function register(): void
@@ -257,4 +324,22 @@ class Register
          }
       }
    }
+
+   // public function status_changed($post_ID, $post)
+   // {
+   //    if ('text' !== $post_after->post_type || 'publish' !== $post_after->post_status) {
+   //       return;
+   //    }
+
+   //    $tts_hash = get_post_meta($post_ID, 'tts_hash', true);
+   //    $text     = Utils::text_to_ssml($post_after->post_content);
+
+   //    if (!empty(1)) {
+   //    }
+
+   //    // md5($post_after->post_content);
+
+   //    // update_post_meta($post_ID, 'tts_hash', true);
+   //    // update_post_meta($post_ID, 'tts_audio', true);
+   // }
 }

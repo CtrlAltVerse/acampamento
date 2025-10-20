@@ -1,5 +1,6 @@
 <?php
 
+use cavEx\Shortlink\Utils as ShortlinkUtils;
 use cavWP\Models\Post;
 use writersCampP\Challenge\Utils as ChallengeUtils;
 
@@ -148,6 +149,31 @@ $container_class = '';
                                  <i class="ri-share-fill"></i>
                               </button>
                            </li>
+
+                           <?php $share = $Text->get('share_image'); ?>
+                           <?php if (!empty($share)) { ?>
+                           <li class="text-xl">
+                              <a class="cursor-pointer"
+                                 href="<?php echo $share; ?>"
+                                 title="Baixar imagem"
+                                 download="share-<?php echo $Text->ID; ?>.png">
+                                 <i class="ri-instagram-line"></i>
+                              </a>
+                           </li>
+                           <?php } ?>
+
+                           <?php $share_link = $Text->get('share_link_image'); ?>
+                           <?php if (empty($share_link)) { ?>
+                           <li class="text-xl">
+                              <a class="cursor-pointer"
+                                 href="<?php echo $share_link; ?>"
+                                 title="Baixar imagem com link"
+                                 download="share-link-<?php echo $Text->ID; ?>.png">
+                                 <i class="ri-qr-code-line"></i>
+                              </a>
+                           </li>
+                           <?php } ?>
+
                            <?php foreach ($shares as $share) { ?>
                            <li class="text-xl" x-show="show">
                               <a href="<?php echo $share['share']; ?>"
@@ -158,9 +184,16 @@ $container_class = '';
                               </a>
                            </li>
                            <?php } ?>
+
+                           <?php $link      = $Text->get('link'); ?>
+                           <?php $shortlink = ShortlinkUtils::get_link($Text->get('shortlink')); ?>
+                           <?php if (!empty($shortlink)) {
+                              $link = $shortlink['link'];
+                           } ?>
+
                            <li class="relative text-xl sharing" x-show="show">
                               <button class="cursor-pointer" type="button" title="Copiar link"
-                                      x-on:click.prevent="copy('<?php echo $Text->get('link'); ?>')">
+                                      x-on:click.prevent="copy('<?php echo $link; ?>')">
                                  <i class="ri-link"></i>
                               </button>
                            </li>
