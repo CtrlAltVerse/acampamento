@@ -73,7 +73,7 @@ class Register
       imagecopyresized($img, $bg_img, 0, 0, $start_x, $start_y, 1080, 1920, $width, $height);
       imagedestroy($bg_img);
 
-      if (get_post_meta($post_ID, 'color', true) || 1) {
+      if (get_post_meta($post_ID, 'color', true)) {
          $text_color = imagecolorallocate($img, 23, 23, 23);
          $logo       = 'black.png';
       } else {
@@ -153,7 +153,7 @@ class Register
          $qr_code_x = imagesx($qr_code);
          $qr_code_y = imagesy($qr_code);
          imagecopy($img_link, $qr_code, 55, 1710, 0, 0, $qr_code_x, $qr_code_y);
-         imagettftext($img_link, 30, 0, 230, 1850, $text_color, $font_normal, $shortlink);
+         imagettftext($img_link, 30, 0, 220, 1850, $text_color, $font_normal, $shortlink);
 
          $files[] = [
             'name' => "share_link-{$post_ID}.png",
