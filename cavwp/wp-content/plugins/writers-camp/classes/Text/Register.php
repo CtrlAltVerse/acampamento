@@ -15,9 +15,9 @@ class Register
       add_action('init', [$this, 'register']);
       add_action('wp_enqueue_scripts', [$this, 'set_post_content']);
       add_action('template_redirect', [$this, 'set_text_draft']);
-      // add_action('post_updated', [$this, 'status_changed'], 10, 2);
-      add_action('post_updated', [$this, 'create_shortlink'], 10, 2);
-      add_action('post_updated', [$this, 'create_share_img'], 15, 2);
+      // add_action('save_post_text', [$this, 'status_changed'], 10, 2);
+      add_action('save_post_text', [$this, 'create_shortlink'], 10, 2);
+      add_action('save_post_text', [$this, 'create_share_img'], 15, 2);
       add_action('delete_attachment', [$this, 'on_delete_attachment'], 10, 2);
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
@@ -26,26 +26,24 @@ class Register
       new Register_Endpoint();
    }
 
-   public function create_share_img($post_ID, $post)
+   public function create_share_img($post_ID, $post_obj)
    {
-      if ('publish' !== $post->post_status) {
+      if ('publish' !== $post_obj->post_status) {
          return;
       }
 
+      $delay = get_post_meta($post_ID, '_delay_upload', true);
       $share = get_post_meta($post_ID, 'share_image', true);
       $bg    = get_post_meta($post_ID, 'image_full', true);
-      $delay = get_post_meta($post_ID, 'delay_upload', true);
-
-      sleep(1);
 
       if (!empty($delay) || !empty($share) || empty($bg)) {
          return;
       }
 
-      update_post_meta($post_ID, 'delay_upload', 1);
+      update_post_meta($post_ID, '_delay_upload', 1);
 
       $link_ID = get_post_meta($post_ID, 'shortlink', true);
-      $author  = get_the_author_meta('display_name', $post->post_author);
+      $author  = get_the_author_meta('display_name', $post_obj->post_author);
       $clubs   = get_the_terms($post_ID, 'club');
 
       if (empty($clubs)) {
@@ -89,14 +87,14 @@ class Register
       $club_color = imagecolorallocate($img, $club_color_r, $club_color_g, $club_color_b);
 
       // TITLE CALC
-      $titles  = TextUtils::split_string($post->post_title, 25, 2);
+      $titles  = TextUtils::split_string($post_obj->post_title, 25, 2);
       $title_y = match (count($titles)) {
          1 => 86,
          2 => 185,
       };
 
       // EXCERPT CALC
-      $excerpts  = TextUtils::split_string($post->post_excerpt);
+      $excerpts  = TextUtils::split_string($post_obj->post_excerpt);
       $excerpt_y = match (count($excerpts)) {
          1 => 1394,
          2 => 1317,
@@ -123,7 +121,7 @@ class Register
 
       // AUTHOR
       imagettftext($img, 35, 0, 162, 1501, $text_color, $font_normal, $author);
-      $avatar = get_avatar_url($post->post_author, [
+      $avatar = get_avatar_url($post_obj->post_author, [
          'size' => 96,
       ]);
 
@@ -211,23 +209,33 @@ class Register
 
       \remove_filter('intermediate_image_sizes_advanced', '__return_empty_array', 11);
 
-      delete_post_meta($post_ID, 'delay_upload');
+      \delete_post_meta($post_ID, '_delay_upload');
    }
 
-   public function create_shortlink($post_ID, $post)
+   public function create_shortlink($post_ID, $post_obj)
    {
-      if ('publish' !== $post->post_status) {
+      if ('publish' !== $post_obj->post_status) {
          return;
       }
 
-      $link_ID = get_post_meta($post_ID, 'shortlink', true);
+      $delay = \get_post_meta($post_ID, '_delay_shortlink', true);
+
+      if (!empty($delay)) {
+         return;
+      }
+
+      \update_post_meta($post_ID, '_delay_shortlink', 1);
+
+      $link_ID = \get_post_meta($post_ID, 'shortlink', true);
 
       if (empty($link_ID)) {
-         $link_ID = ShortlinkUtils::create_shortlink($post->post_title, get_permalink($post_ID));
-         update_post_meta($post_ID, 'shortlink', $link_ID);
+         $link_ID = ShortlinkUtils::create_shortlink($post_obj->post_title, \get_permalink($post_ID));
+         \update_post_meta($post_ID, 'shortlink', $link_ID);
       } else {
-         ShortlinkUtils::update_shortlink($link_ID, get_permalink($post_ID));
+         ShortlinkUtils::update_shortlink($link_ID, \get_permalink($post_ID));
       }
+
+      \delete_post_meta($post_ID, '_delay_shortlink');
    }
 
    public function filter_comment_reply_link($link)
@@ -289,10 +297,10 @@ class Register
       ]);
 
       if (!empty($_GET['edit'])) {
-         $post = get_post($_GET['edit']);
+         $post_obj = get_post($_GET['edit']);
 
-         if (current_user_can('edit_post', $post->ID)) {
-            $localize['post_content'] = $post->post_content;
+         if (current_user_can('edit_post', $post_obj->ID)) {
+            $localize['post_content'] = $post_obj->post_content;
          }
       }
 
@@ -305,22 +313,22 @@ class Register
          return;
       }
 
-      $post = get_post($_GET['draft']);
+      $post_obj = get_post($_GET['draft']);
 
-      if ((int) $post->post_author !== get_current_user_id()) {
+      if ((int) $post_obj->post_author !== get_current_user_id()) {
          if (wp_safe_redirect(WritersCampPUtils::get_page_link('dashboard'))) {
             exit;
          }
       }
 
       $post_ID = wp_update_post([
-         'ID'          => $post->ID,
+         'ID'          => $post_obj->ID,
          'post_status' => 'draft',
       ]);
 
       if (!is_wp_error($post_ID)) {
          if (wp_safe_redirect(WritersCampPUtils::get_page_link('edit', [
-            'edit' => $post->ID,
+            'edit' => $post_obj->ID,
          ]))) {
             exit;
          }

@@ -14,7 +14,7 @@ $texts = Utils::get(6);
          </hgroup>
          <a class="btn"
             href="<?php echo get_post_type_archive_link('text'); ?>">
-            Todas as publicações
+            Todos os textos
          </a>
       </div>
       <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 gap-y-6">
