@@ -156,7 +156,8 @@ $container_class = '';
                               <a class="cursor-pointer"
                                  href="<?php echo $share; ?>"
                                  title="Baixar imagem"
-                                 download="share-<?php echo $Text->ID; ?>.png">
+                                 download="share-<?php echo $Text->ID; ?>.png"
+                                 target="_blank">
                                  <i class="ri-instagram-line"></i>
                               </a>
                            </li>
@@ -168,7 +169,8 @@ $container_class = '';
                               <a class="cursor-pointer"
                                  href="<?php echo $share_link; ?>"
                                  title="Baixar imagem com link"
-                                 download="share-link-<?php echo $Text->ID; ?>.png">
+                                 download="share-link-<?php echo $Text->ID; ?>.png"
+                                 target="_blank">
                                  <i class="ri-qr-code-line"></i>
                               </a>
                            </li>
@@ -299,7 +301,7 @@ $container_class = '';
          <?php if (!empty($challenge)) { ?>
          <section class="flex flex-col gap-4">
             <h2 class="h2">Parte do Desafio</h2>
-            <?php get_component('challenge', ['challenge' => new Post($challenge[0])]); ?>
+            <?php get_component('challenge', ['challenge' => new Post($challenge)]); ?>
          </section>
          <?php } ?>
 

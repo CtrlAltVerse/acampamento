@@ -17,7 +17,7 @@ class Register
       add_action('template_redirect', [$this, 'set_text_draft']);
       // add_action('post_updated', [$this, 'status_changed'], 10, 2);
       add_action('post_updated', [$this, 'create_shortlink'], 10, 2);
-      add_action('post_updated', [$this, 'create_share_img'], 11, 2);
+      add_action('post_updated', [$this, 'create_share_img'], 15, 2);
       add_action('delete_attachment', [$this, 'on_delete_attachment'], 10, 2);
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
@@ -35,6 +35,8 @@ class Register
       $share = get_post_meta($post_ID, 'share_image', true);
       $bg    = get_post_meta($post_ID, 'image_full', true);
       $delay = get_post_meta($post_ID, 'delay_upload', true);
+
+      sleep(1);
 
       if (!empty($delay) || !empty($share) || empty($bg)) {
          return;
@@ -153,7 +155,7 @@ class Register
          $qr_code_x = imagesx($qr_code);
          $qr_code_y = imagesy($qr_code);
          imagecopy($img_link, $qr_code, 55, 1710, 0, 0, $qr_code_x, $qr_code_y);
-         imagettftext($img_link, 30, 0, 220, 1850, $text_color, $font_normal, $shortlink);
+         imagettftext($img_link, 30, 0, 227, 1850, $text_color, $font_normal, $shortlink);
 
          $files[] = [
             'name' => "share_link-{$post_ID}.png",
