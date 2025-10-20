@@ -32,9 +32,9 @@ class Register
          return;
       }
 
-      // $share = get_post_meta($post_ID, 'share_image', true);
-      $bg = get_post_meta($post_ID, 'image_full', true);
-      // $delay = get_post_meta($post_ID, 'delay_upload', true);
+      $share = get_post_meta($post_ID, 'share_image', true);
+      $bg    = get_post_meta($post_ID, 'image_full', true);
+      $delay = get_post_meta($post_ID, 'delay_upload', true);
 
       if (!empty($delay) || !empty($share) || empty($bg)) {
          return;
@@ -142,7 +142,7 @@ class Register
       ];
 
       // LINK COPY
-      if (!empty($link_ID) && false) {
+      if (!empty($link_ID)) {
          $shorter = ShortlinkUtils::get_link($link_ID);
 
          $img_link = imagecreatetruecolor(1080, 1920);
