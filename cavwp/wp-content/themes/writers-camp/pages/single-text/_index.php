@@ -163,7 +163,7 @@ $container_class = '';
                            <?php } ?>
 
                            <?php $share_link = $Text->get('share_link_image'); ?>
-                           <?php if (empty($share_link)) { ?>
+                           <?php if (!empty($share_link)) { ?>
                            <li class="text-xl">
                               <a class="cursor-pointer"
                                  href="<?php echo $share_link; ?>"
