@@ -41,7 +41,7 @@ if ('publish' === $text->get('status')) {
           title="<?php echo $text->get('name'); ?>">
          <?php echo $text->get('name'); ?>
       </h3>
-      <p class="font-medium text-md">por
+      <p class="font-medium text-md">
          <?php echo $text->get('author:display_name'); ?>
       </p>
       <?php if ($full) { ?>
@@ -75,7 +75,7 @@ if ('publish' === $text->get('status')) {
           title="<?php echo $text->get('name'); ?>">
          <?php echo $text->get('name'); ?>
       </h3>
-      <p class="font-medium text-md">por
+      <p class="font-medium text-md">
          <?php echo $text->get('author:display_name'); ?>
       </p>
    </div>

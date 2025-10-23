@@ -52,7 +52,7 @@ a.btn {
 }
 
 kbd {
-   @apply py-0.5 px-1.25 rounded-sm min-w-7 bg-neutral-100 text-neutral-600 shadow-sm dark:shadow-neutral-100 font-mono font-medium tracking-tighter;
+   @apply py-0.5 px-1.25 rounded-sm min-w-7 bg-neutral-100 text-neutral-600 shadow-sm dark:shadow-neutral-100 font-mono font-medium text-center tracking-tighter;
 }
 
 .media-card {

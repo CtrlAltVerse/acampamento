@@ -82,7 +82,6 @@ $container_class = '';
             <?php echo $Text->get('title'); ?>
          </div>
          <p class="flex items-center gap-1 text-lg font-medium">
-            por
             <?php echo $Text->get('author:avatar', size: 32, attrs: ['class' => 'rounded-full']); ?>
             <?php echo $Text->get('author:display_name'); ?>
          </p>
@@ -122,7 +121,6 @@ $container_class = '';
                   </h1>
                   <a href="<?php echo $Text->get('author:link'); ?>"
                      class="flex items-center gap-1 text-lg font-medium">
-                     por
                      <?php echo $Text->get('author:avatar', size: 32, attrs: ['class' => 'rounded-full']); ?>
                      <?php echo $Text->get('author:display_name'); ?>
                   </a>

@@ -58,7 +58,6 @@ if (have_posts()) {
             </h3>
             <?php if (!empty($authors)) { ?>
             <p class="font-medium text-md">
-               Por
                <?php echo Utils::parse_titles($authors); ?>
             </p>
             <?php } ?>
