@@ -3,6 +3,7 @@
 namespace writersCampP\Writer;
 
 use cavWP\Networks\Utils as NetworksUtils;
+use cavEx\Utils as cavExUtils;
 use WP_Error;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -208,7 +209,7 @@ class Register_Endpoint
             $network_user_id = get_user_meta($User->ID, "network_user_id_{$body['sign_method']}", true);
 
             if ($network_user_id === $user['social_user_id']) {
-               wp_set_auth_cookie($User->ID, true, is_ssl());
+               cavExUtils::set_auth_cookie($User->ID);
 
                $actions[] = [
                   'action'  => 'toast',
@@ -323,7 +324,7 @@ class Register_Endpoint
                return $user_ID;
             }
 
-            wp_set_auth_cookie($user_ID, true, is_ssl());
+            cavExUtils::set_auth_cookie($user_ID);
 
             $actions[] = [
                'action'  => 'toast',
