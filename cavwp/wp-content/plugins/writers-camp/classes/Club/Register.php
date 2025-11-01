@@ -11,8 +11,18 @@ class Register
    {
       add_action('init', [$this, 'register'], 9);
       add_action('wp_enqueue_scripts', [$this, 'set_color'], 11);
+      add_action('pre_get_posts', [$this, 'set_query']);
 
       add_filter('cavwp_term_get', [$this, 'filter_name'], 10, 4);
+   }
+
+   public function set_query($query)
+   {
+      if (!$query->is_main_query() || !$query->is_tax('club')) {
+         return;
+      }
+
+      $query->set('menu_order', 99);
    }
 
    public function filter_name($value, $key, $term)

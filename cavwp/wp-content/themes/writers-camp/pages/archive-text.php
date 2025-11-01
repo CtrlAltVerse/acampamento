@@ -10,7 +10,7 @@ get_component('header');
       <?php while (have_posts()) { ?>
       <?php the_post(); ?>
       <li>
-         <?php get_component('feature'); ?>
+         <?php get_component('feature', ['series_item' => 1]); ?>
       </li>
       <?php } ?>
    </ul>

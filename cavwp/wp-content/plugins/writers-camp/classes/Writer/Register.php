@@ -10,7 +10,7 @@ class Register
       add_filter('site_url', [$this, 'set_retrieve_password_url'], 10, 3);
 
       add_action('user_register', [$this, 'send_mail_new'], 10, 2);
-      add_action('pre_get_posts', [$this, 'set_author_query']);
+      add_action('pre_get_posts', [$this, 'set_query']);
 
       add_action('template_redirect', [$this, 'get_mail_confirmation']);
       add_action('admin_init', [$this, 'block_wp_admin']);
@@ -128,13 +128,14 @@ class Register
       }
    }
 
-   public function set_author_query($query)
+   public function set_query($query)
    {
       if (!$query->is_main_query() || !$query->is_author()) {
          return;
       }
 
       $query->set('post_type', ['text']);
+      $query->set('menu_order', 99);
    }
 
    public function set_retrieve_password_url($url, $path, $scheme)

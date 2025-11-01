@@ -22,7 +22,6 @@ class Register
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
       add_filter('cav_head_metatags', [$this, 'set_metatags']);
-      add_filter('posts_where', [$this, 'filter_query'], 10, 2);
 
       new Register_Endpoint();
    }
@@ -242,15 +241,6 @@ class Register
    public function filter_comment_reply_link($link)
    {
       return str_replace('class="comment-reply-link"', 'class="comment-reply-link" x-on:click.prevent="parent=$el.dataset.commentid;reply_to=$el.dataset.replyto"', $link);
-   }
-
-   public function filter_query($where, $query)
-   {
-      if (empty($query->query['menu_order'])) {
-         return $where;
-      }
-
-      return str_replace('AND wp_posts.menu_order = 99', 'AND (wp_posts.menu_order = 1 OR wp_posts.menu_order = \'\')', $where);
    }
 
    public function on_delete_attachment($_post_ID, $post_obj)

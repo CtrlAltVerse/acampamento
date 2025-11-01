@@ -14,9 +14,19 @@ class Register
 
       add_filter('get_custom_logo', [$this, 'set_logo']);
       add_filter('get_search_query', [$this, 'clean_search']);
+      add_filter('posts_where', [$this, 'filter_query'], 10, 2);
 
       new Register_Gamification();
       new Register_Shortcodes();
+   }
+
+   public function filter_query($where, $query)
+   {
+      if (empty($query->query_vars['menu_order'])) {
+         return $where;
+      }
+
+      return str_replace('wp_posts.menu_order = 99', 'wp_posts.menu_order BETWEEN 0 AND 1', $where);
    }
 
    public function block_dashboard()
