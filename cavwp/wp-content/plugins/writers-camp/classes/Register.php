@@ -20,15 +20,6 @@ class Register
       new Register_Shortcodes();
    }
 
-   public function filter_query($where, $query)
-   {
-      if (empty($query->query_vars['menu_order'])) {
-         return $where;
-      }
-
-      return str_replace('wp_posts.menu_order = 99', 'wp_posts.menu_order BETWEEN 0 AND 1', $where);
-   }
-
    public function block_dashboard()
    {
       if (!is_page(['dashboard', 'profile', 'publish'])) {
@@ -55,6 +46,19 @@ class Register
       $text = trim($text);
 
       return substr($text, 0, 66);
+   }
+
+   public function filter_query($where, $query)
+   {
+      if (empty($query->query_vars['menu_order']) && empty($query->query['menu_order'])) {
+         return $where;
+      }
+
+      global $wpdb;
+
+      $posts_table = $wpdb->posts;
+
+      return str_replace($posts_table . '.menu_order = 99', $posts_table . '.menu_order BETWEEN 0 AND 1', $where);
    }
 
    public function register_menus(): void

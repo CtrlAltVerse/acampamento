@@ -130,7 +130,7 @@ class Register
 
    public function set_query($query)
    {
-      if (!$query->is_main_query() || !$query->is_author()) {
+      if (is_admin() || !$query->is_main_query() || !$query->is_author()) {
          return;
       }
 

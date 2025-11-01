@@ -68,13 +68,15 @@ Alpine.data('bonfire', function () {
             return
          }
 
-         const allBlocks = document.querySelectorAll('#content > *')
+         const allBlocks = document.querySelectorAll(
+            '#content > *'
+         ) as NodeListOf<HTMLElement>
 
-         if ('P' !== allBlocks[0].tagName) {
-            return
-         }
-
-         if (allBlocks[0].clientHeight < 70) {
+         if (
+            'P' !== allBlocks[0].tagName ||
+            allBlocks[0].clientHeight < 70 ||
+            allBlocks[0].style.textAlign !== 'justify'
+         ) {
             return
          }
 
@@ -95,8 +97,6 @@ Alpine.data('bonfire', function () {
 
          const initialLetter =
             '<span class="initial-letter">' + rawInitialLetters + '</span>'
-
-         console.log(allBlocks[0].innerHTML)
 
          allBlocks[0].innerHTML = allBlocks[0].innerHTML.replace(
             rawInitialLetters,

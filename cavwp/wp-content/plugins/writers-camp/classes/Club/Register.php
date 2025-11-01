@@ -16,15 +16,6 @@ class Register
       add_filter('cavwp_term_get', [$this, 'filter_name'], 10, 4);
    }
 
-   public function set_query($query)
-   {
-      if (!$query->is_main_query() || !$query->is_tax('club')) {
-         return;
-      }
-
-      $query->set('menu_order', 99);
-   }
-
    public function filter_name($value, $key, $term)
    {
       if ('name' !== $key || is_bool($value)) {
@@ -77,5 +68,14 @@ class Register
       }
 
       wp_add_inline_style('main', ":root{--color-guild: {$color}}");
+   }
+
+   public function set_query($query)
+   {
+      if (is_admin() || !$query->is_main_query() || !$query->is_tax('club')) {
+         return;
+      }
+
+      $query->set('menu_order', 99);
    }
 }

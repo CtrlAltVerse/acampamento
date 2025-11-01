@@ -12,8 +12,10 @@ if (!empty($terms)) {
 }
 
 $is_series = empty($args['series_item']) && $text->get('menu_order') === 1;
-$is_actual = is_singular('text')         && get_the_ID()                     === $text->ID;
-$full      = !($args['small'] ?? false);
+
+$is_actual = is_singular('text') && get_the_ID() === $text->ID;
+
+$full = !($args['small'] ?? false);
 
 $link    = $text->get('link');
 $name    = $text->get('name');
@@ -25,7 +27,7 @@ if ($is_series && 'publish' === $text->get('status')) {
 
    $link    = $serie->get('link');
    $name    = $serie->get('name');
-   $summary = $serie->get('summary');
+   $summary = $serie->get('description');
 }
 
 if ('publish' === $text->get('status')) { ?>
