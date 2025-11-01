@@ -41,8 +41,12 @@ if (have_posts()) {
    <?php } ?>
    <div class="container relative z-1 flex flex-col justify-between gap-3 min-h-55 text-neutral-100 text-shadow-lg">
       <div class="flex flex-col gap-3">
-         <?php if (!empty($clubs)) { ?>
          <div class="relative flex gap-2">
+            <span
+                  class="rounded py-1 px-2 uppercase font-extrabold text-sm bg-neutral-100 text-neutral-900">
+               Série
+            </span>
+            <?php if (!empty($clubs)) { ?>
             <?php foreach ($clubs as $club) { ?>
             <a href="<?php echo $club->get('link'); ?>"
                class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-100"
@@ -50,8 +54,8 @@ if (have_posts()) {
                <?php echo $club->get('name'); ?>
             </a>
             <?php } ?>
+            <?php } ?>
          </div>
-         <?php } ?>
          <hgroup class="flex flex-col gap-1.5 relative z-1">
             <h3 class="font-extrabold uppercase text-xl md:text-3xl">
                <?php echo $series->get('name'); ?>
@@ -94,7 +98,7 @@ if (have_posts()) {
       <?php while (have_posts()) { ?>
       <?php the_post(); ?>
       <li>
-         <?php get_component('feature'); ?>
+         <?php get_component('feature', ['series_item' => 1]); ?>
       </li>
       <?php } ?>
    </ul>
