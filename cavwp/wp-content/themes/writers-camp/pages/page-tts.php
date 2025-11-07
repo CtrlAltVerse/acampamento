@@ -53,18 +53,20 @@ $content = Utils::clean_content($Text->get('content'));
 // footer
 $content[] = "<break time=\"2s\" /><audio src=\"{$outro}\"></audio><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang=\"en-US\">alt vers</lang> ponto <lang xml:lang=\"en-US\">net</lang> barra <say-as interpret-as=\"verbatim\">{$link}</say-as>.</p>";
 
-$requests = [$header];
+$requests = [''];
 
 foreach ($content as $paragraph) {
    $key  = count($requests) - 1;
    $last = $requests[$key];
 
-   if (strlen($last) + strlen($paragraph) >= 4500) {
+   if (strlen($last) + strlen($paragraph) >= 4000) {
       $requests[] = $paragraph;
    } else {
       $requests[$key] .= $paragraph;
    }
 }
+
+$requests = array_merge([$header], $requests, [$footer]);
 
 get_component('header');
 
