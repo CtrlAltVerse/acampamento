@@ -648,7 +648,7 @@ add_action('acf/include_fields', function() {
             'library'           => 'all',
             'min_size'          => '',
             'max_size'          => '',
-            'mime_types'        => 'audio/mp3',
+            'mime_types'        => 'mp3',
             'allow_in_bindings' => 0,
          ],
          [
@@ -669,7 +669,7 @@ add_action('acf/include_fields', function() {
             'library'           => 'all',
             'min_size'          => '',
             'max_size'          => '',
-            'mime_types'        => 'audio/mp3',
+            'mime_types'        => 'mp3',
             'allow_in_bindings' => 0,
          ],
       ],

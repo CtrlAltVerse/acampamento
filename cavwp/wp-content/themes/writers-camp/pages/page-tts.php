@@ -28,7 +28,7 @@ $link   = $Text->get('link');
 $shortlink = ShortlinkUtils::get_link($Text->get('shortlink'));
 
 if (!empty($shortlink)) {
-   $link = str_replace('https://altvers.net', '', $shortlink['link']);
+   $link = str_replace('https://altvers.net/', '', $shortlink['link']);
 }
 
 $site  = get_bloginfo('name');
@@ -45,13 +45,13 @@ if (!empty($terms)) {
 }
 
 // header
-$header = "<p>&quot;{$title}&quot;, de {$author}</p><p>Publicado em &quot;{$club}&quot; no {$site}.</p><audio src=\"{$intro}\"></audio><break time=\"2s\" />";
+$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><audio src=\"{$intro}\"></audio><break time=\"2s\" />";
 
 // middle
 $content = Utils::clean_content($Text->get('content'));
 
 // footer
-$content[] = "<break time=\"2s\" /><audio src=\"{$outro}\"></audio><p>Este foi &quot;{$title}&quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang=\"en-US\">alt vers</lang> ponto <lang xml:lang=\"en-US\">net</lang> barra <say-as interpret-as=\"verbatim\">{$link}</say-as>.</p>";
+$content[] = "<break time=\"2s\" /><audio src=\"{$outro}\"></audio><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang=\"en-US\">alt vers</lang> ponto <lang xml:lang=\"en-US\">net</lang> barra <say-as interpret-as=\"verbatim\">{$link}</say-as>.</p>";
 
 $requests = [$header];
 
@@ -98,7 +98,7 @@ get_component('header');
          <?php foreach ($requests as $request) { ?>
          <strong><?php echo strlen($request); ?></strong>
          <textarea class="w-full"
-                   rows="50"><speak><?php echo $request; ?></speak></textarea>
+                   rows="50"><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
          <hr />
          <?php } ?>
       </div>

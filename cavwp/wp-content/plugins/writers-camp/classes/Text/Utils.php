@@ -10,7 +10,7 @@ class Utils
    public static function clean_content($content)
    {
       // Clean <p>
-      $content = preg_replace('/(\<p)([ a-z=\-:"]+)(\>)/', '$1$3', $content);
+      $content = preg_replace('/(\<p)([ a-z=\-:;"]+)(\>)/', '$1$3', $content);
 
       $content = explode("\n", $content);
 
