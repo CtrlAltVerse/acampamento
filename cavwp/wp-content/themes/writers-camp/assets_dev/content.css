@@ -41,7 +41,7 @@
    }
 
    .initial-letter {
-      @apply sm:mt-1.25 sm:text-[4.25rem] sm:leading-[4.25rem] sm:float-left sm:pr-3;
+      @apply sm:mt-1 sm:text-[4.25rem] sm:leading-[4.25rem] sm:float-left sm:pr-3;
    }
 
    li {

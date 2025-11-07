@@ -7,11 +7,12 @@ class Register_Dashboard_New
    public function __construct()
    {
       add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
+      add_action('wp_enqueue_scripts', [$this, 'localize_voices']);
    }
 
    public function enqueue_assets(): void
    {
-      if (!is_page(['publish', 'profile'])) {
+      if (!is_page(['publish', 'profile', 'tts'])) {
          return;
       }
 
@@ -151,5 +152,49 @@ class Register_Dashboard_New
             ],
          ],
       ]);
+   }
+
+   public function localize_voices()
+   {
+      if (!is_page('tts')) {
+         return;
+      }
+
+      wp_localize_script(
+         'dashboard',
+         'allVoices',
+         [
+            ['name' => 'pt-BR-Chirp3-HD-Achernar', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Achird', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Algenib', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Algieba', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Alnilam', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Aoede', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Autonoe', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Callirrhoe', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Charon', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Despina', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Enceladus', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Erinome', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Fenrir', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Gacrux', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Iapetus', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Kore', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Laomedeia', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Leda', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Orus', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Puck', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Pulcherrima', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Rasalgethi', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Sadachbia', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Sadaltager', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Schedar', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Sulafat', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Umbriel', 'genre' => 'M'],
+            ['name' => 'pt-BR-Chirp3-HD-Vindemiatrix', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Zephyr', 'genre' => 'F'],
+            ['name' => 'pt-BR-Chirp3-HD-Zubenelgenubi', 'genre' => 'M'],
+         ],
+      );
    }
 }

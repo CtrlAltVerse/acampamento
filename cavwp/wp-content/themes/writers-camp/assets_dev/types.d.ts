@@ -53,4 +53,5 @@ declare
    var sky: iSky
    var moon: iMoon
    var editor: iEditor
+   var allVoices: any[]
 }

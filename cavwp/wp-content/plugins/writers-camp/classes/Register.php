@@ -11,6 +11,7 @@ class Register
       add_action('after_setup_theme', [$this, 'register_menus']);
       add_action('pre_get_posts', [$this, 'set_search_query']);
       add_action('template_redirect', [$this, 'block_dashboard']);
+      add_action('wp_head', [$this, 'add_no_robots'], 0);
 
       add_filter('get_custom_logo', [$this, 'set_logo']);
       add_filter('get_search_query', [$this, 'clean_search']);
@@ -20,9 +21,16 @@ class Register
       new Register_Shortcodes();
    }
 
+   public function add_no_robots()
+   {
+      if (is_page(['profile', 'dashboard', 'tts'])) {
+         add_filter('wp_robots', 'wp_robots_no_robots');
+      }
+   }
+
    public function block_dashboard()
    {
-      if (!is_page(['dashboard', 'profile', 'publish'])) {
+      if (!is_page(['dashboard', 'profile', 'publish', 'tts'])) {
          return;
       }
 

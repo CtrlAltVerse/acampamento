@@ -7,6 +7,16 @@ use writersCampP\Club\Utils as ClubUtils;
 
 class Utils
 {
+   public static function clean_content($content)
+   {
+      // Clean <p>
+      $content = preg_replace('/(\<p)([ a-z=\-:"]+)(\>)/', '$1$3', $content);
+
+      $content = explode("\n", $content);
+
+      return array_filter($content);
+   }
+
    public static function get($count = 6, $type = 'popular')
    {
       if ('popular' === $type) {

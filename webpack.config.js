@@ -3,7 +3,8 @@ const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
    entry: {
-      publish: './cavwp/wp-content/themes/writers-camp/assets_dev/publish.ts',
+      publish:
+         './cavwp/wp-content/themes/writers-camp/assets_dev/publish/index.ts',
       all: './cavwp/wp-content/themes/writers-camp/assets_dev/all.ts',
    },
    module: {
