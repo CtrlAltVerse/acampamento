@@ -45,21 +45,20 @@ if (!empty($terms)) {
 }
 
 // header
-$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><audio src=\"{$intro}\"></audio><break time=\"2s\" />";
+$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p>";
 
 // middle
 $content = Utils::clean_content($Text->get('content'));
 
 // footer
-$content[] = "<break time=\"2s\" /><audio src=\"{$outro}\"></audio><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang=\"en-US\">alt vers</lang> ponto <lang xml:lang=\"en-US\">net</lang> barra <say-as interpret-as=\"verbatim\">{$link}</say-as>.</p>";
+$footer = "<p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang=\"en-US\">alt vers</lang> ponto <lang xml:lang=\"en-US\">net</lang> barra <say-as interpret-as=\"verbatim\">{$link}</say-as>.</p>";
 
 $requests = [''];
 
 foreach ($content as $paragraph) {
-   $key  = count($requests) - 1;
-   $last = $requests[$key];
+   $key = count($requests) - 1;
 
-   if (strlen($last) + strlen($paragraph) >= 4000) {
+   if (strlen($requests[$key]) + strlen($paragraph) >= 5000) {
       $requests[] = $paragraph;
    } else {
       $requests[$key] .= $paragraph;

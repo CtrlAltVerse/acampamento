@@ -46,7 +46,7 @@ if (!empty($text)) {
       $club_name = $clubs[0]->get('title');
 
       echo <<<HTML
-      <a href="{$link}" class="relative aspect-square flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 text-neutral-100 overflow-hidden" style="background-color: {$color}; border-color: {$color};" title="{$title} por {$author}">
+      <a href="{$link}" class="relative aspect-banner flex flex-col justify-between cols-1 sm:cols-2 lg:cols-4 rounded-xl border-3 text-neutral-100 overflow-hidden" style="background-color: {$color}; border-color: {$color};" title="{$title} por {$author}">
          <div class="bg-neutral-900/30 absolute inset-0 z-1"></div>
          <img class="object-cover object-center absolute z-0 inset-0 size-full" src="{$mini}" alt="" loading="lazy" />
          <div class="relative flex flex-col justify-end mb-10 py-1.5 px-3.5 h-full z-2 text-shadow-lg">
