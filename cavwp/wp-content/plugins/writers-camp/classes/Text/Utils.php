@@ -19,11 +19,11 @@ class Utils
 
    public static function get($count = 6, $type = 'popular')
    {
+      $orderby['date'] = 'DESC';
+
       if ('popular' === $type) {
          $orderby['comment_count'] = 'DESC';
       }
-
-      $orderby['date'] = 'DESC';
 
       return get_posts([
          'post_type'      => 'text',
