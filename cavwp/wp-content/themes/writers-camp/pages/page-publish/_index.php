@@ -32,7 +32,8 @@ get_component('header');
          <h1 class="text-3xl font-semibold">Editando</h1>
          <?php get_page_component(__FILE__, 'actions'); ?>
       </div>
-      <div class="fixed top-0 inset-x-0 z-9 w-ful flex lg:hidden justify-between items-center rounded-sm py-1 px-4 bg-yellow-100 dark:bg-neutral-700">
+      <div
+           class="fixed top-0 inset-x-0 z-9 w-ful flex lg:hidden justify-between items-center rounded-sm py-1 px-4 bg-yellow-100 dark:bg-neutral-700">
          <?php get_page_component(__FILE__, 'status'); ?>
          <?php get_page_component(__FILE__, 'actions'); ?>
       </div>
@@ -115,8 +116,8 @@ get_component('header');
                   <img class="size-full object-cover" x-bind:src="entry.image_mini" alt="" loading="lazy" />
                </template>
             </button>
-            <div class="hidden  lg:block">
-            <?php get_page_component(__FILE__, 'status'); ?>
+            <div class="hidden lg:block">
+               <?php get_page_component(__FILE__, 'status'); ?>
             </div>
          </div>
          <div id="editor" class="relative max-w-2xl w-full mx-auto ml-3.5 md:ml-0 "></div>
@@ -160,7 +161,8 @@ get_component('header');
                  x-transition:leave-end="opacity-0">
                <template x-for="{name, label, icon, attr, shortcut} in sky.align">
                   <button class="btn-editor" type="button" x-on:click.prevent="align(attr)"
-                          x-show="!current.has.includes(attr) && current.alignable" x-bind:title="`${label} (${shortcut})`">
+                          x-show="!current.has.includes(attr) && current.alignable"
+                          x-bind:title="`${label} (${shortcut})`">
                      <i class="ri-fw" x-bind:class="icon"></i>
                   </button>
                </template>

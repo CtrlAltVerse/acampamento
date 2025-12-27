@@ -263,8 +263,10 @@ class Register
          'show_in_rest'  => true,
          'menu_position' => 3,
          'menu_icon'     => 'dashicons-text',
-         'supports'      => ['title', 'editor', 'author', 'excerpt', 'comments', 'revisions', 'custom-fields', 'page-attributes'],
-         'rewrite'       => [
+         'supports'      => ['title', 'editor' => [
+            'notes' => true,
+         ], 'author', 'excerpt', 'comments', 'revisions', 'custom-fields', 'page-attributes'],
+         'rewrite' => [
             'slug' => 'texto',
          ],
          'can_export' => false,
@@ -300,7 +302,10 @@ class Register
          $post_obj = get_post($_GET['edit']);
 
          if (current_user_can('edit_post', $post_obj->ID)) {
+            $json = get_post_meta($post_obj->ID, 'raw_json', true);
+
             $localize['post_content'] = $post_obj->post_content;
+            $localize['raw_json'] = empty($json) ? null : $json;
          }
       }
 

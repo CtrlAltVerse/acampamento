@@ -17,6 +17,7 @@ import Typography from '@tiptap/extension-typography'
 
 import BubbleMenu from './bubbleMenu.js'
 import CavExtension from './extension'
+import jsonToBlocks from './utils'
 
 document.addEventListener('alpine:init', () => {
    Alpine.data('typewriter', function () {
@@ -36,11 +37,19 @@ document.addEventListener('alpine:init', () => {
          entry: {
             title: '',
             summary: '',
-            content: editor.post_content ?? '',
+            json: null as any,
+            html: '',
             image_mini: '',
+            is_blocks: editor.raw_json !== null,
          },
 
          init() {
+            if (editor.raw_json === null) {
+               this.entry.html = editor.post_content
+            } else {
+               this.entry.json = editor.raw_json
+            }
+
             window.onbeforeunload = (e: any) => {
                if (this.current.saved === -1) {
                   e.preventDefault()
@@ -58,7 +67,7 @@ document.addEventListener('alpine:init', () => {
 
             this.$watch('entry.title', this.setDirt.bind(this))
             this.$watch('entry.summary', this.setDirt.bind(this))
-            this.$watch('entry.content', this.setDirt.bind(this))
+            this.$watch('entry.html', this.setDirt.bind(this))
             this.$watch('entry.image_mini', this.setDirt.bind(this))
 
             setInterval(() => {
@@ -90,7 +99,7 @@ document.addEventListener('alpine:init', () => {
                status === 'draft' &&
                // @ts-expect-error
                document.getElementById('post_title').value.length < 3 &&
-               this.entry.content.length < 3
+               this.entry.html.length < 3
             ) {
                return
             }
@@ -100,7 +109,8 @@ document.addEventListener('alpine:init', () => {
             const el = document.getElementById('editorForm') as HTMLFormElement
             const formData = new FormData(el)
 
-            formData.append('post_content', this.entry.content)
+            formData.append('raw_json', JSON.stringify(this.entry.json))
+            formData.append('post_content', this.entry.html)
 
             let body = {}
             formData.forEach((value, key) => {
@@ -276,7 +286,7 @@ document.addEventListener('alpine:init', () => {
                   },
                },
                autofocus,
-               content: this.entry.content,
+               content: this.entry.json ?? this.entry.html,
                element: document.querySelector('#editor'),
                extensions: [
                   StarterKit.configure({
@@ -352,8 +362,21 @@ document.addEventListener('alpine:init', () => {
                   CharacterCount,
                   Focus,
                ],
+               onCreate: ({ editor }) => {
+                  if (this.entry.is_blocks) {
+                     this.entry.html = jsonToBlocks(editor.getJSON())
+                  } else {
+                     this.entry.html = editor.getHTML()
+                  }
+               },
                onUpdate: ({ editor }) => {
-                  this.entry.content = editor.getHTML()
+                  this.entry.json = editor.getJSON()
+                  if (this.entry.is_blocks) {
+                     this.entry.html = jsonToBlocks(this.entry.json)
+                  } else {
+                     this.entry.html = editor.getHTML()
+                  }
+
                   this.countWords()
                   this.updateCurrent(editor)
                   this.current.saved = -1

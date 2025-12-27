@@ -84,6 +84,13 @@ class Utils
             'minLength' => 3,
             'maxLength' => 333333,
          ],
+         'raw_json' => [
+            'title'     => 'Blocos',
+            'type'      => 'string',
+            'required'  => true,
+            'minLength' => 3,
+            'maxLength' => 333333,
+         ],
          'ID' => [
             'type'              => 'integer',
             'format'            => 'post:text',

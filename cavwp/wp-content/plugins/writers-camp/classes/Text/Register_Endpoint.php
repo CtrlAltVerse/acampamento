@@ -111,6 +111,8 @@ class Register_Endpoint
       $body['post_content'] = $raw['post_content'];
       $body['post_excerpt'] = $raw['post_excerpt'] ?? '';
 
+      $body['meta_input']['raw_json'] = json_decode($raw['raw_json']);
+
       if ('/wrs-camp/v1/pending' === $request->get_route()) {
          $body['post_status'] = 'pending';
       }
