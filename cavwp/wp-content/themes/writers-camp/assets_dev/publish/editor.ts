@@ -364,17 +364,20 @@ document.addEventListener('alpine:init', () => {
                ],
                onCreate: ({ editor }) => {
                   if (this.entry.is_blocks) {
+                     this.entry.json = editor.getJSON()
                      this.entry.html = jsonToBlocks(editor.getJSON())
                   } else {
                      this.entry.html = editor.getHTML()
+                     this.entry.json = editor.getJSON()
                   }
                },
                onUpdate: ({ editor }) => {
-                  this.entry.json = editor.getJSON()
                   if (this.entry.is_blocks) {
+                     this.entry.json = editor.getJSON()
                      this.entry.html = jsonToBlocks(this.entry.json)
                   } else {
                      this.entry.html = editor.getHTML()
+                     this.entry.json = editor.getJSON()
                   }
 
                   this.countWords()
