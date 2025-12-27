@@ -144,6 +144,18 @@
          @apply py-1.5 px-4 bg-guild text-neutral-100 font-medium text-sm;
       }
    }
+
+   .has-text-align-justify {
+      @apply text-justify;
+   }
+
+   .has-text-align-right {
+      @apply text-right;
+   }
+
+   .has-text-align-center {
+      @apply text-center;
+   }
 }
 
 .fullscreen-image .title-effect {
