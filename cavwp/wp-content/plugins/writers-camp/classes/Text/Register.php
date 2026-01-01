@@ -15,13 +15,13 @@ class Register
       add_action('init', [$this, 'register']);
       add_action('wp_enqueue_scripts', [$this, 'set_post_content']);
       add_action('template_redirect', [$this, 'set_text_draft']);
-      // add_action('save_post_text', [$this, 'status_changed'], 10, 2);
 
       add_action('save_post_text', [$this, 'check_comments'], 10, 2);
       add_action('save_post_text', [$this, 'create_shortlink'], 10, 2);
       add_action('save_post_text', [$this, 'create_share_img'], 15, 2);
       add_action('delete_attachment', [$this, 'on_delete_attachment'], 10, 2);
 
+      add_filter('get_post_metadata', [$this, 'convert_raw_json'], 10, 3);
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
       add_filter('cav_head_metatags', [$this, 'set_metatags']);
 
@@ -65,6 +65,19 @@ class Register
       if ($updated) {
          update_post_meta($post_ID, 'raw_json', $js_blocks);
       }
+   }
+
+   public function convert_raw_json($value, $post_ID, $key)
+   {
+      if ('raw_json' !== $key) {
+         return $value;
+      }
+
+      if (gettype($value) === 'array') {
+         return $value;
+      }
+
+      return json_encode(json_decode($value), true);
    }
 
    public function create_share_img($post_ID, $post_obj)
@@ -370,8 +383,8 @@ class Register
                      $comments[$comment->comment_ID] = [
                         'comment' => $comment->comment_content,
                         'author'  => $comment->comment_author,
-                        'avatar'  => get_avatar($comment->comment_author_email, 32, '','',[
-                           'class' => 'rounded-full'
+                        'avatar'  => get_avatar($comment->comment_author_email, 32, '', '', [
+                           'class' => 'rounded-full',
                         ]),
                      ];
                   }
