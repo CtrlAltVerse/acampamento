@@ -108,10 +108,10 @@ class Register_Endpoint
       $body['post_type']    = 'text';
       $body['post_author']  = get_current_user_id();
       $body['post_title']   = $raw['post_title'];
-      $body['post_content'] = $raw['post_content'];
       $body['post_excerpt'] = $raw['post_excerpt'] ?? '';
 
-      $body['meta_input']['raw_json'] = json_decode($raw['raw_json']);
+      $json                           = json_decode($raw['raw_json'], true);
+      $body['meta_input']['raw_json'] = $json;
 
       if ('/wrs-camp/v1/pending' === $request->get_route()) {
          $body['post_status'] = 'pending';
@@ -126,6 +126,8 @@ class Register_Endpoint
       if (!empty($raw['club'])) {
          $body['tax_input']['club'] = [$raw['club']];
       }
+
+      $body['post_content'] = Utils::json_to_block($json);
 
       $body['comment_status'] = 'open';
 

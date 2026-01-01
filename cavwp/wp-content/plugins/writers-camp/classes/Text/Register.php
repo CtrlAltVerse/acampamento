@@ -16,6 +16,8 @@ class Register
       add_action('wp_enqueue_scripts', [$this, 'set_post_content']);
       add_action('template_redirect', [$this, 'set_text_draft']);
       // add_action('save_post_text', [$this, 'status_changed'], 10, 2);
+
+      add_action('save_post_text', [$this, 'check_comments'], 10, 2);
       add_action('save_post_text', [$this, 'create_shortlink'], 10, 2);
       add_action('save_post_text', [$this, 'create_share_img'], 15, 2);
       add_action('delete_attachment', [$this, 'on_delete_attachment'], 10, 2);
@@ -24,6 +26,45 @@ class Register
       add_filter('cav_head_metatags', [$this, 'set_metatags']);
 
       new Register_Endpoint();
+   }
+
+   public function check_comments($post_ID, $post_obj)
+   {
+      $js_blocks = get_post_meta($post_ID, 'raw_json', true);
+
+      if (empty($js_blocks)) {
+         return;
+      }
+
+      $updated = false;
+      $blocks  = parse_blocks($post_obj->post_content);
+
+      $idx = 0;
+
+      foreach ($blocks as $block) {
+         if (!$block['blockName']) {
+            continue;
+         }
+
+         $noteId = $block['attrs']['metadata']['noteId']            ?? false;
+         $commId = $js_blocks['content'][$idx]['attrs']['comments'] ?? false;
+
+         if ($noteId !== $commId) {
+            $updated = true;
+
+            if ($noteId) {
+               $js_blocks['content'][$idx]['attrs']['comments'] = $noteId;
+            } else {
+               unset($js_blocks['content'][$idx]['attrs']['comments']);
+            }
+         }
+
+         $idx++;
+      }
+
+      if ($updated) {
+         update_post_meta($post_ID, 'raw_json', $js_blocks);
+      }
    }
 
    public function create_share_img($post_ID, $post_obj)
@@ -304,8 +345,40 @@ class Register
          if (current_user_can('edit_post', $post_obj->ID)) {
             $json = get_post_meta($post_obj->ID, 'raw_json', true);
 
-            $localize['post_content'] = $post_obj->post_content;
-            $localize['raw_json'] = empty($json) ? null : $json;
+            $localize['raw_json'] = null;
+
+            if (!empty($json)) {
+               $localize['raw_json'] = $json;
+
+               $comments_ID = [];
+
+               foreach ($json['content'] as $block) {
+                  if (!empty($block['attrs']['comments'])) {
+                     $comments_ID[] = $block['attrs']['comments'];
+                  }
+               }
+
+               if (!empty($comments_ID)) {
+                  $raw_comments = get_comments([
+                     'comment__in' => $comments_ID,
+                     'orderby'     => 'comment_ID',
+                     'order'       => 'ASC',
+                     'type'        => 'note',
+                  ]);
+
+                  foreach ($raw_comments as $comment) {
+                     $comments[$comment->comment_ID] = [
+                        'comment' => $comment->comment_content,
+                        'author'  => $comment->comment_author,
+                        'avatar'  => get_avatar($comment->comment_author_email, 32, '','',[
+                           'class' => 'rounded-full'
+                        ]),
+                     ];
+                  }
+
+                  $localize['comments'] = $comments;
+               }
+            }
          }
       }
 

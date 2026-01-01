@@ -120,10 +120,19 @@ get_component('header');
                <?php get_page_component(__FILE__, 'status'); ?>
             </div>
          </div>
-         <div id="editor" class="relative max-w-2xl w-full mx-auto ml-3.5 md:ml-0 "></div>
+         <div id="editor" class="relative max-w-2xl w-full mx-3.5 md:ml-0 "></div>
       </div>
    </form>
    <div class="hidden">
+      <div class="comment relative z-6 !left-auto -right-7 text-neutral-700 transition-all w-full">
+         <button class="btn-editor !rounded-full border-1 border-middle bg-neutral-100 text-neutral-700 opacity-50 transition-opacity"
+                 type="button"
+                 x-on:click.prevent="current.showComment=!current.showComment"
+                 x-bind:class="{'opacity-100': current.showComment}">
+            <i class="ri-chat-4-fill"></i>
+         </button>
+         <div class="comment-content absolute right-10 top-0 flex flex-col gap-4 py-4 px-5 rounded min-w-70 bg-neutral-100 text-neutral-700" x-show="current.showComment"></div>
+         </div>
       <div class="menu-mark flex gap-px p-1 bg-neutral-100 text-neutral-700 rounded" x-show="!current.showChanger"
            x-transition>
          <template x-for="{name,label,icon,shortcut} in sky.marks">
@@ -183,7 +192,6 @@ get_component('header');
             <i class="ri-fw ri-arrow-down-s-line"></i>
          </button>
       </div>
-
    </div>
    <?php get_page_component(__FILE__, 'shortcuts'); ?>
    <?php get_page_component(__FILE__, 'media-selector'); ?>

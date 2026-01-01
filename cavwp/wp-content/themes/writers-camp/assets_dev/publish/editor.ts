@@ -1,23 +1,37 @@
 // todo: IF LISTA/quote, mover item. ou se for first|last mover real root
 
 import { Editor } from '@tiptap/core'
-import StarterKit from '@tiptap/starter-kit'
 import {
    Focus,
    CharacterCount,
    Placeholder,
    Selection,
 } from '@tiptap/extensions'
+import { Dropcursor, UndoRedo } from '@tiptap/extensions'
+import { BulletList, OrderedList, ListKeymap } from '@tiptap/extension-list'
+import Document from '@tiptap/extension-document'
 import TextAlign from '@tiptap/extension-text-align'
-import Superscript from '@tiptap/extension-superscript'
-import Subscript from '@tiptap/extension-subscript'
 import FloatingMenu from '@tiptap/extension-floating-menu'
 import Typography from '@tiptap/extension-typography'
-// import BubbleMenu from '@tiptap/extension-bubble-menu'
+import Bold from '@tiptap/extension-bold'
+import Code from '@tiptap/extension-code'
+import Italic from '@tiptap/extension-italic'
+import Strike from '@tiptap/extension-strike'
+import Underline from '@tiptap/extension-underline'
+import Text from '@tiptap/extension-text'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 
+import {
+   cavParagraph,
+   cavBlockquote,
+   cavCodeBlock,
+   cavHeading,
+   cavHorizontalRule,
+   cavListItem,
+} from './middleware.js'
 import BubbleMenu from './bubbleMenu.js'
 import CavExtension from './extension'
-import jsonToBlocks from './utils'
 
 document.addEventListener('alpine:init', () => {
    Alpine.data('typewriter', function () {
@@ -27,6 +41,8 @@ document.addEventListener('alpine:init', () => {
             type: 'paragraph',
             icon: 'ri-paragraph',
             position: 'first',
+            comment: false,
+            showComment: false,
             showChanger: false,
             has: [],
             alignable: true,
@@ -38,17 +54,12 @@ document.addEventListener('alpine:init', () => {
             title: '',
             summary: '',
             json: null as any,
-            html: '',
             image_mini: '',
             is_blocks: editor.raw_json !== null,
          },
 
          init() {
-            if (editor.raw_json === null) {
-               this.entry.html = editor.post_content
-            } else {
-               this.entry.json = editor.raw_json
-            }
+            this.entry.json = editor.raw_json
 
             window.onbeforeunload = (e: any) => {
                if (this.current.saved === -1) {
@@ -67,8 +78,21 @@ document.addEventListener('alpine:init', () => {
 
             this.$watch('entry.title', this.setDirt.bind(this))
             this.$watch('entry.summary', this.setDirt.bind(this))
-            this.$watch('entry.html', this.setDirt.bind(this))
+            this.$watch('entry.json', this.setDirt.bind(this))
             this.$watch('entry.image_mini', this.setDirt.bind(this))
+
+            this.$watch('current.comment', (commentId) => {
+               if (typeof commentId !== 'boolean') {
+                  const comment = editor.comments[commentId]
+
+                  this.$do({
+                     action: 'html',
+                     target: '.comment-content',
+                     content: `<p>${comment.comment}</p>
+               <footer class="flex items-center gap-2 font-semibold text-sm">${comment.avatar} ${comment.author}</footer>`,
+                  })
+               }
+            })
 
             setInterval(() => {
                if (this.current.saved === -1) {
@@ -99,7 +123,8 @@ document.addEventListener('alpine:init', () => {
                status === 'draft' &&
                // @ts-expect-error
                document.getElementById('post_title').value.length < 3 &&
-               this.entry.html.length < 3
+               // @ts-expect-error
+               this.entry.json.content.length
             ) {
                return
             }
@@ -110,7 +135,6 @@ document.addEventListener('alpine:init', () => {
             const formData = new FormData(el)
 
             formData.append('raw_json', JSON.stringify(this.entry.json))
-            formData.append('post_content', this.entry.html)
 
             let body = {}
             formData.forEach((value, key) => {
@@ -168,7 +192,10 @@ document.addEventListener('alpine:init', () => {
                let $doc: any
 
                do {
-                  type = $from.node(n === 0 ? null : n).type.name
+                  const node = $from.node(n === 0 ? null : n)
+                  this.current.comment = node.attrs.comments ?? false
+
+                  type = node.type.name
                   if (
                      ['bulletList', 'orderedList', 'codeBlock'].includes(type)
                   ) {
@@ -226,10 +253,12 @@ document.addEventListener('alpine:init', () => {
                   this.editor()
                      .chain()
                      .focus()
+                     // @ts-expect-error
                      .toggleHeading({ level: lvl })
                      .run()
                   break
                case 'blockquote':
+                  // @ts-expect-error
                   this.editor().chain().focus().toggleBlockquote().run()
                   break
                case 'bulletList':
@@ -239,12 +268,15 @@ document.addEventListener('alpine:init', () => {
                   this.editor().chain().focus().toggleOrderedList().run()
                   break
                case 'horizontalRule':
+                  // @ts-expect-error
                   this.editor().chain().focus().setHorizontalRule().run()
                   break
                case 'codeBlock':
+                  // @ts-expect-error
                   this.editor().chain().focus().toggleCodeBlock().run()
                   break
                default:
+                  // @ts-expect-error
                   this.editor().chain().focus().setParagraph().run()
                   break
             }
@@ -286,19 +318,9 @@ document.addEventListener('alpine:init', () => {
                   },
                },
                autofocus,
-               content: this.entry.json ?? this.entry.html,
+               content: this.entry.json,
                element: document.querySelector('#editor'),
                extensions: [
-                  StarterKit.configure({
-                     heading: {
-                        levels: [2, 3],
-                     },
-                     horizontalRule: {
-                        HTMLAttributes: {
-                           class: 'hr',
-                        },
-                     },
-                  }),
                   TextAlign.configure({
                      types: ['heading', 'paragraph'],
                      defaultAlignment: 'justify',
@@ -329,6 +351,20 @@ document.addEventListener('alpine:init', () => {
                         return editor.isFocused
                      },
                   }),
+                  FloatingMenu.configure({
+                     element: document.querySelector('.comment'),
+                     options: {
+                        placement: 'right',
+                     },
+                     shouldShow: ({ editor, state }) => {
+                        const { $anchor } = state.selection
+                        this.current.comment =
+                           $anchor.parent.attrs?.comments ?? false
+                        return (
+                           editor.isFocused && !!$anchor.parent.attrs?.comments
+                        )
+                     },
+                  }),
                   BubbleMenu.configure({
                      element: BubbleMenuEl,
                      options: {
@@ -354,31 +390,43 @@ document.addEventListener('alpine:init', () => {
                         )
                      },
                   }),
-                  Typography,
-                  Selection,
+                  cavHeading.configure({
+                     levels: [2, 3],
+                  }),
+                  cavHorizontalRule.configure({
+                     HTMLAttributes: {
+                        class: 'hr',
+                     },
+                  }),
+                  cavParagraph,
+                  cavBlockquote,
+                  cavCodeBlock,
+                  cavListItem,
+                  Bold,
+                  BulletList,
                   CavExtension,
-                  Superscript,
-                  Subscript,
                   CharacterCount,
+                  Code,
+                  Document,
+                  Dropcursor,
                   Focus,
+                  Italic,
+                  ListKeymap,
+                  OrderedList,
+                  Selection,
+                  Strike,
+                  Subscript,
+                  Superscript,
+                  Text,
+                  Typography,
+                  Underline,
+                  UndoRedo,
                ],
                onCreate: ({ editor }) => {
-                  if (this.entry.is_blocks) {
-                     this.entry.json = editor.getJSON()
-                     this.entry.html = jsonToBlocks(editor.getJSON())
-                  } else {
-                     this.entry.html = editor.getHTML()
-                     this.entry.json = editor.getJSON()
-                  }
+                  this.entry.json = editor.getJSON()
                },
                onUpdate: ({ editor }) => {
-                  if (this.entry.is_blocks) {
-                     this.entry.json = editor.getJSON()
-                     this.entry.html = jsonToBlocks(this.entry.json)
-                  } else {
-                     this.entry.html = editor.getHTML()
-                     this.entry.json = editor.getJSON()
-                  }
+                  this.entry.json = editor.getJSON()
 
                   this.countWords()
                   this.updateCurrent(editor)

@@ -77,13 +77,6 @@ class Utils
             'type'        => 'string',
             'minLength'   => 3,
          ],
-         'post_content' => [
-            'title'     => 'Texto',
-            'type'      => 'string',
-            'required'  => true,
-            'minLength' => 3,
-            'maxLength' => 333333,
-         ],
          'raw_json' => [
             'title'     => 'Blocos',
             'type'      => 'string',
@@ -152,6 +145,176 @@ class Utils
       }
 
       return $fields;
+   }
+
+   public static function json_to_block($block, $parent_tag = '')
+   {
+      $text    = $block['text']    ?? null;
+      $type    = $block['type']    ?? null;
+      $content = $block['content'] ?? null;
+      $attrs   = self::parse_attrs($block['attrs'] ?? false, $type);
+
+      if (is_array($content)) {
+         $content = implode('', array_map(fn($sub_block) => self::json_to_block($sub_block, $type), $content));
+      }
+
+      if (empty($content)) {
+         $content = '';
+      }
+
+      switch ($type) {
+         case 'paragraph':
+            if ('listItem' === $parent_tag) {
+               return $content;
+            }
+
+            $alignP = $attrs['textAlign'] ?? 'justify';
+
+            return <<<HTML
+            <!-- wp:paragraph {$attrs} -->
+            <p class="has-text-align-{$alignP}">{$content}</p>
+            <!-- /wp:paragraph -->
+            HTML;
+
+         case 'doc':
+            return $content;
+
+         case 'text':
+            $marks = $block['marks'] ?? [];
+            $tags  = [];
+
+            if (\array_find($marks, fn($i) => 'bold' === $i['type'])) {
+               $tags[] = 'strong';
+            }
+
+            if (\array_find($marks, fn($i) => 'italic' === $i['type'])) {
+               $tags[] = 'em';
+            }
+
+            if (\array_find($marks, fn($i) => 'strike' === $i['type'])) {
+               $tags[] = 's';
+            }
+
+            if (\array_find($marks, fn($i) => 'superscript' === $i['type'])) {
+               $tags[] = 'sup';
+            }
+
+            if (\array_find($marks, fn($i) => 'subscript' === $i['type'])) {
+               $tags[] = 'sub';
+            }
+
+            if (\array_find($marks, fn($i) => 'code' === $i['type'])) {
+               $tags[] = 'code';
+            }
+
+            $prefix = '';
+            $suffix = '';
+
+            if (count($tags)) {
+               $prefix += implode('', array_map(fn($tag) => "<{$tag}>", $tags));
+               $suffix += implode('', array_map(fn($tag) => "</{$tag}>", array_reverse($tags)));
+            }
+
+            if (\array_find($marks, fn($i) => 'underline' === $i['type'])) {
+               $prefix .= '<span style="text-decoration: underline;">';
+               $suffix = '</span>' . $suffix;
+            }
+
+            return $prefix . $text . $suffix;
+
+         case 'heading':
+            $alignH = $attrs['textAlign'] ?? 'left';
+            $level  = $attrs['level']     ?? 2;
+
+            return <<<HTML
+            <!-- wp:heading {$attrs} -->
+            <h{$level} class="wp-block-heading has-text-align-{$alignH}">{$content}</h{$level}>
+            <!-- /wp:heading -->
+            HTML;
+
+         case 'blockquote':
+            return <<<HTML
+            <!-- wp:quote {$attrs} -->
+            <blockquote class="wp-block-quote">{$content}</blockquote>
+            <!-- /wp:quote -->
+            HTML;
+
+         case 'bulletList':
+         case 'orderedList':
+            $isOrdered = 'orderedList' === $type;
+            $tagList   = $isOrdered ? 'ol' : 'ul';
+
+            return <<<HTML
+            <!-- wp:list {$attrs} -->
+            <{$tagList} class="wp-block-list">{$content}</{$tagList}>
+            <!-- /wp:list -->
+            HTML;
+
+         case 'listItem':
+            return <<<HTML
+            <!-- wp:list-item -->
+            <li>{$content}</li>
+            <!-- /wp:list-item -->
+            HTML;
+
+         case 'codeBlock':
+            return <<<HTML
+            <!-- wp:code {$attrs} -->
+            <pre class="wp-block-code"><code>{$content}</code></pre>
+            <!-- /wp:code -->
+            HTML;
+
+         case 'horizontalRule':
+            return <<<'HTML'
+            <!-- wp:separator $attrs -->
+            <hr class="wp-block-separator"/>
+            <!-- /wp:separator -->
+            HTML;
+
+         default:
+            debug($block);
+
+            return '';
+      }
+   }
+
+   public static function parse_attrs($attrs, $type)
+   {
+      if (empty($attrs)) {
+         return '';
+      }
+
+      if (empty($attrs['textAlign'])) {
+         if ('paragraph' === $type) {
+            $attrs['textAlign'] = 'justify';
+         }
+
+         if ('heading' === $type) {
+            $attrs['textAlign'] = 'left';
+         }
+      }
+
+      if (empty($attrs['level'])) {
+         if ('heading' === $type) {
+            $attrs['level'] = 2;
+         }
+      }
+
+      if ('orderedList' === $type) {
+         $attrs['ordered'] = true;
+      }
+
+      if (!empty($attrs['comments'])) {
+         $attrs['metadata']['noteId'] = $attrs['comments'];
+      }
+
+      unset($attrs['comments']);
+
+      if (empty($attrs)) {
+         return '';
+      }
+
+      return json_encode($attrs);
    }
 
    public static function split_string($string, $max_char_length = 32, $max_lines = 4)

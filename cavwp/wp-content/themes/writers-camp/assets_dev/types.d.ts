@@ -44,9 +44,9 @@ interface iMoon {
 }
 
 interface iEditor {
-   post_content: string
    raw_json: any
    edit_url: string
+   comments: any[]
 }
 
 declare
