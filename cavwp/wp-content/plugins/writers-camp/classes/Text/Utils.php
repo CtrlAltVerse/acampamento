@@ -17,6 +17,19 @@ class Utils
       return array_filter($content);
    }
 
+   public static function convert_raw_json($value)
+   {
+      if (empty($value) || is_null($value)) {
+         return $value;
+      }
+
+      if (gettype($value) === 'array') {
+         return $value;
+      }
+
+      return json_decode(json_encode($value), true);
+   }
+
    public static function get($count = 6, $type = 'popular')
    {
       $orderby['date'] = 'DESC';
@@ -286,11 +299,11 @@ class Utils
 
       if (empty($attrs['textAlign'])) {
          if ('paragraph' === $type) {
-            $attrs['textAlign'] = 'justify';
+            $attrs['align'] = 'justify';
          }
 
          if ('heading' === $type) {
-            $attrs['textAlign'] = 'left';
+            $attrs['align'] = 'left';
          }
       }
 
@@ -308,7 +321,11 @@ class Utils
          $attrs['metadata']['noteId'] = $attrs['comments'];
       }
 
-      unset($attrs['comments']);
+      if (!empty($attrs['textAlign'])) {
+         $attrs['align'] = $attrs['textAlign'];
+      }
+
+      unset($attrs['comments'], $attrs['textAlign']);
 
       if (empty($attrs)) {
          return '';
