@@ -6,6 +6,7 @@ interface Window {
    Alpine: typeof Alpine
    Tiptap: Editor
    FB: any
+   specialStorage: any
    handleFbToken: (response: any) => void
    handleGoogleToken: (response: any) => void
 }
@@ -43,7 +44,7 @@ interface iMoon {
    nonce: string
 }
 
-interface iEditor {
+interface iEditorG {
    raw_json: any
    edit_url: string
    comments: any[]
@@ -53,6 +54,6 @@ declare
 {
    var sky: iSky
    var moon: iMoon
-   var editor: iEditor
+   var editorG: iEditorG
    var allVoices: any[]
 }

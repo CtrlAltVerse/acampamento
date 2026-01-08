@@ -33,6 +33,43 @@ import {
 import BubbleMenu from './bubbleMenu.js'
 import CavExtension from './extension'
 
+const specialStorage = {
+   getItem(key: string) {
+      if (
+         localStorage.getItem('cav-camp-post_ID') !==
+         // @ts-expect-error
+         document.getElementById('ID').value
+      ) {
+         localStorage.removeItem('cav-camp-save_remote')
+         localStorage.removeItem('cav-camp-save_local')
+      }
+
+      const value = localStorage.getItem(key)
+
+      if (value === null || value.length <= 6) {
+         if (key === 'cav-camp-json') {
+            return JSON.stringify(editorG.raw_json)
+         }
+         return null
+      }
+
+      const local = localStorage.getItem('cav-camp-save_local') ?? -1
+      const remote = localStorage.getItem('cav-camp-save_remote') ?? 0
+
+      if (local >= remote) {
+         return value
+      }
+
+      if (key === 'cav-camp-json') {
+         return JSON.stringify(editorG.raw_json)
+      }
+      return null
+   },
+   setItem(key: string, value: any) {
+      localStorage.setItem(key, value)
+   },
+}
+
 document.addEventListener('alpine:init', () => {
    Alpine.data('typewriter', function () {
       return {
@@ -48,21 +85,33 @@ document.addEventListener('alpine:init', () => {
             alignable: true,
             focus: Alpine.$persist([]),
             words: 0,
-            saved: 1, // -1 = not, 0 = saving , 1 = saved
          },
          entry: {
-            title: '',
-            summary: '',
-            json: null as any,
+            title: Alpine.$persist('')
+               .as('cav-camp-title')
+               .using(specialStorage),
+            summary: Alpine.$persist('')
+               .as('cav-camp-summary')
+               .using(specialStorage),
+            json: Alpine.$persist(null)
+               .as('cav-camp-json')
+               .using(specialStorage) as any,
             image_mini: '',
-            is_blocks: editor.raw_json !== null,
+            saved: 1, // -1 = not, 0 = saving , 1 = saved
          },
 
          init() {
-            this.entry.json = editor.raw_json
+            this.$do({
+               action: 'local',
+               target: 'cav-camp-save_remote',
+               content: Number.parseInt(
+                  // @ts-expect-error
+                  document.getElementById('save_remote').value
+               ),
+            })
 
             window.onbeforeunload = (e: any) => {
-               if (this.current.saved === -1) {
+               if (this.entry.saved === -1) {
                   e.preventDefault()
                   return 'Tem certeza?'
                }
@@ -83,7 +132,7 @@ document.addEventListener('alpine:init', () => {
 
             this.$watch('current.comment', (commentId) => {
                if (typeof commentId !== 'boolean') {
-                  const comment = editor.comments[commentId]
+                  const comment = editorG.comments[commentId]
 
                   this.$do({
                      action: 'html',
@@ -95,26 +144,41 @@ document.addEventListener('alpine:init', () => {
             })
 
             setInterval(() => {
-               if (this.current.saved === -1) {
+               if (this.entry.saved === -1) {
                   this.save('draft')
                }
             }, Number.parseInt(sky.autosave) * 999)
 
             this.editor = this.initEditor()
+
             this.countWords()
          },
 
          setDirt(newS: string, oldS: string) {
-            if (oldS === newS) {
+            if (oldS.length === 0 || oldS === newS) {
                return
             }
-            this.current.saved = -1
+
+            this.$do({
+               action: 'local',
+               target: 'cav-camp-post_ID',
+               // @ts-expect-error
+               content: Number.parseInt(document.getElementById('ID').value),
+            })
+
+            this.$do({
+               action: 'local',
+               target: 'cav-camp-save_local',
+               content: Date.now(),
+            })
+
+            this.entry.saved = -1
          },
 
          save(status = 'pending') {
             if (
                !['pending', 'draft'].includes(status) ||
-               this.current.saved === 0
+               this.entry.saved === 0
             ) {
                return
             }
@@ -123,13 +187,12 @@ document.addEventListener('alpine:init', () => {
                status === 'draft' &&
                // @ts-expect-error
                document.getElementById('post_title').value.length < 3 &&
-               // @ts-expect-error
-               this.entry.json.content.length
+               this.entry.json === null
             ) {
                return
             }
 
-            this.current.saved = 0
+            this.entry.saved = 0
 
             const el = document.getElementById('editorForm') as HTMLFormElement
             const formData = new FormData(el)
@@ -148,7 +211,13 @@ document.addEventListener('alpine:init', () => {
             this.$rest
                .post(`${moon.apiUrl}/${status}?_wpnonce=${moon.nonce}`, body)
                .then(({ data }) => {
-                  this.current.saved = 1
+                  this.entry.saved = 1
+
+                  this.$do({
+                     action: 'local',
+                     target: 'cav-camp-save_remote',
+                     content: Date.now(),
+                  })
 
                   if (data.length === 0) {
                      return
@@ -156,10 +225,16 @@ document.addEventListener('alpine:init', () => {
 
                   data.forEach((action) => {
                      if (action.action === 'value') {
+                        this.$do({
+                           action: 'local',
+                           target: 'cav-camp-post_ID',
+                           content: action.content,
+                        })
+
                         history.replaceState(
                            null,
                            '',
-                           editor.edit_url.replace('ID', action.content)
+                           editorG.edit_url.replace('ID', action.content)
                         )
                      }
                   })
@@ -317,8 +392,8 @@ document.addEventListener('alpine:init', () => {
                      class: 'content editor',
                   },
                },
-               autofocus,
                content: this.entry.json,
+               autofocus,
                element: document.querySelector('#editor'),
                extensions: [
                   TextAlign.configure({
@@ -343,6 +418,7 @@ document.addEventListener('alpine:init', () => {
                      },
                   }),
                   FloatingMenu.configure({
+                     pluginKey: 'floatingMenuBlock',
                      element: document.querySelector('.menu-block'),
                      options: {
                         placement: 'left',
@@ -352,6 +428,7 @@ document.addEventListener('alpine:init', () => {
                      },
                   }),
                   FloatingMenu.configure({
+                     pluginKey: 'floatingMenuComment',
                      element: document.querySelector('.comment'),
                      options: {
                         placement: 'right',
@@ -422,15 +499,12 @@ document.addEventListener('alpine:init', () => {
                   Underline,
                   UndoRedo,
                ],
-               onCreate: ({ editor }) => {
-                  this.entry.json = editor.getJSON()
-               },
                onUpdate: ({ editor }) => {
                   this.entry.json = editor.getJSON()
 
                   this.countWords()
                   this.updateCurrent(editor)
-                  this.current.saved = -1
+                  this.entry.saved = -1
                },
                onSelectionUpdate: ({ editor }) => {
                   this.updateCurrent(editor)

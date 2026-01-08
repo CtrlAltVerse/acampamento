@@ -79,7 +79,7 @@ get_component('header');
                <?php } ?>
             </div>
             <?php $Form->field('ID', [
-               'value' => $_GET['edit'] ?? '',
+               'value' => $_GET['edit'] ?? 0,
                'type'  => 'hidden',
             ]); ?>
             <?php $Form->field('slot', [
@@ -107,6 +107,8 @@ get_component('header');
                'value'        => !empty($_GET['edit']) ? $Text->get('image_mini') : '',
                'x-model.fill' => 'entry.image_mini',
             ]); ?>
+            <input id="save_remote" name="save_remote" type="hidden" value="<?php echo $text ? $Text->get('modified', format: 'U') * 1000 : 0 ?>" />
+
             <button class="flex justify-center items-center mx-2 border-2 border-middle rounded w-full max-w-120 aspect-card bg-neutral-200/80 dark:bg-neutral-900/80 cursor-pointer"
                     x-on:click.prevent="unsplash.showModal()"
                     x-bind:class="{'border-dashed': 0===entry.image_mini.length}"

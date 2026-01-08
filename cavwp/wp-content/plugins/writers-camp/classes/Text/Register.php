@@ -383,7 +383,7 @@ class Register
          }
       }
 
-      wp_localize_script('dashboard', 'editor', $localize);
+      wp_localize_script('dashboard', 'editorG', $localize);
    }
 
    public function set_text_draft()
