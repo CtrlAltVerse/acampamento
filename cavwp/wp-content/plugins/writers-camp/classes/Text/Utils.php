@@ -224,8 +224,8 @@ class Utils
             $suffix = '';
 
             if (count($tags)) {
-               $prefix += implode('', array_map(fn($tag) => "<{$tag}>", $tags));
-               $suffix += implode('', array_map(fn($tag) => "</{$tag}>", array_reverse($tags)));
+               $prefix .= implode('', array_map(fn($tag) => "<{$tag}>", $tags));
+               $suffix .= implode('', array_map(fn($tag) => "</{$tag}>", array_reverse($tags)));
             }
 
             if (\array_find($marks, fn($i) => 'underline' === $i['type'])) {
