@@ -75,7 +75,8 @@ Alpine.data('bonfire', function () {
          if (
             'P' !== allBlocks[0].tagName ||
             allBlocks[0].clientHeight < 70 ||
-            allBlocks[0].style.textAlign !== 'justify'
+            (allBlocks[0].style.textAlign !== 'justify' &&
+               !allBlocks[0].classList.contains('has-text-align-justify'))
          ) {
             return
          }

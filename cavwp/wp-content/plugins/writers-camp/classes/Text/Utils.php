@@ -181,7 +181,7 @@ class Utils
                return $content;
             }
 
-            $alignP = $attrs['textAlign'] ?? 'justify';
+            $alignP = $block['attrs']['textAlign'] ?? 'justify';
 
             return <<<HTML
             <!-- wp:paragraph {$attrs} -->
@@ -236,8 +236,8 @@ class Utils
             return $prefix . $text . $suffix;
 
          case 'heading':
-            $alignH = $attrs['textAlign'] ?? 'left';
-            $level  = $attrs['level']     ?? 2;
+            $alignH = $block['attrs']['textAlign'] ?? 'left';
+            $level  = $block['attrs']['level']     ?? 2;
 
             return <<<HTML
             <!-- wp:heading {$attrs} -->

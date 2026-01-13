@@ -31,7 +31,9 @@
    }
 
    > p[style*='justify']:not(.p-with-initial-letter),
-   blockquote > p[style*='justify'] {
+   > p.has-text-align-justify,
+   blockquote > p[style*='justify'],
+   blockquote > p.has-text-align-justify {
       @apply indent-9;
    }
 
@@ -162,7 +164,7 @@
    text-shadow: 0px 0px 2px var(--tw-text-shadow-color);
 }
 
-body.single-text #content > p {
+body.single-text #content > p:not(:first-of-type) {
    @apply relative cursor-pointer;
 
    &:hover::before,
