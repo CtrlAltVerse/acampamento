@@ -250,6 +250,7 @@ add_action('acf/include_fields', function() {
       'active'                => true,
       'description'           => '',
       'show_in_rest'          => 0,
+      'display_title'         => '',
    ]);
 
    acf_add_local_field_group([
@@ -467,6 +468,7 @@ add_action('acf/include_fields', function() {
       'active'                => true,
       'description'           => '',
       'show_in_rest'          => 0,
+      'display_title'         => '',
    ]);
 
    acf_add_local_field_group([
@@ -487,10 +489,13 @@ add_action('acf/include_fields', function() {
                'class' => '',
                'id'    => '',
             ],
-            'default_value'     => '#000000',
-            'enable_opacity'    => 0,
-            'return_format'     => 'string',
-            'allow_in_bindings' => 0,
+            'default_value'         => '#000000',
+            'enable_opacity'        => 0,
+            'return_format'         => 'string',
+            'allow_in_bindings'     => 0,
+            'custom_palette_source' => '',
+            'palette_colors'        => '',
+            'show_color_wheel'      => true,
          ],
          [
             'key'               => 'field_688456357681a',
@@ -630,48 +635,6 @@ add_action('acf/include_fields', function() {
             'prepend'           => '',
             'append'            => '',
          ],
-         [
-            'key'               => 'field_690e54eff8f7a',
-            'label'             => 'Vinheta - Introdução',
-            'name'              => 'intro',
-            'aria-label'        => '',
-            'type'              => 'file',
-            'instructions'      => '',
-            'required'          => 0,
-            'conditional_logic' => 0,
-            'wrapper'           => [
-               'width' => '',
-               'class' => '',
-               'id'    => '',
-            ],
-            'return_format'     => 'url',
-            'library'           => 'all',
-            'min_size'          => '',
-            'max_size'          => '',
-            'mime_types'        => 'mp3,ogg,opus',
-            'allow_in_bindings' => 0,
-         ],
-         [
-            'key'               => 'field_690e5532f8f7b',
-            'label'             => 'Vinheta - Final',
-            'name'              => 'outro',
-            'aria-label'        => '',
-            'type'              => 'file',
-            'instructions'      => '',
-            'required'          => 0,
-            'conditional_logic' => 0,
-            'wrapper'           => [
-               'width' => '',
-               'class' => '',
-               'id'    => '',
-            ],
-            'return_format'     => 'url',
-            'library'           => 'all',
-            'min_size'          => '',
-            'max_size'          => '',
-            'mime_types'        => 'mp3,ogg',
-            'allow_in_bindings' => 0,
-         ],
       ],
       'location' => [
          [
@@ -691,6 +654,7 @@ add_action('acf/include_fields', function() {
       'active'                => true,
       'description'           => '',
       'show_in_rest'          => 0,
+      'display_title'         => '',
    ]);
 
    acf_add_local_field_group([
@@ -826,6 +790,7 @@ add_action('acf/include_fields', function() {
       'active'                => true,
       'description'           => '',
       'show_in_rest'          => 0,
+      'display_title'         => '',
    ]);
 
    acf_add_local_field_group([
@@ -862,6 +827,27 @@ add_action('acf/include_fields', function() {
                0 => 'field_688663c87a9e8',
             ],
             'ui' => 1,
+         ],
+         [
+            'key'               => 'field_6966c0744379c',
+            'label'             => 'Áudio',
+            'name'              => 'audio',
+            'aria-label'        => '',
+            'type'              => 'file',
+            'instructions'      => '',
+            'required'          => 0,
+            'conditional_logic' => 0,
+            'wrapper'           => [
+               'width' => '',
+               'class' => '',
+               'id'    => '',
+            ],
+            'return_format'     => 'url',
+            'library'           => 'all',
+            'min_size'          => '',
+            'max_size'          => '',
+            'mime_types'        => 'audio/*',
+            'allow_in_bindings' => 0,
          ],
          [
             'key'               => 'field_68bc45aecfcd4',
@@ -978,6 +964,7 @@ add_action('acf/include_fields', function() {
       'active'                => true,
       'description'           => '',
       'show_in_rest'          => 0,
+      'display_title'         => '',
    ]);
 
    acf_add_local_field_group([
@@ -1026,6 +1013,7 @@ add_action('acf/include_fields', function() {
       'active'                => true,
       'description'           => '',
       'show_in_rest'          => 0,
+      'display_title'         => '',
    ]);
 });
 

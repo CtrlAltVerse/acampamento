@@ -10,6 +10,7 @@ window.Alpine = Alpine
 Alpine.data('bonfire', function () {
    return {
       currentUrl: '',
+      playing: false,
       bookmark: Alpine.$persist(null),
       midPoint: 160,
 
@@ -60,6 +61,17 @@ Alpine.data('bonfire', function () {
                //@ts-expect-error
                document.getElementById('login').showModal()
             }
+         }
+      },
+
+      togglePlay() {
+         this.playing = !this.playing
+         const player = document.getElementById('player') as HTMLAudioElement
+
+         if (this.playing) {
+            player.play()
+         } else {
+            player.pause()
          }
       },
 

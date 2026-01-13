@@ -43,7 +43,7 @@
    }
 
    .initial-letter {
-      @apply sm:mt-1 sm:text-[4.25rem] sm:leading-[4.25rem] sm:float-left sm:pr-3;
+      @apply sm:mt-1 sm:text-[4.2rem] sm:leading-[4.2rem] sm:float-left sm:pr-3;
    }
 
    li {
@@ -160,7 +160,8 @@
    }
 }
 
-.fullscreen-image .title-effect {
+.fullscreen-image .title-effect,
+.fullscreen-image .title-effect button {
    text-shadow: 0px 0px 2px var(--tw-text-shadow-color);
 }
 

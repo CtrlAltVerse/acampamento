@@ -16,6 +16,7 @@ $full      = $Text->get('image_full');
 $challenge = $Text->get('challenge');
 $shares    = $Text->get('share', attrs: ['facebook', 'x-twitter', 'email', 'whatsapp']);
 $terms     = $Text->get('terms', taxonomy: 'club');
+$audio     = $Text->get('audio');
 
 if (!empty($terms)) {
    $term = $terms[0];
@@ -64,31 +65,41 @@ $container_class = '';
 
 ?>
 <?php if (!empty($full)) { ?>
-   <?php $container_class = 'absolute top-[100vh] w-full overflow-safe'; ?>
-   <div class="fullscreen-image absolute top-safe left-0 justify-start items-end h-safe overflow-safe" aria-hidden="true">
-      <img class="absolute inset-0 z-0 size-full object-cover"
-         src="<?php echo $full; ?>" loading="eager" alt="">
-      <div class="container h-full">
-         <div
-            class="title-effect z-1 <?php echo $color ? 'text-neutral-900 text-shadow-neutral-100' : 'text-neutral-100 text-shadow-neutral-900'; ?>">
-            <?php if (!empty($term)) { ?>
-               <span
-                  class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none
+<?php $container_class = 'absolute top-[100vh] w-full overflow-safe'; ?>
+<div class="fullscreen-image absolute top-safe left-0 justify-start items-end h-safe overflow-safe" aria-hidden="true">
+   <img class="absolute inset-0 z-0 size-full object-cover"
+        src="<?php echo $full; ?>" loading="eager" alt="">
+   <div class="container h-full">
+      <div
+           class="title-effect z-1 <?php echo $color ? 'text-neutral-900 text-shadow-neutral-100' : 'text-neutral-100 text-shadow-neutral-900'; ?>">
+         <?php if (!empty($term)) { ?>
+         <span
+               class="rounded py-1 px-2 uppercase font-extrabold text-sm text-shadow-none
          <?php echo $color ? 'text-neutral-900 bg-neutral-100' : 'text-neutral-100 bg-neutral-900'; ?>">
-                  <?php echo $term->get('name'); ?>
-               </span>
+            <?php echo $term->get('name'); ?>
+         </span>
+         <?php } ?>
+         <div class="h1">
+            <?php echo $Text->get('title'); ?>
+         </div>
+         <p class="flex items-center gap-1 text-lg font-medium">
+            <?php echo $Text->get('author:avatar', size: 32, attrs: ['class' => 'rounded-full']); ?>
+            <?php echo $Text->get('author:display_name'); ?>
+         </p>
+         <div class="text-xl font-medium w-full pt-4">
+            <?php echo $Text->get('summary'); ?>
+         </div>
+         <div class="flex items-center gap-3 pt-4">
+            <?php if ($audio) { ?>
+            <audio id="player" src="<?php echo wp_get_attachment_url($audio); ?>"
+                   x-on:ended="playing = false">
+            </audio>
+            <button class="cursor-pointer" type="button" x-on:click.prevent="togglePlay()">
+               <i x-bind:class="playing ? 'ri-pause-circle-line' : 'ri-play-circle-line'"></i>
+               <span x-text="playing ? 'Pausar' : 'Ouvir'"></span>
+            </button>
             <?php } ?>
-            <div class="h1">
-               <?php echo $Text->get('title'); ?>
-            </div>
-            <p class="flex items-center gap-1 text-lg font-medium">
-               <?php echo $Text->get('author:avatar', size: 32, attrs: ['class' => 'rounded-full']); ?>
-               <?php echo $Text->get('author:display_name'); ?>
-            </p>
-            <div class="text-xl font-medium w-full pt-4">
-               <?php echo $Text->get('summary'); ?>
-            </div>
-            <div class="flex items-center gap-1 pt-4">
+            <div>
                Foto de
                <a class="font-semibold"
                   href="<?php echo $Text->get('image_author_url'); ?>"
@@ -102,6 +113,7 @@ $container_class = '';
          </div>
       </div>
    </div>
+</div>
 <?php } ?>
 <div class="<?php echo $container_class; ?>">
    <main class="main !mt-25" x-data="{comment:$persist(''),parent: 0, reply_to: ''}">
@@ -110,11 +122,11 @@ $container_class = '';
             <div>
                <div class="title-effect" x-ref="singleTitle" x-cloak>
                   <?php if (!empty($term)) { ?>
-                     <a href="<?php echo $term->get('link'); ?>"
-                        class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-100"
-                        style="background-color: <?php echo $term->get('color'); ?>">
-                        <?php echo $term->get('name'); ?>
-                     </a>
+                  <a href="<?php echo $term->get('link'); ?>"
+                     class="rounded py-1 px-2 uppercase font-extrabold text-sm text-neutral-100"
+                     style="background-color: <?php echo $term->get('color'); ?>">
+                     <?php echo $term->get('name'); ?>
+                  </a>
                   <?php } ?>
                   <h1 class="h1">
                      <?php echo $Text->get('title'); ?>
@@ -134,8 +146,16 @@ $container_class = '';
                      </span>
                   </div>
                   <ul class="flex flex-wrap items-center gap-3" x-data="{show: false}">
+                     <?php if ($audio) { ?>
+                     <li>
+                        <button class="cursor-pointer" type="button" x-on:click.prevent="togglePlay()">
+                           <i x-bind:class="playing ? 'ri-pause-circle-line' : 'ri-play-circle-line'"></i>
+                           <span x-text="playing ? 'Pausar' : 'Ouvir'"></span>
+                        </button>
+                     </li>
+                     <?php } ?>
                      <li x-show="!show"><button class="cursor-pointer" type="button"
-                           x-on:click.prevent="show=true">Compartilhar</button></li>
+                                x-on:click.prevent="show=true">Compartilhar</button></li>
                      <li x-show="show" x-cloak>
                         <ul class="flex gap-3">
                            <li class="text-xl">
@@ -150,39 +170,39 @@ $container_class = '';
 
                            <?php $share = $Text->get('share_image'); ?>
                            <?php if (!empty($share)) { ?>
-                              <li class="text-xl">
-                                 <a class="cursor-pointer"
-                                    href="<?php echo $share; ?>"
-                                    title="Baixar imagem"
-                                    download="share-<?php echo $Text->ID; ?>.png"
-                                    target="_blank">
-                                    <i class="ri-instagram-line"></i>
-                                 </a>
-                              </li>
+                           <li class="text-xl">
+                              <a class="cursor-pointer"
+                                 href="<?php echo $share; ?>"
+                                 title="Baixar imagem"
+                                 download="share-<?php echo $Text->ID; ?>.png"
+                                 target="_blank">
+                                 <i class="ri-instagram-line"></i>
+                              </a>
+                           </li>
                            <?php } ?>
 
                            <?php $share_link = $Text->get('share_link_image'); ?>
                            <?php if (!empty($share_link)) { ?>
-                              <li class="text-xl">
-                                 <a class="cursor-pointer"
-                                    href="<?php echo $share_link; ?>"
-                                    title="Baixar imagem com link"
-                                    download="share-link-<?php echo $Text->ID; ?>.png"
-                                    target="_blank">
-                                    <i class="ri-qr-code-line"></i>
-                                 </a>
-                              </li>
+                           <li class="text-xl">
+                              <a class="cursor-pointer"
+                                 href="<?php echo $share_link; ?>"
+                                 title="Baixar imagem com link"
+                                 download="share-link-<?php echo $Text->ID; ?>.png"
+                                 target="_blank">
+                                 <i class="ri-qr-code-line"></i>
+                              </a>
+                           </li>
                            <?php } ?>
 
                            <?php foreach ($shares as $share) { ?>
-                              <li class="text-xl" x-show="show">
-                                 <a href="<?php echo $share['share']; ?>"
-                                    target="_blank"
-                                    title="Compartilhar no <?php echo $share['name']; ?>">
-                                    <i
-                                       class="<?php echo $share['icon']; ?>"></i>
-                                 </a>
-                              </li>
+                           <li class="text-xl" x-show="show">
+                              <a href="<?php echo $share['share']; ?>"
+                                 target="_blank"
+                                 title="Compartilhar no <?php echo $share['name']; ?>">
+                                 <i
+                                    class="<?php echo $share['icon']; ?>"></i>
+                              </a>
+                           </li>
                            <?php } ?>
 
                            <?php $link      = $Text->get('link'); ?>
@@ -193,7 +213,7 @@ $container_class = '';
 
                            <li class="relative text-xl sharing" x-show="show">
                               <button class="cursor-pointer" type="button" title="Copiar link"
-                                 x-on:click.prevent="copy('<?php echo $link; ?>')">
+                                      x-on:click.prevent="copy('<?php echo $link; ?>')">
                                  <i class="ri-link"></i>
                               </button>
                            </li>
@@ -202,7 +222,7 @@ $container_class = '';
                      <li><a href="#comments" x-on:click.prevent="$do('scroll','#comments')">Comentar</a></li>
                      <li><a href="#related" x-on:click.prevent="$do('scroll','#related')">Relacionados</a></li>
                      <?php if (current_user_can('edit_others_posts')) { ?>
-                        <?php edit_post_link(); ?>
+                     <?php edit_post_link(); ?>
                      <?php } ?>
                   </ul>
                   <p class="mt-5 font-xs" x-show="bookmark === null" x-cloak>
@@ -221,7 +241,7 @@ $container_class = '';
             </div>
             <div x-show="bookmark !== null && bookmark.url.length && bookmark.url === currentUrl" x-cloak>
                <button class="border rounded py-2 px-3 text-md cursor-pointer" x-on:click.prevent="cleanBookmark()"
-                  type="button">
+                       type="button">
                   <i class="ri-bookmark-2-line"></i>
                   Remover marca-página
                </button>
@@ -247,94 +267,96 @@ $container_class = '';
                <ul class="flex gap-4 text-xl">
                   <?php $site_url = $Text->get('author:user_url'); ?>
                   <?php if (!empty($site_url)) { ?>
-                     <li>
-                        <a href="<?php echo $site_url; ?>"
-                           target="_blank" rel="external">
-                           <i class="ri-global-line"></i>
-                        </a>
-                     </li>
+                  <li>
+                     <a href="<?php echo $site_url; ?>"
+                        target="_blank" rel="external">
+                        <i class="ri-global-line"></i>
+                     </a>
+                  </li>
                   <?php } ?>
                   <?php $socials = $Text->get('author:socials'); ?>
                   <?php if (!empty($socials)) { ?>
-                     <?php foreach ($socials as $social) { ?>
-                        <li>
-                           <a href="<?php echo $social['profile']; ?>"
-                              target="_blank" rel="external">
-                              <i class="<?php echo $social['icon']; ?>"></i>
-                           </a>
-                        </li>
-                     <?php } ?>
+                  <?php foreach ($socials as $social) { ?>
+                  <li>
+                     <a href="<?php echo $social['profile']; ?>"
+                        target="_blank" rel="external">
+                        <i
+                           class="<?php echo $social['icon']; ?>"></i>
+                     </a>
+                  </li>
+                  <?php } ?>
                   <?php } ?>
                </ul>
             </footer>
          </div>
       </article>
       <div id="related" class="flex flex-col gap-12 mt-15" x-init="checkTitle" x-on:scroll.window.passive="checkTitle"
-         x-on:resize.window.passive="checkTitle">
+           x-on:resize.window.passive="checkTitle">
          <?php if (!empty($series_itens)) { ?>
-            <section class="flex flex-col gap-4">
-               <h2 class="h2">
-                  <a class="flex items-center gap-3" href="<?php echo $serie->get('link'); ?>">
-                     <span
+         <section class="flex flex-col gap-4">
+            <h2 class="h2">
+               <a class="flex items-center gap-3"
+                  href="<?php echo $serie->get('link'); ?>">
+                  <span
                         class="rounded py-1 px-2 uppercase font-extrabold text-sm bg-neutral-100 text-neutral-900">
-                        Série
-                     </span>
-                     <?php echo $serie->get('title'); ?>
-                     <span class="text-sm uppercase self-end text-neutral-200">
-                        <?php echo count($series_itens); ?> partes
-                     </span>
-                  </a>
-               </h2>
-               <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-                  <?php foreach ($series_itens as $serie_item) { ?>
-                     <?php $position = $serie_item->menu_order; ?>
-                     <?php if ($min_position <= $position && $position <= $max_position) { ?>
-                        <li>
-                           <?php get_component('feature', ['text' => $serie_item, 'small' => true, 'series_item' => true]); ?>
-                        </li>
-                     <?php } ?>
-                  <?php } ?>
-               </ul>
-            </section>
+                     Série
+                  </span>
+                  <?php echo $serie->get('title'); ?>
+                  <span class="text-sm uppercase self-end text-neutral-200">
+                     <?php echo count($series_itens); ?> partes
+                  </span>
+               </a>
+            </h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+               <?php foreach ($series_itens as $serie_item) { ?>
+               <?php $position = $serie_item->menu_order; ?>
+               <?php if ($min_position <= $position && $position <= $max_position) { ?>
+               <li>
+                  <?php get_component('feature', ['text' => $serie_item, 'small' => true, 'series_item' => true]); ?>
+               </li>
+               <?php } ?>
+               <?php } ?>
+            </ul>
+         </section>
          <?php } ?>
 
          <?php if (!empty($challenge)) { ?>
-            <section class="flex flex-col gap-4">
-               <h2 class="h2">Parte do Desafio</h2>
-               <?php get_component('challenge', ['challenge' => new Post($challenge)]); ?>
-            </section>
+         <section class="flex flex-col gap-4">
+            <h2 class="h2">Parte do Desafio</h2>
+            <?php get_component('challenge', ['challenge' => new Post($challenge)]); ?>
+         </section>
          <?php } ?>
 
          <?php if (!empty($from_club)) { ?>
-            <section class="flex flex-col gap-4">
-               <h2 class="h2">
-                  Mais em
-                  <?php echo $term->get('name', apply_filter: false); ?>
-               </h2>
-               <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-                  <?php foreach ($from_club as $from_club_item) { ?>
-                     <li>
-                        <?php get_component('feature', ['text' => $from_club_item, 'small' => true]); ?>
-                     </li>
-                  <?php } ?>
-               </ul>
-            </section>
+         <section class="flex flex-col gap-4">
+            <h2 class="h2">
+               Mais em
+               <?php echo $term->get('name', apply_filter: false); ?>
+            </h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+               <?php foreach ($from_club as $from_club_item) { ?>
+               <li>
+                  <?php get_component('feature', ['text' => $from_club_item, 'small' => true]); ?>
+               </li>
+               <?php } ?>
+            </ul>
+         </section>
          <?php } ?>
 
          <?php if (!empty($from_author)) { ?>
-            <section class="flex flex-col gap-4">
-               <h2 class="h2">
-                  Mais de
-                  <?php echo $Text->get('author:display_name'); ?>
-               </h2>
-               <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-                  <?php foreach ($from_author as $from_author_item) { ?>
-                     <li>
-                        <?php get_component('feature', ['text' => $from_author_item, 'small' => true]); ?>
-                     </li>
-                  <?php } ?>
-               </ul>
-            </section>
+         <section class="flex flex-col gap-4">
+            <h2 class="h2">
+               Mais de
+               <?php echo $Text->get('author:display_name'); ?>
+            </h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+               <?php foreach ($from_author as $from_author_item) { ?>
+               <li>
+                  <?php get_component('feature', ['text' => $from_author_item, 'small' => true]); ?>
+               </li>
+               <?php } ?>
+            </ul>
+         </section>
          <?php } ?>
       </div>
       <section id="comments" class="flex flex-col gap-4 mt-15" x-init="">
