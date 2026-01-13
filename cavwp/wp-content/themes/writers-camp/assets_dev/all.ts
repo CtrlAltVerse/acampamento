@@ -104,10 +104,7 @@ Alpine.data('bonfire', function () {
             initialLetter
          )
 
-         allBlocks[0].outerHTML = allBlocks[0].outerHTML.replace(
-            '<p',
-            '<p class="p-with-initial-letter"'
-         )
+         allBlocks[0].classList.add('p-with-initial-letter')
       },
 
       enableBookmark() {
