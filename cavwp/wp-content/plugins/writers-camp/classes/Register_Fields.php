@@ -421,6 +421,34 @@ add_action('acf/include_fields', function() {
                   'bidirectional_target' => [
                   ],
                ],
+               [
+                  'key'               => 'field_696aa2b1f307c',
+                  'label'             => 'TTS',
+                  'name'              => 'tts',
+                  'aria-label'        => '',
+                  'type'              => 'post_object',
+                  'instructions'      => '',
+                  'required'          => 1,
+                  'conditional_logic' => 0,
+                  'wrapper'           => [
+                     'width' => '',
+                     'class' => '',
+                     'id'    => '',
+                  ],
+                  'post_type'   => '',
+                  'post_status' => [
+                     0 => 'publish',
+                  ],
+                  'taxonomy'             => '',
+                  'return_format'        => 'id',
+                  'multiple'             => 0,
+                  'allow_null'           => 0,
+                  'allow_in_bindings'    => 0,
+                  'bidirectional'        => 0,
+                  'ui'                   => 1,
+                  'bidirectional_target' => [
+                  ],
+               ],
             ],
          ],
          [
@@ -846,7 +874,7 @@ add_action('acf/include_fields', function() {
             'library'           => 'all',
             'min_size'          => '',
             'max_size'          => '',
-            'mime_types'        => 'ogg,mp3',
+            'mime_types'        => 'audio/ogg,audio/mp3',
             'allow_in_bindings' => 0,
          ],
          [

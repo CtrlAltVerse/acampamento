@@ -7,16 +7,6 @@ use writersCampP\Club\Utils as ClubUtils;
 
 class Utils
 {
-   public static function clean_content($content)
-   {
-      // Clean <p>
-      $content = preg_replace('/(\<p)([ a-z=\-:;"]+)(\>)/', '$1$3', $content);
-
-      $content = explode("\n", $content);
-
-      return array_filter($content);
-   }
-
    public static function convert_raw_json($value)
    {
       if (empty($value) || is_null($value)) {
@@ -282,6 +272,96 @@ class Utils
             <!-- wp:separator $attrs -->
             <hr class="wp-block-separator"/>
             <!-- /wp:separator -->
+            HTML;
+
+         default:
+            debug($block);
+
+            return '';
+      }
+   }
+
+   public static function json_to_ssml($block, $parent_tag = '')
+   {
+      $text    = $block['text']    ?? null;
+      $type    = $block['type']    ?? null;
+      $content = $block['content'] ?? null;
+
+      if (is_array($content)) {
+         $content = array_map(fn($sub_block) => self::json_to_ssml($sub_block, $type), $content);
+
+         if (!empty($parent_tag)) {
+            $content = implode('', $content);
+         }
+      }
+
+      if (empty($content)) {
+         $content = '';
+      }
+
+      switch ($type) {
+         case 'paragraph':
+            if ('listItem' === $parent_tag) {
+               return $content;
+            }
+
+            return <<<HTML
+            <p>{$content}</p>
+            HTML;
+
+         case 'doc':
+            return $content;
+
+         case 'text':
+            $marks = $block['marks'] ?? [];
+
+            $prefix = '';
+            $suffix = '';
+
+            // STRONG
+            if (\array_find($marks, fn($i) => 'bold' === $i['type']) || \array_find($marks, fn($i) => 'underline' === $i['type'])) {
+               $prefix .= '<emphasis level="strong">';
+               $suffix = '</emphasis>' . $suffix;
+            }
+
+            // REDUCE
+            if (
+               \array_find($marks, fn($i) => 'strike' === $i['type']) || \array_find($marks, fn($i) => 'superscript' === $i['type']) || \array_find($marks, fn($i) => 'subscript' === $i['type'])) {
+               $prefix .= '<emphasis level="reduced">';
+               $suffix = '</emphasis>' . $suffix;
+            }
+
+            return $prefix . $text . $suffix;
+
+         case 'heading':
+            return <<<HTML
+            <break time="4s" />
+            <p><emphasis level="moderate">{$content}</emphasis></p>
+            <break time="2s" />
+            HTML;
+
+         case 'blockquote':
+            return <<<HTML
+            <p>{$content}</p>
+            HTML;
+
+         case 'bulletList':
+         case 'orderedList':
+            return <<<HTML
+            <p>{$content}</p>
+            HTML;
+
+         case 'listItem':
+            return <<<HTML
+            <s>{$content}</s>
+            HTML;
+
+         case 'codeBlock':
+            return $content;
+
+         case 'horizontalRule':
+            return <<<'HTML'
+            <break time="3s" />
             HTML;
 
          default:

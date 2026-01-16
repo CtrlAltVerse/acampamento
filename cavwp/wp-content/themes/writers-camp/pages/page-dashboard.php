@@ -157,6 +157,17 @@ get_component('header');
                         Editar
                      </button>
                   </li>
+                  <?php if (is_super_admin()) { ?>
+                  <li>
+                     <a class="btn small"
+                        href="<?php echo WritersCampPUtils::get_page_link('tts', [
+                           'edit' => $Text->ID,
+                        ]); ?>"
+                        title="Criar TTS" target="_blank">
+                        <i class="ri-speak-ai-fill"></i>
+                     </a>
+                  </li>
+                  <?php } ?>
                   <?php } else { ?>
                   <li>
                      <a class="btn small"
