@@ -22,6 +22,7 @@ if (!empty($text)) {
 }
 
 $title  = $Text->get('title');
+$slug   = $Text->get('post_name');
 $author = $Text->get('author:display_name');
 $link   = $Text->get('link');
 
@@ -75,7 +76,7 @@ get_component('header');
       <h1 class="text-3xl font-semibold">Criar áudio</h1>
    </div>
    <div class="flex flex-col lg:flex-row items-start gap-8">
-      <div class="w-full flex flex-col items-start gap-3">
+      <form id="global" class="w-full flex flex-col items-start gap-3">
          <h2>Prévias das vozes</h2>
          <select class="dark:bg-neutral-700 dark:text-neutral-100" x-model="genre">
             <option value="M">Masculinas</option>
@@ -85,7 +86,10 @@ get_component('header');
             <template x-for="voice in voices">
                <li class="flex items-center justify-between w-full"
                    x-show="voice.genre === genre">
-                  <span x-text="voice.name"></span>
+                  <label>
+                     <input type="radio" name="voice" x-bind:value="voice.id" />
+                     <span x-text="voice.name"></span>
+                  </label>
                   <template x-if="voice.file">
                      <audio controls>
                         <source x-bind:src="voice.file" type="audio/wav">
@@ -94,12 +98,20 @@ get_component('header');
                </li>
             </template>
          </ul>
-      </div>
+         <input name="title" type="hidden"
+                value="<?php echo $slug; ?>" />
+      </form>
       <div class="relative max-w-2xl w-full mx-auto ml-3.5 md:ml-0">
-         <?php foreach ($requests as $request) { ?>
-         <strong><?php echo strlen($request); ?></strong>
-         <textarea class="w-full" rows="5" readonly><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
-         <hr />
+         <?php foreach ($requests as $number => $request) { ?>
+         <form class="mb-12" x-on:submit.prevent="requestAudio">
+            <strong>N. de caracteres:
+               <?php echo strlen($request); ?></strong>
+            <button class="btn" type="submit">Criar áudio</button>
+            <textarea name="text" class="w-full" rows="5"
+                      readonly><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
+            <input name="number" type="hidden"
+                   value="<?php echo $number; ?>" />
+         </form>
          <?php } ?>
       </div>
    </div>

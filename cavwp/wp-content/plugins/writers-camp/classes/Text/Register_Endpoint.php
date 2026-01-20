@@ -3,8 +3,10 @@
 namespace writersCampP\Text;
 
 use cavWP\Utils as cavUtils;
+use WP_Error;
 use WP_REST_Response;
 use WP_REST_Server;
+use writersCampP\Services\TextToSpeech;
 
 class Register_Endpoint
 {
@@ -37,6 +39,57 @@ class Register_Endpoint
          'permission_callback' => ['writersCampP\Utils', 'checks_login'],
          'parse_errors'        => true,
          'args'                => Utils::get_text_fields('pending'),
+      ]);
+
+      register_rest_route('wrs-camp/v1', '/tts', [
+         'methods'             => WP_REST_Server::CREATABLE,
+         'callback'            => [$this, 'create_audio'],
+         'permission_callback' => ['writersCampP\Utils', 'checks_login'],
+         'parse_errors'        => true,
+         'args'                => [
+            'text' => [
+               'type'     => 'string',
+               'required' => true,
+            ],
+            'voice' => [
+               'type'     => 'string',
+               'required' => true,
+            ],
+            'number' => [
+               'type'     => 'string',
+               'required' => true,
+            ],
+            'title' => [
+               'type'     => 'string',
+               'required' => true,
+            ],
+         ],
+      ]);
+   }
+
+   public function create_audio($request)
+   {
+      $raw = $request->get_params();
+
+      if (!current_user_can('administrator')) {
+         return new WP_Error('', 'Não é um administrador.');
+      }
+
+      $text   = $raw['text'];
+      $voice  = $raw['voice'];
+      $number = str_pad($raw['number'], 2, '0');
+      $title  = $raw['title'];
+
+      $textToSpeech = new TextToSpeech();
+      $file_content = $textToSpeech->synthesize($voice, $text);
+
+      if (is_wp_error($file_content)) {
+         return $file_content;
+      }
+
+      return new WP_REST_Response([
+         'content'  => $file_content,
+         'filename' => "{$number}-{$title}.ogg",
       ]);
    }
 
