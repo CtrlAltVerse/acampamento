@@ -30,6 +30,8 @@ document.addEventListener('alpine:init', () => {
             alert('Selecione uma voz')
             return
          }
+         const btn = e.target.querySelector('[type="submit"]')
+         btn.classList.add('!hidden')
 
          const formItem = new FormData(e.target)
 
@@ -69,6 +71,7 @@ document.addEventListener('alpine:init', () => {
          a.click()
 
          URL.revokeObjectURL(url)
+         btn.classList.remove('hidden')
       },
    }))
 })
