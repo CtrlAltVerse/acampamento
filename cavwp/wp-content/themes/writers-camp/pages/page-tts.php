@@ -52,7 +52,7 @@ $header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp
 $content = Utils::json_to_ssml($Text->get('raw_json'));
 
 // footer
-$footer = "<p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang=\"en-US\">alt vers</lang> ponto <lang xml:lang=\"en-US\">net</lang> barra <say-as interpret-as=\"verbatim\">{$link}</say-as>.</p>";
+$footer = "<p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as>.</p>";
 
 $requests = [''];
 
@@ -60,9 +60,9 @@ foreach ($content as $paragraph) {
    $key = count($requests) - 1;
 
    if (strlen($requests[$key]) + strlen($paragraph) >= 5000) {
-      $requests[] = $paragraph;
+      $requests[] = stripslashes($paragraph);
    } else {
-      $requests[$key] .= $paragraph;
+      $requests[$key] .= stripslashes($paragraph);
    }
 }
 
@@ -77,11 +77,20 @@ get_component('header');
    </div>
    <div class="flex flex-col lg:flex-row items-start gap-8">
       <form id="global" class="w-full flex flex-col items-start gap-3">
-         <h2>Prévias das vozes</h2>
+         <h2 class="font-bold">Opções</h2>
+         <div class="flex gap-4">
+         <h3 class="font-medium">
+            Velocidade
+            </h3>
+         <input name="rate" type="number" value="1.025" step="0.025" min="0.95" max="1.3" />
+         </div>
+         <div class="flex gap-4">
+         <h3 class="font-medium">Voz</h3>
          <select class="dark:bg-neutral-700 dark:text-neutral-100" x-model="genre">
             <option value="M">Masculinas</option>
             <option value="F">Femininas</option>
          </select>
+         </div>
          <ul class="flex flex-col gap-1 text-lg font-mono w-full">
             <template x-for="voice in voices">
                <li class="flex items-center justify-between w-full"
@@ -98,8 +107,7 @@ get_component('header');
                </li>
             </template>
          </ul>
-         <input name="title" type="hidden"
-                value="<?php echo $slug; ?>" />
+         <input name="title" type="hidden" value="<?php echo $slug; ?>" />
       </form>
       <div class="relative max-w-2xl w-full mx-auto ml-3.5 md:ml-0">
          <?php foreach ($requests as $number => $request) { ?>

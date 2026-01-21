@@ -118,12 +118,12 @@ $networks = CavWPUtils::get_login_networks();
                        x-on:click.prevent="user_email.value.length<3 ? $do('toast','','Preencha o e-mail.') : $rest.post(moon.apiUrl+'/retrieve', {user_email: user_email.value})"
                        x-transition:enter x-cloak>Recuperar senha</button>
             <div class="grid grid-cols-2 items-center gap-3 mt-3" x-show="$store.login.method==='email'" x-cloak>
-               <span>
+               <label class=" cursor-pointer" for="is_signup">
                   <i class="ri-arrow-left-right-line"></i>
-                  <label class="cursor-pointer font-medium" for="is_signup"
-                      x-text="is_signup ? 'Fazer login' : 'Cadastrar-se'"></label>
-               </span>
-               <button class="btn" type="submit" x-text="is_signup ? 'Cadastrar' : 'Entrar'"></button>
+                  <span class="font-medium"
+                      x-text="is_signup ? 'Fazer login' : 'Cadastrar-se'"></span>
+               </label>
+               <button class="btn font-semibold" type="submit" x-text="is_signup ? 'Cadastrar' : 'Entrar'"></button>
             </div>
          </div>
          <div class="flex justify-center gap-7">

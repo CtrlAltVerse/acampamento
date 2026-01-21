@@ -320,24 +320,24 @@ class Utils
 
             // STRONG
             if (\array_find($marks, fn($i) => 'bold' === $i['type']) || \array_find($marks, fn($i) => 'underline' === $i['type'])) {
-               $prefix .= '<emphasis level="strong">';
+               $prefix .= "<emphasis level='strong'>";
                $suffix = '</emphasis>' . $suffix;
             }
 
             // REDUCE
             if (
                \array_find($marks, fn($i) => 'strike' === $i['type']) || \array_find($marks, fn($i) => 'superscript' === $i['type']) || \array_find($marks, fn($i) => 'subscript' === $i['type'])) {
-               $prefix .= '<emphasis level="reduced">';
+               $prefix .= "<emphasis level='reduced'>";
                $suffix = '</emphasis>' . $suffix;
             }
 
-            return $prefix . $text . $suffix;
+            return $prefix . str_replace('&', '&amp;', htmlspecialchars($text, ENT_XHTML | ENT_QUOTES | ENT_SUBSTITUTE)) . $suffix;
 
          case 'heading':
             return <<<HTML
-            <break time="4s" />
-            <p><emphasis level="moderate">{$content}</emphasis></p>
-            <break time="2s" />
+            <break time='3s' />
+            <p><emphasis level='moderate'>{$content}</emphasis></p>
+            <break time='2s' />
             HTML;
 
          case 'blockquote':
@@ -361,7 +361,7 @@ class Utils
 
          case 'horizontalRule':
             return <<<'HTML'
-            <break time="3s" />
+            <break time='4s' />
             HTML;
 
          default:

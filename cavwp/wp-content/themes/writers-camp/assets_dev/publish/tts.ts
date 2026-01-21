@@ -33,8 +33,9 @@ document.addEventListener('alpine:init', () => {
 
          const formItem = new FormData(e.target)
 
-         const text = formItem.get('text') as string
          const title = globalForm.get('title') as string
+         const rate = globalForm.get('rate') as string
+         const text = formItem.get('text') as string
          const number = formItem.get('number') as string
 
          const body = {
@@ -42,6 +43,7 @@ document.addEventListener('alpine:init', () => {
             text,
             title,
             number,
+            rate,
          }
 
          const request = await this.$rest.post(

@@ -8,9 +8,10 @@ class TextToSpeech
 {
    public function __construct() {}
 
-   public function synthesize($voice, $text)
+   public function synthesize($voice, $text, $rate)
    {
       $request = wp_remote_post('https://texttospeech.googleapis.com/v1/text:synthesize', [
+         'timeout' => 1000,
          'headers' => [
             'Content-Type'        => 'application/json',
             'Authorization'       => $this->get_token(),
@@ -25,7 +26,7 @@ class TextToSpeech
                'name'         => $voice,
             ],
             'audioConfig' => [
-               'speakingRate'  => 1.025,
+               'speakingRate'  => $rate,
                'audioEncoding' => 'OGG_OPUS',
             ],
          ]),
@@ -89,7 +90,7 @@ class TextToSpeech
 
       $token = $body['access_token'];
 
-      set_transient('cav-gcp-tts-token', $token, time() + 3500);
+      set_transient('cav-gcp-tts-token', $token, (int) $body['expires_in']);
 
       return "Bearer {$token}";
    }

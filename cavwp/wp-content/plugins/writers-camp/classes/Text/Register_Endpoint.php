@@ -59,6 +59,10 @@ class Register_Endpoint
                'type'     => 'string',
                'required' => true,
             ],
+            'rate' => [
+               'type'     => 'string',
+               'required' => true,
+            ],
             'title' => [
                'type'     => 'string',
                'required' => true,
@@ -78,10 +82,11 @@ class Register_Endpoint
       $text   = $raw['text'];
       $voice  = $raw['voice'];
       $number = str_pad($raw['number'], 2, '0');
+      $rate   = (float) $raw['rate'];
       $title  = $raw['title'];
 
       $textToSpeech = new TextToSpeech();
-      $file_content = $textToSpeech->synthesize($voice, $text);
+      $file_content = $textToSpeech->synthesize($voice, $text, $rate);
 
       if (is_wp_error($file_content)) {
          return $file_content;

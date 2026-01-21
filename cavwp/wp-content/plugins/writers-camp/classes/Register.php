@@ -3,6 +3,7 @@
 namespace writersCampP;
 
 use cavWP\Utils;
+use writersCampP\Utils as WritersCampPUtils;
 
 class Register
 {
@@ -38,7 +39,7 @@ class Register
          $email_not_verified = get_user_meta(get_current_user_id(), 'email_not_verified', true);
 
          if (!empty($email_not_verified) && is_page(['profile', 'publish'])) {
-            if (wp_safe_redirect(home_url('dashboard'))) {
+            if (wp_safe_redirect(WritersCampPUtils::get_page_link('dashboard'))) {
                exit;
             }
          }

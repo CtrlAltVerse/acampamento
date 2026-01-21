@@ -46,7 +46,7 @@ $clubs = ClubUtils::get();
             <?php echo $rank->label; ?>
          </a>
       </div>
-      <?php } else {  ?>
+      <?php } else { ?>
       <div class="bg-neutral-500 text-neutral-100">
          <div class="flex items-center  min-h-17 bg-neutral-900/10 hover:bg-neutral-300/50">
             <button class="grow text-left cursor-pointer py-2.5 px-3" type="button"
