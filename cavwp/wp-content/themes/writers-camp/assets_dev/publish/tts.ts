@@ -55,6 +55,10 @@ document.addEventListener('alpine:init', () => {
 
          const { content, filename } = request.data
 
+         const audio = e.target.querySelector('audio')
+         audio.classList.remove('hidden')
+         audio.innerHTML = `<source src="data:audio/ogg;base64,${content}" type="audio/ogg" />`
+
          const byteString = atob(content)
          const bytes = new Uint8Array(byteString.length)
 
@@ -71,7 +75,7 @@ document.addEventListener('alpine:init', () => {
          a.click()
 
          URL.revokeObjectURL(url)
-         btn.classList.remove('hidden')
+         btn.classList.remove('!hidden')
       },
    }))
 })
