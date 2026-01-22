@@ -341,9 +341,7 @@ class Utils
             HTML;
 
          case 'blockquote':
-            return <<<HTML
-            <p>{$content}</p>
-            HTML;
+            return $content;
 
          case 'bulletList':
          case 'orderedList':
@@ -416,10 +414,13 @@ class Utils
 
    public static function parse_text($text)
    {
-      $text = str_replace(['"', '”', '“'], '&amp;quot;', $text);
-      $text = str_replace('&', '&amp;amp;', $text);
+      $text = str_replace('&nbsp;', ' ', $text);
+      $text = str_replace(['"', '”', '“', '&#8220;', '&#8221;'], '&amp;quot;', $text);
+      $text = str_replace('&#8217;', '&amp;apos;', $text);
 
-      $text = str_replace(['...', '…'], "<break strength='medium' />", $text);
+      $text = str_replace(['...', '…', '&#8230;'], "<break strength='medium' />", $text);
+
+      $text = str_replace('& ', '&amp;amp; ', $text);
 
       return str_replace(['—'], "<break strength='weak' />", $text);
    }
