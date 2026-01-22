@@ -416,7 +416,9 @@ class Utils
 
    public static function parse_text($text)
    {
-      $text = str_replace('&', '&amp;', htmlspecialchars($text, ENT_XHTML | ENT_QUOTES | ENT_SUBSTITUTE));
+      $text = str_replace(['"', '”', '“'], '&amp;quot;', $text);
+      $text = str_replace('&', '&amp;amp;', $text);
+
       $text = str_replace(['...', '…'], "<break strength='medium' />", $text);
 
       return str_replace(['—'], "<break strength='weak' />", $text);
