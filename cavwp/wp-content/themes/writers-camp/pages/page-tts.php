@@ -55,7 +55,12 @@ if (!empty($terms)) {
 $header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p>";
 
 // middle
-$content = Utils::json_to_ssml($Text->get('raw_json'));
+$raw_json = $Text->get('raw_json');
+if (empty($raw_json)) {
+   $content = Utils::text_to_ssml($Text->get('content'));
+} else {
+   $content = Utils::json_to_ssml($raw_json);
+}
 
 // footer
 $footer = "<p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as>.</p>";

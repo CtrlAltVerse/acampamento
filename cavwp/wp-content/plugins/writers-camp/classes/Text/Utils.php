@@ -281,6 +281,16 @@ class Utils
       }
    }
 
+   public static function text_to_ssml($content)
+   {
+      // Clean <p>
+      $content = preg_replace('/(\<p)([ a-z=\-:;"]+)(\>)/', '$1$3', $content);
+
+      $content = explode("\n", $content);
+
+      return array_filter($content);
+   }
+
    public static function json_to_ssml($block, $parent_tag = '')
    {
       $text    = $block['text']    ?? null;
