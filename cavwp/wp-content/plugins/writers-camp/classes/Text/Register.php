@@ -23,8 +23,28 @@ class Register
 
       add_filter('comment_reply_link', [$this, 'filter_comment_reply_link']);
       add_filter('cav_head_metatags', [$this, 'set_metatags']);
+      add_filter('post_row_actions', [$this, 'add_link_tts'], 10, 2);
 
       new Register_Endpoint();
+   }
+
+   public function add_link_tts($actions, $post)
+   {
+      if ($post->post_type !== "text") {
+         return $actions;
+      }
+
+      if(!empty(get_post_meta($post->ID, 'audio', true))){
+         return $actions;
+      }
+
+      $actions['tts'] = sprintf(
+         '<a href="%1$s" target="_blank">%2$s</a>',
+         WritersCampPUtils::get_page_link('tts', ['edit' => $post->ID,]),
+         esc_html__('Criar áudio', 'camp')
+      );
+
+      return $actions;
    }
 
    public function check_comments($post_ID, $post_obj)
