@@ -43,19 +43,20 @@ if (!empty($terms)) {
    $club  = $term->get('name', apply_filter: false);
    $intro = [
       'name' => 'Intro',
-      'src' => wp_get_attachment_url($term->get('intro'))
+      'src'  => wp_get_attachment_url($term->get('intro')),
    ];
    $outro = [
       'name' => 'Outro',
-      'src' => wp_get_attachment_url($term->get('outro'))
+      'src'  => wp_get_attachment_url($term->get('outro')),
    ];
 }
 
 // header
-$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p>";
+$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><break strength='strong'/>";
 
 // middle
 $raw_json = $Text->get('raw_json');
+
 if (empty($raw_json)) {
    $content = Utils::text_to_ssml($Text->get('content'));
 } else {
@@ -63,7 +64,7 @@ if (empty($raw_json)) {
 }
 
 // footer
-$footer = "<p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as>.</p>";
+$footer = "<break strength='strong'/><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as>.</p>";
 
 $requests = [''];
 
@@ -84,7 +85,9 @@ get_component('header');
 ?>
 <main class="container my-6" x-data="tts">
    <div class="flex items-center justify-between mb-4">
-      <h1 class="text-3xl font-semibold">Criar áudio: <?php echo $title ?></h1>
+      <h1 class="text-3xl font-semibold">Criar áudio:
+         <?php echo $title; ?>
+      </h1>
    </div>
    <div class="flex flex-col lg:flex-row items-start gap-8">
       <form id="global" class="w-full flex flex-col items-start gap-3">
@@ -105,7 +108,7 @@ get_component('header');
          <ul class="flex flex-col gap-1 text-lg font-mono w-full">
             <template x-for="voice in voices">
                <li class="flex items-center justify-between w-full"
-                  x-show="voice.genre === genre">
+                   x-show="voice.genre === genre">
                   <label>
                      <input type="radio" name="voice" x-bind:value="voice.id" />
                      <span x-text="voice.name"></span>
@@ -118,31 +121,38 @@ get_component('header');
                </li>
             </template>
          </ul>
-         <input name="title" type="hidden" value="<?php echo $slug; ?>" />
+         <input name="title" type="hidden"
+                value="<?php echo $slug; ?>" />
       </form>
       <div class="relative max-w-2xl w-full mx-auto ml-3.5 md:ml-0">
          <?php foreach ($requests as $number => $request) { ?>
-            <?php if (is_array($request)) { ?>
-               <div class="flex items-center gap-4 mb-12">
-                  <strong>Vinheta: <?php echo $request['name'] ?></strong>
-                  <audio controls>
-                     <source src="<?php echo $request['src']; ?>" type="audio/ogg" />
-                  </audio>
-               </div>
-            <?php } else { ?>
-               <form class="mb-12" x-on:submit.prevent="requestAudio">
-                  <div class="flex items-center gap-4 mb-2">
-                     <button class="btn" type="submit">Criar áudio</button>
-                     <strong><?php echo strlen($request); ?> caracteres</strong>
-                     <audio class="hidden" controls>
-                     </audio>
-                  </div>
-                  <textarea name="text" class="w-full" rows="5"
-                     readonly><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
-                  <input name="number" type="hidden"
-                     value="<?php echo $number; ?>" />
-               </form>
-            <?php } ?>
+         <?php if (empty($request)) {
+            continue;
+         } ?>
+         <?php if (is_array($request)) { ?>
+         <div class="flex items-center gap-4 mb-12">
+            <strong>Vinheta:
+               <?php echo $request['name']; ?></strong>
+            <audio controls>
+               <source src="<?php echo $request['src']; ?>"
+                       type="audio/ogg" />
+            </audio>
+         </div>
+         <?php } else { ?>
+         <form class="mb-12" x-on:submit.prevent="requestAudio">
+            <div class="flex items-center gap-4 mb-2">
+               <button class="btn" type="submit">Criar áudio</button>
+               <strong><?php echo strlen($request); ?>
+                  caracteres</strong>
+               <audio class="hidden" controls>
+               </audio>
+            </div>
+            <textarea name="text" class="w-full"
+                      x-autosize><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
+            <input name="number" type="hidden"
+                   value="<?php echo $number; ?>" />
+         </form>
+         <?php } ?>
          <?php } ?>
       </div>
    </div>

@@ -281,16 +281,6 @@ class Utils
       }
    }
 
-   public static function text_to_ssml($content)
-   {
-      // Clean <p>
-      $content = preg_replace('/(\<p)([ a-z=\-:;"]+)(\>)/', '$1$3', $content);
-
-      $content = explode("\n", $content);
-
-      return array_filter($content);
-   }
-
    public static function json_to_ssml($block, $parent_tag = '')
    {
       $text    = $block['text']    ?? null;
@@ -341,13 +331,13 @@ class Utils
                $suffix = '</emphasis>' . $suffix;
             }
 
-            return $prefix . str_replace('&', '&amp;', htmlspecialchars($text, ENT_XHTML | ENT_QUOTES | ENT_SUBSTITUTE)) . $suffix;
+            return $prefix . self::parse_text($text) . $suffix;
 
          case 'heading':
             return <<<HTML
-            <break time='3s' />
-            <p><emphasis level='moderate'>{$content}</emphasis></p>
             <break time='2s' />
+            <p><emphasis level='moderate'>{$content}</emphasis></p>
+            <break time='1s' />
             HTML;
 
          case 'blockquote':
@@ -371,7 +361,7 @@ class Utils
 
          case 'horizontalRule':
             return <<<'HTML'
-            <break time='4s' />
+            <break time='2s' />
             HTML;
 
          default:
@@ -424,6 +414,14 @@ class Utils
       return json_encode($attrs);
    }
 
+   public static function parse_text($text)
+   {
+      $text = str_replace('&', '&amp;', htmlspecialchars($text, ENT_XHTML | ENT_QUOTES | ENT_SUBSTITUTE));
+      $text = str_replace(['...', '…'], "<break strength='medium' />", $text);
+
+      return str_replace(['—'], "<break strength='weak' />", $text);
+   }
+
    public static function split_string($string, $max_char_length = 32, $max_lines = 4)
    {
       $string = trim($string);
@@ -461,5 +459,17 @@ class Utils
       }
 
       return $return;
+   }
+
+   public static function text_to_ssml($content)
+   {
+      // Clean <p>
+      $content = preg_replace('/(\<p)([ a-z=\-:;"]+)(\>)/', '$1$3', $content);
+
+      $content = self::parse_text($content);
+
+      $content = explode("\n", $content);
+
+      return array_filter($content);
    }
 }
