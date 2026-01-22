@@ -32,14 +32,15 @@ if (!empty($shortlink)) {
    $link = str_replace('https://altvers.net/', '', $shortlink['link']);
 }
 
-$site  = get_bloginfo('name');
-$terms = $Text->get('terms', taxonomy: 'club');
+$site   = get_bloginfo('name');
+$clubs  = $Text->get('terms', taxonomy: 'club');
+$series = $Text->get('terms', taxonomy: 'series');
 
 $club     = '';
 $vignette = '';
 
-if (!empty($terms)) {
-   $term  = $terms[0];
+if (!empty($clubs)) {
+   $term  = $clubs[0];
    $club  = $term->get('name', apply_filter: false);
    $intro = [
       'name' => 'Intro',
@@ -51,8 +52,14 @@ if (!empty($terms)) {
    ];
 }
 
+$summary = '';
+
+if (!empty($series)) {
+   $summary = '<p>' . $Text->get('summary') . '</p>';
+}
+
 // header
-$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><break strength='strong'/>";
+$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p>{$summary}<p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><break strength='strong'/>";
 
 // middle
 $raw_json = $Text->get('raw_json');
@@ -64,7 +71,7 @@ if (empty($raw_json)) {
 }
 
 // footer
-$footer = "<break strength='strong'/><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as>.</p>";
+$footer = "<break strength='strong'/><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as></p>";
 
 $requests = [''];
 
