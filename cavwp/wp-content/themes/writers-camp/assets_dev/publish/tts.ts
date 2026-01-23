@@ -48,33 +48,33 @@ document.addEventListener('alpine:init', () => {
             rate,
          }
 
-         const request = await this.$rest.post(
-            `${moon.apiUrl}/tts?_wpnonce=${moon.nonce}`,
-            body,
-         )
+         try {
+            const request = await this.$rest.post(
+               `${moon.apiUrl}/tts?_wpnonce=${moon.nonce}`,
+               body,
+            )
+            const { content, filename } = request.data
+            const audio = e.target.querySelector('audio')
+            audio.classList.remove('hidden')
+            audio.innerHTML = `<source src="data:audio/ogg;base64,${content}" type="audio/ogg" />`
 
-         const { content, filename } = request.data
+            const byteString = atob(content)
+            const bytes = new Uint8Array(byteString.length)
+            for (let i = 0; i < byteString.length; i++) {
+               bytes[i] = byteString.charCodeAt(i)
+            }
 
-         const audio = e.target.querySelector('audio')
-         audio.classList.remove('hidden')
-         audio.innerHTML = `<source src="data:audio/ogg;base64,${content}" type="audio/ogg" />`
+            const blob = new Blob([bytes], { type: 'audio/ogg' })
+            const url = URL.createObjectURL(blob)
 
-         const byteString = atob(content)
-         const bytes = new Uint8Array(byteString.length)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = filename
+            a.click()
 
-         for (let i = 0; i < byteString.length; i++) {
-            bytes[i] = byteString.charCodeAt(i)
-         }
+            URL.revokeObjectURL(url)
+         } catch (_error) {}
 
-         const blob = new Blob([bytes], { type: 'audio/ogg' })
-         const url = URL.createObjectURL(blob)
-
-         const a = document.createElement('a')
-         a.href = url
-         a.download = filename
-         a.click()
-
-         URL.revokeObjectURL(url)
          btn.classList.remove('!hidden')
       },
    }))

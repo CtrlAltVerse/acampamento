@@ -78,7 +78,7 @@ $requests = [''];
 foreach ($content as $paragraph) {
    $key = count($requests) - 1;
 
-   if (strlen($requests[$key]) + strlen($paragraph) >= 5000) {
+   if (strlen($requests[$key]) + strlen($paragraph) >= 4600) {
       $requests[] = stripslashes($paragraph);
    } else {
       $requests[$key] .= stripslashes($paragraph);
@@ -146,16 +146,15 @@ get_component('header');
             </audio>
          </div>
          <?php } else { ?>
-         <form class="mb-12" x-on:submit.prevent="requestAudio">
+         <form class="mb-12" x-on:submit.prevent="requestAudio" x-data="{count: 0}">
             <div class="flex items-center gap-4 mb-2">
                <button class="btn" type="submit">Criar áudio</button>
-               <strong><?php echo strlen($request); ?>
-                  caracteres</strong>
+               <strong><span x-text="count"></span> caracteres</strong>
                <audio class="hidden" controls>
                </audio>
             </div>
             <textarea name="text" class="w-full"
-                      x-autosize><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
+                      x-autosize x-on:input="count=$el.value.length" x-init="count=$el.value.length"><speak><?php echo str_replace('"', '\"', $request); ?></speak></textarea>
             <input name="number" type="hidden"
                    value="<?php echo $number; ?>" />
          </form>

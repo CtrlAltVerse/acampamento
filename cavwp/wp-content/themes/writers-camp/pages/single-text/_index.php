@@ -91,7 +91,8 @@ $container_class = '';
          </div>
          <div class="flex items-center gap-3 pt-4">
             <?php if ($audio) { ?>
-            <audio id="player" src="<?php echo wp_get_attachment_url($audio); ?>"
+            <audio id="player"
+                   src="<?php echo wp_get_attachment_url($audio); ?>"
                    x-on:ended="playing = false">
             </audio>
             <button class="cursor-pointer" type="button" x-on:click.prevent="togglePlay()">
@@ -303,7 +304,9 @@ $container_class = '';
                   </span>
                   <?php echo $serie->get('title'); ?>
                   <span class="text-sm uppercase self-end text-neutral-200">
-                     <?php echo count($series_itens); ?> partes
+                     <?php printf(
+                        _n('%d parte', '%d partes', count($series_itens), 'camp'),
+                        count($series_itens)); ?>
                   </span>
                </a>
             </h2>
