@@ -482,7 +482,7 @@ class Register_Endpoint
             continue;
          }
 
-         $userdata[$key] = $body[$key];
+         $userdata['meta_input'][$key] = $body[$key];
       }
 
       $user_ID = wp_update_user($userdata);

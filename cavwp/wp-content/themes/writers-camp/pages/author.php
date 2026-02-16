@@ -14,7 +14,7 @@ $socials  = $writer->get('socials');
 ?>
 <div class="py-6 bg-brown-100 text-neutral-700">
    <div class="container flex flex-col lg:flex-row items-center justify-between gap-9 min-h-55">
-      <div class="shrink-0 lg:w-1/2 relative flex gap-4 lg:gap-9">
+      <div class="shrink-0 w-full lg:w-1/2 relative flex gap-4 lg:gap-9">
          <?php get_component('level'); ?>
          <div class="flex flex-col justify-between pt-5 pb-11">
             <div class="flex flex-col gap-1">
