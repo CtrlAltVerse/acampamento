@@ -23,7 +23,7 @@ get_component('header');
      x-data="<?php echo '{' . implode(',', array_map(fn($key) => "m_{$key}: ''", array_merge(array_keys($fields), ['avatar']))) . '}'; ?>">
    <div id="top" class="py-6 bg-brown-100 text-neutral-700">
       <div class="container flex flex-col lg:flex-row items-center justify-between gap-9 min-h-55">
-         <div class="shrink-0 w-1/2 relative flex gap-9">
+         <div class="shrink-0 lg:w-1/2 relative flex gap-4 lg:gap-9">
             <?php get_component('level', ['avatar' => 'm_avatar']); ?>
             <div class="flex flex-col justify-between pt-5 pb-11">
                <div class="flex flex-col gap-1">
@@ -33,7 +33,7 @@ get_component('header');
                   <span
                         class="text-lg">@<?php echo $writer->get('slug'); ?></span>
                </div>
-               <ul class="flex gap-4 flex-wrap mt-8 text-xl">
+               <ul class="flex gap-2 lg:gap-4 flex-wrap mt-8 text-xl">
                   <li x-show="m_site_url" x-cloak>
                      <a x-bind:href="m_site_url" target="_blank" rel="external">
                         <i class="ri-global-line"></i>

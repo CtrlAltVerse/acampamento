@@ -59,7 +59,7 @@ if (!empty($series)) {
 }
 
 // header
-$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p>{$summary}<p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><break strength='strong'/>";
+$header = "<p>&amp;quot;{$title}&amp;quot;, de {$author}</p>{$summary}<p>Publicado em &amp;quot;{$club}&amp;quot; no {$site}.</p><break time='600ms'/>";
 
 // middle
 $raw_json = $Text->get('raw_json');
@@ -71,7 +71,7 @@ if (empty($raw_json)) {
 }
 
 // footer
-$footer = "<break strength='strong'/><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as></p>";
+$footer = "<break time='600ms'/><p>Este foi &amp;quot;{$title}&amp;quot;, de {$author}</p><p>Publicado no {$site}.</p><p>Deixe seu comentário em <lang xml:lang='en-US'>alt vers</lang> ponto <lang xml:lang='en-US'>net</lang> barra <say-as interpret-as='verbatim'>{$link}</say-as></p>";
 
 $requests = [''];
 
